@@ -1,4 +1,4 @@
-package src.main.java.com.shapeville.main;
+package com.shapeville.main;
 
 import javax.swing.*;
 
