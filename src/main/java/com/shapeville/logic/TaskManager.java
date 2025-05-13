@@ -2,207 +2,213 @@ package com.shapeville.logic;
 
 import com.shapeville.main.MainFrame;
 import com.shapeville.model.TaskDefinition;
+import com.shapeville.tasks.ks1.angle.AngleTypeLogic; // Placeholder for actual imports
+import com.shapeville.tasks.ks1.angle.AngleTypePanel;
 import com.shapeville.tasks.ks1.identification.ShapeIdentificationLogic;
 import com.shapeville.tasks.ks1.identification.ShapeIdentificationPanel;
-import com.shapeville.ui.panel_templates.TaskPanel; // Assuming TaskPanel is an interface
+import com.shapeville.ui.panel_templates.TaskPanel;
+import com.shapeville.utils.Constants;
 
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-/**
- * Manages the overall flow and sequence of tasks in the application.
- * Decides which task to load next and interacts with MainFrame to display the correct panel.
- */
 public class TaskManager {
-
     private MainFrame mainFrameRef;
     private ScoreManager scoreManagerRef;
-    private List<TaskDefinition> taskSequence;
-    private int currentTaskIndex;
-    private TaskLogic currentActiveTaskLogic; // The logic controller for the currently active task
-    private JPanel currentActiveTaskPanel;   // The UI panel for the currently active task
+    private List<TaskDefinition> masterTaskList; // All possible tasks
+    private TaskLogic currentActiveTaskLogic;
+    private JPanel currentActiveTaskPanel;       // The UI panel (which should implement TaskPanel)
+    private String currentPanelId; // ID of the currently displayed task panel
+
+    // To manage the overall session progress (sequence of different task types)
+    private List<String> sessionTaskSequenceIds; // e.g., [TASK_ID_SHAPE_ID_2D, TASK_ID_ANGLE_TYPE, ...]
+    private int currentSessionTaskIndex;
+
 
     public TaskManager(MainFrame mainFrame, ScoreManager scoreManager) {
         this.mainFrameRef = mainFrame;
         this.scoreManagerRef = scoreManager;
-        this.taskSequence = new ArrayList<>();
-        this.currentTaskIndex = -1;
+        this.masterTaskList = new ArrayList<>();
+        this.sessionTaskSequenceIds = new ArrayList<>();
+        this.currentSessionTaskIndex = -1;
+        defineMasterTasks();
+        defineDefaultSessionSequence(); // Define the flow for a "full game"
     }
 
-    /**
-     * Defines the sequence of tasks for the session.
-     * This could be loaded from a config file or database in a real app.
-     */
-    public void setTaskSequence() {
-        taskSequence.clear();
-        // TODO: Populate this list with TaskDefinition objects in the desired order
-        // Example TaskDefinitions (use constants for IDs)
-        taskSequence.add(new TaskDefinition("T1_SHAPE_ID_2D", "ShapeIdentificationPanel", "SHAPE_IDENTIFICATION_2D"));
-        taskSequence.add(new TaskDefinition("T2_ANGLE_TYPE", "AngleTypePanel", "ANGLE_TYPE_IDENTIFICATION"));
-        // Add Task 3, Task 4, Bonus 1, Bonus 2 definitions...
-
-        System.out.println("Task sequence set with " + taskSequence.size() + " tasks.");
+    private void defineMasterTasks() {
+        // Define all tasks the application supports. HomeScreen buttons will refer to these Task IDs.
+        masterTaskList.add(new TaskDefinition(Constants.TASK_ID_SHAPE_ID_2D, Constants.SHAPE_IDENTIFICATION_PANEL_ID, Constants.TASK_TYPE_SHAPE_IDENTIFICATION_2D, Constants.SCORE_BASIC));
+        masterTaskList.add(new TaskDefinition(Constants.TASK_ID_SHAPE_ID_3D, Constants.SHAPE_IDENTIFICATION_PANEL_ID, Constants.TASK_TYPE_SHAPE_IDENTIFICATION_3D, Constants.SCORE_ADVANCED));
+        masterTaskList.add(new TaskDefinition(Constants.TASK_ID_ANGLE_TYPE, Constants.ANGLE_TYPE_PANEL_ID, Constants.TASK_TYPE_ANGLE_IDENTIFICATION, Constants.SCORE_BASIC));
+        // TODO: Add definitions for Task 3, 4, Bonus 1, 2
+        // Example: masterTaskList.add(new TaskDefinition("TASK_AREA_RECT", "AreaCalcPanel_Rect", "AREA_CALC_RECT", Constants.SCORE_BASIC));
+        System.out.println("Master task list defined with " + masterTaskList.size() + " task types.");
     }
 
-
-    /**
-     * Starts the task sequence from the beginning. Called from HomeScreen, for example.
-     */
-    public void startTaskSequence() {
-         System.out.println("Starting task sequence...");
-         scoreManagerRef.resetSession(); // Reset score/progress for new sequence
-         currentTaskIndex = -1; // Reset index
-         loadNextTask();
+    private void defineDefaultSessionSequence() {
+        // Defines a typical flow if user plays through everything or a "Start Game" button
+        // For now, let's just add a couple.
+        sessionTaskSequenceIds.add(Constants.TASK_ID_SHAPE_ID_2D);
+        sessionTaskSequenceIds.add(Constants.TASK_ID_ANGLE_TYPE);
+        // TODO: Add other task IDs to define the full game sequence
+        System.out.println("Default session sequence defined with " + sessionTaskSequenceIds.size() + " tasks.");
+        // Update progress bar max based on this sequence
+        if (mainFrameRef != null && mainFrameRef.getScoreManager() != null && masterTaskList.size() > 0) {
+             // Bit of a circular dependency for nav bar update, but can be managed
+             // Or pass total tasks to NavigationBar constructor or an update method
+             mainFrameRef.getScoreManager().setNavigationBar(mainFrameRef.getNavigationBar()); // ensure nav is set
+             mainFrameRef.getNavigationBar().updateProgress(0, sessionTaskSequenceIds.size());
+        }
     }
 
-    /**
-    * Starts a specific task type directly, potentially outside the main sequence.
-    * Useful for letting the user choose a specific task from the HomeScreen.
-    * @param taskId The unique ID of the task to start.
-    */
+    public void startFullSessionSequence() {
+        System.out.println("Starting full session task sequence...");
+        scoreManagerRef.resetSession();
+        currentSessionTaskIndex = -1;
+        loadNextTaskInSequence();
+    }
+
     public void startSpecificTask(String taskId) {
-        System.out.println("Starting specific task: " + taskId);
-        // Find the task definition
-        TaskDefinition taskToStart = null;
-        for (TaskDefinition td : taskSequence) { // Assuming all possible tasks are in the sequence list
+        System.out.println("Attempting to start specific task: " + taskId);
+        TaskDefinition taskDefToStart = findTaskDefinitionById(taskId);
+
+        if (taskDefToStart != null) {
+            // scoreManagerRef.resetSession(); // Decide if starting a specific task resets overall session score/progress
+            loadTaskUIAndLogic(taskDefToStart);
+        } else {
+            System.err.println("Error: Task definition not found for Task ID: " + taskId);
+            JOptionPane.showMessageDialog(mainFrameRef, "Error: Could not load task " + taskId, "Task Error", JOptionPane.ERROR_MESSAGE);
+            mainFrameRef.navigateToHome();
+        }
+    }
+
+    private TaskDefinition findTaskDefinitionById(String taskId) {
+        for (TaskDefinition td : masterTaskList) {
             if (td.getTaskId().equals(taskId)) {
-                taskToStart = td;
-                break;
+                return td;
             }
         }
+        return null;
+    }
 
-        if (taskToStart != null) {
-            // scoreManagerRef.resetSession(); // Decide if starting specific task resets score
-            loadTask(taskToStart);
-        } else {
-            System.err.println("Error: Task definition not found for ID: " + taskId);
-            // Maybe show an error message to the user
-             JOptionPane.showMessageDialog(mainFrameRef, "Error: Could not load task " + taskId, "Error", JOptionPane.ERROR_MESSAGE);
-             mainFrameRef.navigateToHome(); // Go back home if task fails to load
+    private void loadTaskUIAndLogic(TaskDefinition taskDef) {
+        System.out.println("Loading UI and Logic for task: " + taskDef.getTaskId() + " - Type: " + taskDef.getTaskType());
+        currentActiveTaskLogic = null;
+        currentActiveTaskPanel = null; // This should be the JPanel that implements TaskPanel
+        currentPanelId = taskDef.getPanelId();
+
+        // Factory to create correct Logic and Panel
+        try {
+            TaskPanel taskPanelInstance = null; // The UI
+            TaskLogic taskLogicInstance = null;   // The Logic
+
+            switch (taskDef.getTaskType()) {
+                case Constants.TASK_TYPE_SHAPE_IDENTIFICATION_2D:
+                case Constants.TASK_TYPE_SHAPE_IDENTIFICATION_3D:
+                    taskLogicInstance = new ShapeIdentificationLogic();
+                    taskPanelInstance = new ShapeIdentificationPanel(mainFrameRef);
+                    break;
+                case Constants.TASK_TYPE_ANGLE_IDENTIFICATION:
+                    taskLogicInstance = new AngleTypeLogic();       // TODO: KS1 Dev to implement AngleTypeLogic
+                    taskPanelInstance = new AngleTypePanel(mainFrameRef); // TODO: KS1 Dev to implement AngleTypePanel
+                    break;
+                // TODO: Add cases for Task 3 (Area), Task 4 (Circle), Bonus 1 (Compound), Bonus 2 (Sector)
+                // For each, instantiate their specific ...Logic and ...Panel classes.
+                // Example:
+                // case Constants.TASK_TYPE_AREA_CALC_RECT:
+                //     taskLogicInstance = new AreaCalculationLogic();
+                //     taskPanelInstance = new AreaCalculationPanel(mainFrameRef, "RECTANGLE"); // Panel might need type
+                //     break;
+                default:
+                    System.err.println("Unknown task type for UI/Logic instantiation: " + taskDef.getTaskType());
+                    JOptionPane.showMessageDialog(mainFrameRef, "Error: Task type '" + taskDef.getTaskType() + "' is not implemented.", "Implementation Error", JOptionPane.ERROR_MESSAGE);
+                    mainFrameRef.navigateToHome();
+                    return;
+            }
+
+            if (taskPanelInstance != null && taskLogicInstance != null) {
+                currentActiveTaskLogic = taskLogicInstance;
+                currentActiveTaskPanel = (JPanel) taskPanelInstance; // Cast to JPanel for CardLayout
+
+                taskPanelInstance.setTaskLogicCallback(currentActiveTaskLogic); // Link UI to Logic
+                currentActiveTaskLogic.initializeTask(taskDef, scoreManagerRef, this); // Initialize Logic
+
+                mainFrameRef.registerPanel(currentPanelId, currentActiveTaskPanel);
+                mainFrameRef.showPanel(currentPanelId);
+
+                // Display the first problem
+                taskPanelInstance.displayProblem(currentActiveTaskLogic.getCurrentProblem());
+            } else {
+                 System.err.println("Failed to instantiate Panel or Logic for: " + taskDef.getTaskType());
+                 mainFrameRef.navigateToHome();
+            }
+
+        } catch (Exception e) {
+            System.err.println("Exception while loading task " + taskDef.getTaskId() + ": " + e.getMessage());
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(mainFrameRef, "Critical error loading task: " + taskDef.getTaskId(), "Error", JOptionPane.ERROR_MESSAGE);
+            mainFrameRef.navigateToHome();
         }
     }
 
     /**
-     * Loads and displays the next task in the sequence.
+     * Called by a TaskLogic instance when it has completed all its internal problems
+     * (e.g., identified 4 shapes, calculated 1 area).
      */
-    private void loadNextTask() {
-        currentTaskIndex++;
-        if (currentTaskIndex < taskSequence.size()) {
-            TaskDefinition nextTaskDef = taskSequence.get(currentTaskIndex);
-            loadTask(nextTaskDef);
+    public void currentTaskTypeCompleted(TaskLogic completedLogic) {
+        System.out.println("Task type completed: " + completedLogic.getClass().getSimpleName());
+        scoreManagerRef.incrementTaskTypeCompletedCount(); // Increment overall session progress
+
+        // If we are in a sequence, load the next one.
+        // If a specific task was started, this might mean returning to home or a summary.
+        // For now, assume it means load next in sequence if sequence was started.
+        if (currentSessionTaskIndex != -1 && currentSessionTaskIndex < sessionTaskSequenceIds.size()) {
+             loadNextTaskInSequence();
         } else {
-            System.out.println("Task sequence completed.");
-            // All tasks in the sequence are done
-            // TODO: Maybe show a summary screen before the end panel?
-            mainFrameRef.showPanel(MainFrame.END_PANEL_ID); // Or navigate to a summary panel first
-             // Call endSession which shows final score and prompts exit
-             mainFrameRef.endSession();
+             // Specific task finished, or sequence ended unexpectedly
+             System.out.println("Specific task type finished or sequence ended. Navigating home.");
+             // Maybe show a "Task Set Complete!" dialog before going home?
+             JOptionPane.showMessageDialog(mainFrameRef, "You've completed this task set!", "Task Set Complete", JOptionPane.INFORMATION_MESSAGE);
+             mainFrameRef.navigateToHome();
+        }
+    }
+
+    private void loadNextTaskInSequence() {
+        currentSessionTaskIndex++;
+        if (currentSessionTaskIndex < sessionTaskSequenceIds.size()) {
+            String nextTaskId = sessionTaskSequenceIds.get(currentSessionTaskIndex);
+            TaskDefinition nextTaskDef = findTaskDefinitionById(nextTaskId);
+            if (nextTaskDef != null) {
+                loadTaskUIAndLogic(nextTaskDef);
+                // Update progress bar display via ScoreManager or direct call if MainFrame has method
+                mainFrameRef.getNavigationBar().updateProgress(currentSessionTaskIndex + 1, sessionTaskSequenceIds.size());
+            } else {
+                System.err.println("Error: Next task in sequence not found: " + nextTaskId);
+                mainFrameRef.navigateToHome(); // Or handle error
+            }
+        } else {
+            System.out.println("Entire session task sequence completed!");
+            mainFrameRef.endSession(); // All predefined tasks in sequence are done
         }
     }
 
     /**
-     * Instantiates and sets up the logic and UI panel for a given task definition.
-     * Registers the panel with MainFrame and tells MainFrame to display it.
-     *
-     * @param taskDef The definition of the task to load.
+     * Called by MainFrame when user navigates away from an active task (e.g., clicks Home).
      */
-    private void loadTask(TaskDefinition taskDef) {
-         System.out.println("Loading task: " + taskDef.getTaskId() + " - Type: " + taskDef.getTaskType());
-         currentActiveTaskLogic = null; // Reset previous logic
-         currentActiveTaskPanel = null; // Reset previous panel
-
-         // --- Factory or Switch to create correct Logic and Panel based on taskDef ---
-         // This part needs to map Task Types/Panel IDs to actual class instantiations.
-         // This is where new tasks modules are integrated.
-         try {
-             switch (taskDef.getTaskType()) {
-                 case "SHAPE_IDENTIFICATION_2D":
-                 case "SHAPE_IDENTIFICATION_3D": // Logic might handle both? Or separate task types?
-                     ShapeIdentificationLogic shapeLogic = new ShapeIdentificationLogic();
-                     shapeLogic.initializeTask(taskDef, scoreManagerRef, this); // Pass dependencies
-                     ShapeIdentificationPanel shapePanel = new ShapeIdentificationPanel(mainFrameRef); // Pass mainframe ref if needed by UI directly
-                     shapePanel.setTaskLogicCallback(shapeLogic); // Link Panel UI to Logic
-                     currentActiveTaskLogic = shapeLogic;
-                     currentActiveTaskPanel = shapePanel;
-                     break;
-
-                 case "ANGLE_TYPE_IDENTIFICATION":
-                      // TODO: Instantiate AngleTypeLogic and AngleTypePanel
-                      // AngleTypeLogic angleLogic = new AngleTypeLogic();
-                      // angleLogic.initializeTask(taskDef, scoreManagerRef, this);
-                      // AngleTypePanel anglePanel = new AngleTypePanel(mainFrameRef);
-                      // anglePanel.setTaskLogicCallback(angleLogic);
-                      // currentActiveTaskLogic = angleLogic;
-                      // currentActiveTaskPanel = anglePanel;
-                      System.err.println("Task type not implemented yet: " + taskDef.getTaskType());
-                      // Placeholder panel
-                      currentActiveTaskPanel = new JPanel();
-                      ((JPanel)currentActiveTaskPanel).add(new JLabel("Task Panel for: " + taskDef.getTaskType() + " - Not Implemented"));
-                      break;
-
-                 // TODO: Add cases for Task 3, Task 4, Bonus 1, Bonus 2
-                 // case "AREA_CALCULATION_RECTANGLE": ...
-
-                 default:
-                     System.err.println("Unknown task type: " + taskDef.getTaskType());
-                     // Create a placeholder panel indicating error
-                      currentActiveTaskPanel = new JPanel();
-                      ((JPanel)currentActiveTaskPanel).add(new JLabel("Error: Unknown Task Type - " + taskDef.getTaskType()));
-                     break;
-             }
-
-             if (currentActiveTaskPanel != null) {
-                  mainFrameRef.registerPanel(taskDef.getPanelId(), currentActiveTaskPanel); // Ensure panel is registered
-                  mainFrameRef.showPanel(taskDef.getPanelId()); // Show the panel
-                  // Optionally call a method on the panel/logic to start the first question
-                  if (currentActiveTaskLogic != null) {
-                       // Tell the panel to display the first problem from the logic
-                       if (currentActiveTaskPanel instanceof TaskPanel) {
-                            ((TaskPanel)currentActiveTaskPanel).displayProblem(currentActiveTaskLogic.getCurrentProblem());
-                       }
-                  }
-             }
-
-         } catch (Exception e) {
-              System.err.println("Error loading task " + taskDef.getTaskId() + ": " + e.getMessage());
-              e.printStackTrace();
-              // Show error message and maybe return home
-              JOptionPane.showMessageDialog(mainFrameRef, "Error loading task: " + taskDef.getTaskId() + "\n" + e.getMessage(), "Loading Error", JOptionPane.ERROR_MESSAGE);
-              mainFrameRef.navigateToHome();
-         }
+    public void currentTaskInterrupted() {
+        System.out.println("Current task interrupted.");
+        // TODO: Add any cleanup logic for the currentActiveTaskLogic if needed (e.g., stop timers)
+        // if (currentActiveTaskLogic != null && currentActiveTaskLogic instanceof SomeTimerInterface) {
+        //    ((SomeTimerInterface)currentActiveTaskLogic).stopTimer();
+        // }
+        currentActiveTaskLogic = null;
+        currentActiveTaskPanel = null;
+        currentPanelId = null;
+        // Resetting currentSessionTaskIndex to -1 means if user clicks "Start Game" again, it starts from beginning.
+        // If they click a specific task, that task starts. This seems reasonable.
+        currentSessionTaskIndex = -1;
     }
-
-    /**
-     * Callback method for TaskLogic instances to call when their specific task
-     * (e.g., identifying 4 shapes, calculating 1 area) is fully completed.
-     *
-     * @param logic The TaskLogic instance that just finished.
-     */
-    public void onTaskCompleted(TaskLogic logic) {
-        System.out.println("Task logic completed: " + logic.getClass().getSimpleName());
-        // Current task type (like identify 4 shapes) is done. Load the next task in the sequence.
-        scoreManagerRef.incrementTasksCompleted(); // Increment overall session progress
-        loadNextTask();
-    }
-
-    /**
-     * Resets the state when the user navigates away prematurely (e.g., hits Home).
-     */
-     public void resetCurrentTask() {
-         // This might involve telling the currentActiveTaskLogic to stop timers, reset its state, etc.
-         if (currentActiveTaskLogic != null) {
-              // currentActiveTaskLogic.cancelTask(); // Add such method if needed
-         }
-         currentActiveTaskLogic = null;
-         currentActiveTaskPanel = null;
-         // Reset index only if restarting the whole sequence
-         // currentTaskIndex = -1; // Depends on desired behavior when hitting Home
-         System.out.println("Current task reset due to navigation.");
-     }
-
-     // TODO: Add method to get total number of tasks for progress bar
-     public int getTotalTasksInSequence() {
-         return taskSequence.size();
-     }
 }
