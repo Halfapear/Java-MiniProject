@@ -8,7 +8,7 @@ com.shapeville
 │   └── panel_templates  // 任务面板的基类或接口 (如 TaskPanel)
 ├── model                // 共享数据模型 (Shape, Angle, UserProgress, etc.)
 ├── logic                // 核心业务逻辑 (TaskManager, ScoreManager, etc.)
-├── tasks                // 各个任务模块的包
+├── tasks(我目前没动)                // 各个任务模块的包
 │   ├── ks1
 │   │   ├── identification  // Task 1: Shape Identification
 │   │   └── angle         // Task 2: Angle Types
