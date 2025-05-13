@@ -21,4 +21,8 @@ com.shapeville
 ├── assets               // 存放图片、声音等资源 (通常在 src/main/resources/assets)
 └── utils                // 通用工具类 (ImageLoader, Validators, etc.)
 
+
 .gitignore 文件已配置，忽略 .class 文件
+
+架构使用maven 我的vscode source总会会出bug；你新建个文件应该会出现package com.shapeville.main;类似的内容 如果没有先看看有没有按照maven for java插件 再不行就call一下我
+
