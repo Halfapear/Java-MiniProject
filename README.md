@@ -25,7 +25,17 @@ com.shapeville
 
 ## 其他
 
-.gitignore 文件已配置，忽略 .class 文件
+- .gitignore 文件已配置，忽略 .class 文件
 
-架构使用maven 我的vscode source总会会出bug；你新建个文件应该会出现package com.shapeville.main;类似的内容 如果没有先看看有没有安装maven for java插件 再不行就call一下我
+- 架构使用maven 我的vscode source总会会出bug；你新建个文件应该会出现package com.shapeville.main;类似的内容 如果没有先看看有没有安装maven for java插件 再不行就call一下我
+
+- 自己分一下task文件夹 统一命名次级task1 等 再下级就随便了
+
+- （5.13施工中）你觉得公共的方法不够 or 我还没写完 -> 请写一下更新文档 某块添加了什么功能 这样别人更新的时候可以不用瞪代码看更新了什么
+
+## 更新文档
+
+- 5.13 框架+其中几个文件
+
+- 
 
