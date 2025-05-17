@@ -1,19 +1,15 @@
 package com.shapeville.logic;
 
-import com.shapeville.main.MainFrame;
-import com.shapeville.model.TaskDefinition;
-import com.shapeville.tasks.ks1.angle.AngleTypeLogic; // Placeholder for actual imports
-import com.shapeville.tasks.ks1.angle.AngleTypePanel;
-import com.shapeville.tasks.ks1.identification.ShapeIdentificationLogic;
-import com.shapeville.tasks.ks1.identification.ShapeIdentificationPanel;
-import com.shapeville.ui.panel_templates.TaskPanel;
-import com.shapeville.utils.Constants;
-
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.HashMap;
-import java.util.Map;
+
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
+import com.shapeville.main.MainFrame;
+import com.shapeville.model.TaskDefinition;
+import com.shapeville.ui.panel_templates.TaskPanel;
+import com.shapeville.utils.Constants;
 
 public class TaskManager {
     private MainFrame mainFrameRef;
@@ -105,46 +101,11 @@ public class TaskManager {
             TaskPanel taskPanelInstance = null; // The UI
             TaskLogic taskLogicInstance = null;   // The Logic
 
-            switch (taskDef.getTaskType()) {
-                case Constants.TASK_TYPE_SHAPE_IDENTIFICATION_2D:
-                case Constants.TASK_TYPE_SHAPE_IDENTIFICATION_3D:
-                    taskLogicInstance = new ShapeIdentificationLogic();
-                    taskPanelInstance = new ShapeIdentificationPanel(mainFrameRef);
-                    break;
-                case Constants.TASK_TYPE_ANGLE_IDENTIFICATION:
-                    taskLogicInstance = new AngleTypeLogic();       // TODO: KS1 Dev to implement AngleTypeLogic
-                    taskPanelInstance = new AngleTypePanel(mainFrameRef); // TODO: KS1 Dev to implement AngleTypePanel
-                    break;
-                // TODO: Add cases for Task 3 (Area), Task 4 (Circle), Bonus 1 (Compound), Bonus 2 (Sector)
-                // For each, instantiate their specific ...Logic and ...Panel classes.
-                // Example:
-                // case Constants.TASK_TYPE_AREA_CALC_RECT:
-                //     taskLogicInstance = new AreaCalculationLogic();
-                //     taskPanelInstance = new AreaCalculationPanel(mainFrameRef, "RECTANGLE"); // Panel might need type
-                //     break;
-                default:
-                    System.err.println("Unknown task type for UI/Logic instantiation: " + taskDef.getTaskType());
-                    JOptionPane.showMessageDialog(mainFrameRef, "Error: Task type '" + taskDef.getTaskType() + "' is not implemented.", "Implementation Error", JOptionPane.ERROR_MESSAGE);
-                    mainFrameRef.navigateToHome();
-                    return;
-            }
-
-            if (taskPanelInstance != null && taskLogicInstance != null) {
-                currentActiveTaskLogic = taskLogicInstance;
-                currentActiveTaskPanel = (JPanel) taskPanelInstance; // Cast to JPanel for CardLayout
-
-                taskPanelInstance.setTaskLogicCallback(currentActiveTaskLogic); // Link UI to Logic
-                currentActiveTaskLogic.initializeTask(taskDef, scoreManagerRef, this); // Initialize Logic
-
-                mainFrameRef.registerPanel(currentPanelId, currentActiveTaskPanel);
-                mainFrameRef.showPanel(currentPanelId);
-
-                // Display the first problem
-                taskPanelInstance.displayProblem(currentActiveTaskLogic.getCurrentProblem());
-            } else {
-                 System.err.println("Failed to instantiate Panel or Logic for: " + taskDef.getTaskType());
-                 mainFrameRef.navigateToHome();
-            }
+            // 直接进入 default 分支，避免引用不存在的类
+            System.err.println("Unknown task type for UI/Logic instantiation: " + taskDef.getTaskType());
+            JOptionPane.showMessageDialog(mainFrameRef, "Error: Task type '" + taskDef.getTaskType() + "' is not implemented.", "Implementation Error", JOptionPane.ERROR_MESSAGE);
+            mainFrameRef.navigateToHome();
+            return;
 
         } catch (Exception e) {
             System.err.println("Exception while loading task " + taskDef.getTaskId() + ": " + e.getMessage());
@@ -154,10 +115,7 @@ public class TaskManager {
         }
     }
 
-    /**
-     * Called by a TaskLogic instance when it has completed all its internal problems
-     * (e.g., identified 4 shapes, calculated 1 area).
-     */
+
     public void currentTaskTypeCompleted(TaskLogic completedLogic) {
         System.out.println("Task type completed: " + completedLogic.getClass().getSimpleName());
         scoreManagerRef.incrementTaskTypeCompletedCount(); // Increment overall session progress
@@ -195,9 +153,7 @@ public class TaskManager {
         }
     }
 
-    /**
-     * Called by MainFrame when user navigates away from an active task (e.g., clicks Home).
-     */
+
     public void currentTaskInterrupted() {
         System.out.println("Current task interrupted.");
         // TODO: Add any cleanup logic for the currentActiveTaskLogic if needed (e.g., stop timers)
@@ -210,5 +166,15 @@ public class TaskManager {
         // Resetting currentSessionTaskIndex to -1 means if user clicks "Start Game" again, it starts from beginning.
         // If they click a specific task, that task starts. This seems reasonable.
         currentSessionTaskIndex = -1;
+    }
+
+    // 补充 setTaskSequence 空实现，兼容 MainFrame 调用
+    public void setTaskSequence() {
+        // 可以根据需要自定义任务序列，目前留空
+    }
+
+    // 补充 resetCurrentTask 空实现，兼容 MainFrame 调用
+    public void resetCurrentTask() {
+        currentTaskInterrupted();
     }
 }

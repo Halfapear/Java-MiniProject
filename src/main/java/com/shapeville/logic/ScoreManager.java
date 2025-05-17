@@ -1,7 +1,8 @@
 package com.shapeville.logic;
 
-import com.shapeville.ui.NavigationBar;
-import javax.swing.JOptionPane; // For "Great Job!"
+import javax.swing.JOptionPane;
+
+import com.shapeville.ui.NavigationBar; // For "Great Job!"
 
 public class ScoreManager {
     private int currentScore;

@@ -146,4 +146,8 @@ public class MainFrame extends JFrame {
     public TaskManager getTaskManager() {
         return taskManager;
     }
+
+    public NavigationBar getNavigationBar() {
+        return navigationBar;
+    }
 }
