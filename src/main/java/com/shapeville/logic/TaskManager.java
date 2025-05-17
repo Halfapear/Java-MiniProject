@@ -8,7 +8,6 @@ import javax.swing.JPanel;
 
 import com.shapeville.main.MainFrame;
 import com.shapeville.model.TaskDefinition;
-import com.shapeville.ui.panel_templates.TaskPanel;
 import com.shapeville.utils.Constants;
 
 public class TaskManager {
@@ -31,7 +30,7 @@ public class TaskManager {
         this.sessionTaskSequenceIds = new ArrayList<>();
         this.currentSessionTaskIndex = -1;
         defineMasterTasks();
-        defineDefaultSessionSequence(); // Define the flow for a "full game"
+        //defineDefaultSessionSequence(); // Define the flow for a "full game"
     }
 
     private void defineMasterTasks() {
@@ -95,18 +94,15 @@ public class TaskManager {
         currentActiveTaskLogic = null;
         currentActiveTaskPanel = null; // This should be the JPanel that implements TaskPanel
         currentPanelId = taskDef.getPanelId();
-
-        // Factory to create correct Logic and Panel
+    
         try {
-            TaskPanel taskPanelInstance = null; // The UI
-            TaskLogic taskLogicInstance = null;   // The Logic
-
-            // 直接进入 default 分支，避免引用不存在的类
-            System.err.println("Unknown task type for UI/Logic instantiation: " + taskDef.getTaskType());
-            JOptionPane.showMessageDialog(mainFrameRef, "Error: Task type '" + taskDef.getTaskType() + "' is not implemented.", "Implementation Error", JOptionPane.ERROR_MESSAGE);
-            mainFrameRef.navigateToHome();
-            return;
-
+            // 用一个简单的占位面板代替真实面板，保证流程能跑通
+            JPanel placeholderPanel = new JPanel();
+            placeholderPanel.add(new javax.swing.JLabel("任务界面占位符：" + taskDef.getTaskType()));
+            currentActiveTaskPanel = placeholderPanel;
+            // 注册并显示该面板
+            mainFrameRef.registerPanel(currentPanelId, currentActiveTaskPanel);
+            mainFrameRef.showPanel(currentPanelId);
         } catch (Exception e) {
             System.err.println("Exception while loading task " + taskDef.getTaskId() + ": " + e.getMessage());
             e.printStackTrace();

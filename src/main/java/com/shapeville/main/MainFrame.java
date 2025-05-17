@@ -1,16 +1,20 @@
 package com.shapeville.main;
 
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane; // Assuming TaskPanel is an interface or class Panels implement/extend
+import javax.swing.JPanel;
+
 import com.shapeville.logic.ScoreManager;
 import com.shapeville.logic.TaskManager;
 import com.shapeville.ui.EndPanel;
 import com.shapeville.ui.HomeScreenPanel;
 import com.shapeville.ui.NavigationBar;
-import com.shapeville.ui.panel_templates.TaskPanel; // Assuming TaskPanel is an interface or class Panels implement/extend
-
-import javax.swing.*;
-import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
+import com.shapeville.ui.panel_templates.TaskPanel;
 
 /**
  * The main window (JFrame) of the application.
