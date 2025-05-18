@@ -30,8 +30,9 @@ public class HomeScreenPanel extends JPanel {
         addButton(buttonGrid, "Task 1: Identify Shapes (2D)", Constants.TASK_ID_SHAPE_ID_2D);
         addButton(buttonGrid, "Task 2: Identify Angles", Constants.TASK_ID_ANGLE_TYPE);
         // TODO: Add actual Task IDs for other buttons from Constants.java
-        addButton(buttonGrid, "Task 3: Area Calculation", "T3_PLACEHOLDER_ID");
-        addButton(buttonGrid, "Task 4: Circle Calc", "T4_PLACEHOLDER_ID");
+        addButton(buttonGrid, "Task 3: Area Calculation", Constants.TASK_ID_AREA_CALC);
+        addButton(buttonGrid, "Task 4: Circle Calc",      Constants.TASK_ID_CIRCLE_CALC);
+
         addButton(buttonGrid, "Bonus 1: Compound Area", "B1_PLACEHOLDER_ID");
         addButton(buttonGrid, "Bonus 2: Sector Calc", "B2_PLACEHOLDER_ID");
         add(buttonGrid, BorderLayout.CENTER);
