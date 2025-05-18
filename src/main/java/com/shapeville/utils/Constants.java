@@ -30,4 +30,14 @@ public class Constants {
     public static final int SHAPES_PER_IDENTIFICATION_QUIZ = 4;
     public static final int ANGLES_PER_IDENTIFICATION_QUIZ = 4;
     // TODO: Add other constants (e.g., time limits in milliseconds)
+
+    public static final String AREA_CALC_PANEL_ID   = "AREA_CALC_PANEL";
+    public static final String CIRCLE_CALC_PANEL_ID = "CIRCLE_CALC_PANEL";
+    public static final String TASK_TYPE_AREA_CALC  = "AREA_CALCULATION";
+    public static final String TASK_TYPE_CIRCLE_CALC = "CIRCLE_CALCULATION";
+    public static final String TASK_ID_AREA_CALC    = "TASK_AREA_CALC";
+    public static final String TASK_ID_CIRCLE_CALC  = "TASK_CIRCLE_CALC";
+    public static final int    TASK_TIME_LIMIT_SEC  = 180;  // 3 minutes in seconds
+
 }
+
