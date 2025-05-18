@@ -22,6 +22,8 @@ com.shapeville
 └── utils                // 通用工具类 (ImageLoader, Validators, etc.)
 
 ```
+
+```plaintext
 任务1、任务2修改结构
 
 com.shapeville
@@ -55,6 +57,7 @@ com.shapeville
 ├── assets               // 存放图片、声音等资源 (通常在 src/main/resources/assets)
 └── utils                // 通用工具类 (ImageLoader, Validators, etc.)
 
+```
 
 ## 其他
 
