@@ -99,21 +99,35 @@ public class TaskManager {
         currentPanelId = taskDef.getPanelId();
     
         try {
-            // 用一个简单的占位面板代替真实面板，保证流程能跑通
-            JPanel placeholderPanel = new JPanel();
-            placeholderPanel.add(new javax.swing.JLabel("任务界面占位符：" + taskDef.getTaskType()));
-            currentActiveTaskPanel = placeholderPanel;
-            // 注册并显示该面板
+        // ---------- instantiate the correct panel ----------
+            if (taskDef.getTaskId().equals(Constants.TASK_ID_AREA_CALC)) {
+                // Task 3 – Shapes area
+                currentActiveTaskPanel = new Task3Panel(mainFrameRef);
+
+            } 
+            else if (taskDef.getTaskId().equals(Constants.TASK_ID_CIRCLE_CALC)) {
+                // Task 4 – Circle area / circumference
+                currentActiveTaskPanel = new Task4Panel(mainFrameRef);
+
+            } 
+            else {
+                // Fallback for tasks that are not implemented yet
+                JPanel placeholderPanel = new JPanel();
+                placeholderPanel.add(new JLabel("Task UI Placeholder: " + taskDef.getTaskType()));
+                currentActiveTaskPanel = placeholderPanel;
+            }
+
+            // ---------- register & show the panel ----------
             mainFrameRef.registerPanel(currentPanelId, currentActiveTaskPanel);
             mainFrameRef.showPanel(currentPanelId);
-        } catch (Exception e) {
+        } 
+        catch (Exception e) {
             System.err.println("Exception while loading task " + taskDef.getTaskId() + ": " + e.getMessage());
             e.printStackTrace();
             JOptionPane.showMessageDialog(mainFrameRef, "Critical error loading task: " + taskDef.getTaskId(), "Error", JOptionPane.ERROR_MESSAGE);
             mainFrameRef.navigateToHome();
         }
     }
-
 
     public void currentTaskTypeCompleted(TaskLogic completedLogic) {
         System.out.println("Task type completed: " + completedLogic.getClass().getSimpleName());
@@ -155,6 +169,9 @@ public class TaskManager {
 
     public void currentTaskInterrupted() {
         System.out.println("Current task interrupted.");
+        if (currentActiveTaskPanel instanceof TaskPanel) {
+        ((TaskPanel) currentActiveTaskPanel).resetState();
+        }
         // TODO: Add any cleanup logic for the currentActiveTaskLogic if needed (e.g., stop timers)
         // if (currentActiveTaskLogic != null && currentActiveTaskLogic instanceof SomeTimerInterface) {
         //    ((SomeTimerInterface)currentActiveTaskLogic).stopTimer();
