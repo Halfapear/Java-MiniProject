@@ -18,12 +18,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities; 
+import javax.swing.SwingUtilities;
 /**
  * Bonus 1: Compound Shape Area Calculation
  * Allows users to select a compound shape and calculate its area.
  */
-public class compound extends JPanel {
+public class Compound extends JPanel {
     private JTextField answerField;
     private int attempt = 0;
     private int currentShapeIndex = 0;
@@ -40,7 +40,7 @@ public class compound extends JPanel {
     /**
      * Constructor
      */
-    public compound() {
+    public Compound() {
         setLayout(new BorderLayout());
         content = new JPanel();
         add(content, BorderLayout.CENTER);
@@ -116,10 +116,11 @@ public class compound extends JPanel {
      * @return The shape image.
      */
     private ImageIcon createShapeImage(int shapeNumber) {
-        // Load image from resources/assets/compound directory
-        String imagePath = "/assets/compound/compound" + shapeNumber + ".png";
+        // 修改为使用类路径加载资源
+        String imagePath = "assets/compound/compound" + shapeNumber + ".png";
         return com.shapeville.utils.ImageLoader.loadImageAndScale(imagePath, 400, 300);
     }
+
 
     /**
      * Sets up the user interface components.
@@ -249,7 +250,7 @@ public class compound extends JPanel {
                     timer.cancel();
                     timerRunning = false;
                     SwingUtilities.invokeLater(() -> {
-                        JOptionPane.showMessageDialog(compound.this, 
+                        JOptionPane.showMessageDialog(Compound.this, 
                                 "Time's up! Let's see the solution.");
                         showSolution();
                     });
@@ -306,7 +307,8 @@ public class compound extends JPanel {
                 JOptionPane.showMessageDialog(this, "Correct Answer!");
                 practisedShapes++;
 
-              
+                // 更新进度条
+                updateProgress(practisedShapes, shapes.size());
                 
                 // Mark this shape as completed
                 currentShape.setCompleted(true);
@@ -487,4 +489,21 @@ private void recordScore(int attemptsUsed) {
             this.completed = completed;
         }
     }
+
+    /**
+ * 更新进度条
+ * @param current 当前完成的形状数量
+ * @param total 总形状数量
+ */
+private void updateProgress(int current, int total) {
+    // 获取MainFrame实例
+    JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+    if (topFrame instanceof com.shapeville.main.MainFrame) {
+        com.shapeville.main.MainFrame mainFrame = (com.shapeville.main.MainFrame) topFrame;
+        // 获取NavigationBar并更新进度
+        mainFrame.getNavigationBar().updateProgress(current, total);
+    }
 }
+
+}
+

@@ -9,10 +9,8 @@ import javax.swing.JPanel;
 
 import com.shapeville.main.MainFrame;
 import com.shapeville.model.TaskDefinition;
-
-import com.shapeville.task.sk1.shape.Task1Panel; 
-import com.shapeville.task.sk1.angle.Task2Panel; 
-
+import com.shapeville.task.sk1.Task1Panel;
+import com.shapeville.task.sk1.Task2Panel;
 import com.shapeville.task.sk2.Task3Panel;
 import com.shapeville.task.sk2.Task4Panel;
 import com.shapeville.ui.panel_templates.TaskPanel;

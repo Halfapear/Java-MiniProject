@@ -25,7 +25,7 @@ import javax.swing.SwingUtilities;
  * Bonus 2: Sector Area Calculation
  * Allows users to choose a sector and calculate its area.
  */
-public class sector extends JPanel {
+public class Sector extends JPanel {
     private JTextField answerField;
     private int attempt = 0;
     private int currentSectorIndex = 0;
@@ -43,7 +43,7 @@ public class sector extends JPanel {
     /**
      * Constructor
      */
-    public sector() {
+    public Sector() {
         setLayout(new BorderLayout());
         content = new JPanel();
         add(content, BorderLayout.CENTER);
@@ -146,7 +146,7 @@ public class sector extends JPanel {
      */
     private ImageIcon createSectorImage(int sectorNumber) {
         // Load image from resources/assets/sector directory
-        String imagePath = "/assets/sector/sector" + sectorNumber + ".png";
+        String imagePath = "/assets/sectors/sector" + sectorNumber + ".png";
         return com.shapeville.utils.ImageLoader.loadImageAndScale(imagePath, 300, 300);
     }
 
@@ -287,7 +287,7 @@ public class sector extends JPanel {
                     timer.cancel();
                     timerRunning = false;
                     SwingUtilities.invokeLater(() -> {
-                        JOptionPane.showMessageDialog(sector.this, 
+                        JOptionPane.showMessageDialog(Sector.this, 
                                 "Time's up! Let's see the solution.");
                         showSolution();
                     });
@@ -343,6 +343,9 @@ public class sector extends JPanel {
                 JOptionPane.showMessageDialog(this, "Correct answer!");
                 practicedSectors++;
 
+              // 更新进度条
+            updateProgress(practicedSectors, sectors.size());
+                
                 JOptionPane.showMessageDialog(this, "Correct answer!");
                 practicedSectors++;
                 
@@ -538,4 +541,21 @@ private void recordScore(int attemptsUsed) {
             return values;
         }
     }
+
+    /**
+ * 更新进度条
+ * @param current 当前完成的扇形数量
+ * @param total 总扇形数量
+ */
+private void updateProgress(int current, int total) {
+    // 获取MainFrame实例
+    javax.swing.JFrame topFrame = (javax.swing.JFrame) SwingUtilities.getWindowAncestor(this);
+    if (topFrame instanceof com.shapeville.main.MainFrame) {
+        com.shapeville.main.MainFrame mainFrame = (com.shapeville.main.MainFrame) topFrame;
+        // 获取NavigationBar并更新进度
+        mainFrame.getNavigationBar().updateProgress(current, total);
+    }
 }
+
+}
+

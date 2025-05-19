@@ -8,13 +8,22 @@ import javax.swing.ImageIcon;
 
 public class ImageLoader {
     public static ImageIcon loadImageAndScale(String imagePath, int width, int height) {
+        
         try {
-            // 从资源文件中加载图片
-            InputStream is = ImageLoader.class.getResourceAsStream(imagePath);
+        System.out.println("尝试加载图片: " + imagePath);
+        // 从资源文件中加载图片
+        InputStream is = ImageLoader.class.getResourceAsStream(imagePath);
+        if (is == null) {
+            System.err.println("无法找到图片: " + imagePath);
+            // 尝试使用不同的加载方式
+            is = Thread.currentThread().getContextClassLoader().getResourceAsStream(imagePath.substring(1));
             if (is == null) {
-                System.err.println("无法找到图片: " + imagePath);
+                System.err.println("使用ContextClassLoader也无法找到图片");
                 return null;
+            } else {
+                System.out.println("使用ContextClassLoader成功加载图片");
             }
+        }
             
             // 读取图片
             Image image = ImageIO.read(is);
