@@ -39,6 +39,9 @@ public class TaskManager {
         masterTaskList.add(new TaskDefinition(Constants.TASK_ID_SHAPE_ID_3D, Constants.SHAPE_IDENTIFICATION_PANEL_ID, Constants.TASK_TYPE_SHAPE_IDENTIFICATION_3D, Constants.SCORE_ADVANCED));
         masterTaskList.add(new TaskDefinition(Constants.TASK_ID_ANGLE_TYPE, Constants.ANGLE_TYPE_PANEL_ID, Constants.TASK_TYPE_ANGLE_IDENTIFICATION, Constants.SCORE_BASIC));
         // TODO: Add definitions for Task 3, 4, Bonus 1, 2
+        masterTaskList.add(new TaskDefinition(Constants.TASK_ID_AREA_CALC, Constants.AREA_CALC_PANEL_ID,Constants.TASK_TYPE_AREA_CALC, Constants.SCORE_BASIC));
+        masterTaskList.add(new TaskDefinition(Constants.TASK_ID_CIRCLE_CALC, Constants.CIRCLE_CALC_PANEL_ID,Constants.TASK_TYPE_CIRCLE_CALC, Constants.SCORE_BASIC));
+
         // Example: masterTaskList.add(new TaskDefinition("TASK_AREA_RECT", "AreaCalcPanel_Rect", "AREA_CALC_RECT", Constants.SCORE_BASIC));
         System.out.println("Master task list defined with " + masterTaskList.size() + " task types.");
     
@@ -104,42 +107,48 @@ public class TaskManager {
         }
         return null;
     }
-private void loadTaskUIAndLogic(TaskDefinition taskDef) {
-    System.out.println("Loading UI and Logic for task: " + taskDef.getTaskId() + " - Type: " + taskDef.getTaskType());
-    currentActiveTaskLogic = null;
-    currentActiveTaskPanel = null;
-    currentPanelId = taskDef.getPanelId();
-
-    try {
-        // 根据面板ID加载相应的任务面板
-        if (currentPanelId.equals(Constants.COMPOUND_AREA_PANEL_ID)) {
-            // 加载Compound任务面板
-            currentActiveTaskPanel = new com.shapeville.task.bonus.compound();
-        } else if (currentPanelId.equals(Constants.SECTOR_CALC_PANEL_ID)) {
-            // 加载Sector任务面板
-            currentActiveTaskPanel = new com.shapeville.task.bonus.sector();
-        } else {
-            // 其他面板的处理逻辑
-            // ... existing code ...
-            JPanel placeholderPanel = new JPanel();
-            placeholderPanel.add(new javax.swing.JLabel("任务界面占位符：" + taskDef.getTaskType()));
-            currentActiveTaskPanel = placeholderPanel;
-        }
-
-        // 将面板添加到主框架
-        mainFrameRef.setContentPanel(currentActiveTaskPanel);
+nel(currentActiveTaskPanel);
         
             // 注册并显示该面板
+
+
+    private void loadTaskUIAndLogic(TaskDefinition taskDef) {
+        System.out.println("Loading UI and Logic for task: " + taskDef.getTaskId() + " - Type: " + taskDef.getTaskType());
+        currentActiveTaskLogic = null;
+        currentActiveTaskPanel = null; // This should be the JPanel that implements TaskPanel
+        currentPanelId = taskDef.getPanelId();
+    
+        try {
+        // ---------- instantiate the correct panel ----------
+            if (taskDef.getTaskId().equals(Constants.TASK_ID_AREA_CALC)) {
+                // Task 3 – Shapes area
+                currentActiveTaskPanel = new Task3Panel(mainFrameRef);
+
+            } 
+            else if (taskDef.getTaskId().equals(Constants.TASK_ID_CIRCLE_CALC)) {
+                // Task 4 – Circle area / circumference
+                currentActiveTaskPanel = new Task4Panel(mainFrameRef);
+
+            } 
+            else {
+                // Fallback for tasks that are not implemented yet
+                JPanel placeholderPanel = new JPanel();
+                placeholderPanel.add(new JLabel("Task UI Placeholder: " + taskDef.getTaskType()));
+                currentActiveTaskPanel = placeholderPanel;
+            }
+
+            // ---------- register & show the panel ----------
+
             mainFrameRef.registerPanel(currentPanelId, currentActiveTaskPanel);
             mainFrameRef.showPanel(currentPanelId);
-        } catch (Exception e) {
+        } 
+        catch (Exception e) {
             System.err.println("Exception while loading task " + taskDef.getTaskId() + ": " + e.getMessage());
             e.printStackTrace();
             JOptionPane.showMessageDialog(mainFrameRef, "Critical error loading task: " + taskDef.getTaskId(), "Error", JOptionPane.ERROR_MESSAGE);
             mainFrameRef.navigateToHome();
         }
     }
-
 
     public void currentTaskTypeCompleted(TaskLogic completedLogic) {
         System.out.println("Task type completed: " + completedLogic.getClass().getSimpleName());
@@ -181,6 +190,9 @@ private void loadTaskUIAndLogic(TaskDefinition taskDef) {
 
     public void currentTaskInterrupted() {
         System.out.println("Current task interrupted.");
+        if (currentActiveTaskPanel instanceof TaskPanel) {
+        ((TaskPanel) currentActiveTaskPanel).resetState();
+        }
         // TODO: Add any cleanup logic for the currentActiveTaskLogic if needed (e.g., stop timers)
         // if (currentActiveTaskLogic != null && currentActiveTaskLogic instanceof SomeTimerInterface) {
         //    ((SomeTimerInterface)currentActiveTaskLogic).stopTimer();
