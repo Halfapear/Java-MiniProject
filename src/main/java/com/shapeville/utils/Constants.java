@@ -39,5 +39,15 @@ public class Constants {
     public static final String TASK_ID_CIRCLE_CALC  = "TASK_CIRCLE_CALC";
     public static final int    TASK_TIME_LIMIT_SEC  = 180;  // 3 minutes in seconds
 
+
+    // ... existing code ...
+public static final String COMPOUND_AREA_PANEL_ID = "COMPOUND_AREA_PANEL";
+public static final String SECTOR_CALC_PANEL_ID = "SECTOR_CALC_PANEL";
+public static final String TASK_TYPE_COMPOUND_AREA = "COMPOUND_AREA";
+public static final String TASK_TYPE_SECTOR_CALC = "SECTOR_CALC";
+public static final String TASK_ID_COMPOUND_AREA = "TASK_COMPOUND_AREA";
+public static final String TASK_ID_SECTOR_CALC = "TASK_SECTOR_CALC";
+// ... existing code ...
+
 }
 

@@ -151,7 +151,20 @@ public class MainFrame extends JFrame {
         return taskManager;
     }
 
+   
     public NavigationBar getNavigationBar() {
         return navigationBar;
     }
+    
+    /**
+     * 设置内容面板
+     * 
+     * @param panel 要设置的面板
+     */
+    public void setContentPanel(JPanel panel) {
+        // 这里不需要做额外操作，因为registerPanel和showPanel已经处理了面板的添加和显示
+        // 这个方法只是为了兼容TaskManager中的调用
+        System.out.println("设置内容面板: " + panel.getClass().getSimpleName());
+    }
 }
+

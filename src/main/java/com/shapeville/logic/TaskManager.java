@@ -41,6 +41,22 @@ public class TaskManager {
         // TODO: Add definitions for Task 3, 4, Bonus 1, 2
         // Example: masterTaskList.add(new TaskDefinition("TASK_AREA_RECT", "AreaCalcPanel_Rect", "AREA_CALC_RECT", Constants.SCORE_BASIC));
         System.out.println("Master task list defined with " + masterTaskList.size() + " task types.");
+    
+    //为了bonus1和bonus2加的
+    // Add the bonus task definitions
+    masterTaskList.add(new TaskDefinition(Constants.TASK_ID_COMPOUND_AREA, Constants.COMPOUND_AREA_PANEL_ID, Constants.TASK_TYPE_COMPOUND_AREA, Constants.SCORE_ADVANCED));
+    masterTaskList.add(new TaskDefinition(Constants.TASK_ID_SHAPE_ID_2D, Constants.SHAPE_IDENTIFICATION_PANEL_ID, Constants.TASK_TYPE_SHAPE_IDENTIFICATION_2D, Constants.SCORE_BASIC));
+    masterTaskList.add(new TaskDefinition(Constants.TASK_ID_SHAPE_ID_3D, Constants.SHAPE_IDENTIFICATION_PANEL_ID, Constants.TASK_TYPE_SHAPE_IDENTIFICATION_3D, Constants.SCORE_ADVANCED));
+    masterTaskList.add(new TaskDefinition(Constants.TASK_ID_ANGLE_TYPE, Constants.ANGLE_TYPE_PANEL_ID, Constants.TASK_TYPE_ANGLE_IDENTIFICATION, Constants.SCORE_BASIC));
+    
+    // Add the bonus task definitions
+    masterTaskList.add(new TaskDefinition(Constants.TASK_ID_COMPOUND_AREA, Constants.COMPOUND_AREA_PANEL_ID, Constants.TASK_TYPE_COMPOUND_AREA, Constants.SCORE_ADVANCED));
+    masterTaskList.add(new TaskDefinition(Constants.TASK_ID_SECTOR_CALC, Constants.SECTOR_CALC_PANEL_ID, Constants.TASK_TYPE_SECTOR_CALC, Constants.SCORE_ADVANCED));
+    
+    System.out.println("Master task list defined with " + masterTaskList.size() + " task types.");
+    
+    
+    
     }
 
     private void defineDefaultSessionSequence() {
@@ -88,18 +104,31 @@ public class TaskManager {
         }
         return null;
     }
+private void loadTaskUIAndLogic(TaskDefinition taskDef) {
+    System.out.println("Loading UI and Logic for task: " + taskDef.getTaskId() + " - Type: " + taskDef.getTaskType());
+    currentActiveTaskLogic = null;
+    currentActiveTaskPanel = null;
+    currentPanelId = taskDef.getPanelId();
 
-    private void loadTaskUIAndLogic(TaskDefinition taskDef) {
-        System.out.println("Loading UI and Logic for task: " + taskDef.getTaskId() + " - Type: " + taskDef.getTaskType());
-        currentActiveTaskLogic = null;
-        currentActiveTaskPanel = null; // This should be the JPanel that implements TaskPanel
-        currentPanelId = taskDef.getPanelId();
-    
-        try {
-            // 用一个简单的占位面板代替真实面板，保证流程能跑通
+    try {
+        // 根据面板ID加载相应的任务面板
+        if (currentPanelId.equals(Constants.COMPOUND_AREA_PANEL_ID)) {
+            // 加载Compound任务面板
+            currentActiveTaskPanel = new com.shapeville.task.bonus.compound();
+        } else if (currentPanelId.equals(Constants.SECTOR_CALC_PANEL_ID)) {
+            // 加载Sector任务面板
+            currentActiveTaskPanel = new com.shapeville.task.bonus.sector();
+        } else {
+            // 其他面板的处理逻辑
+            // ... existing code ...
             JPanel placeholderPanel = new JPanel();
             placeholderPanel.add(new javax.swing.JLabel("任务界面占位符：" + taskDef.getTaskType()));
             currentActiveTaskPanel = placeholderPanel;
+        }
+
+        // 将面板添加到主框架
+        mainFrameRef.setContentPanel(currentActiveTaskPanel);
+        
             // 注册并显示该面板
             mainFrameRef.registerPanel(currentPanelId, currentActiveTaskPanel);
             mainFrameRef.showPanel(currentPanelId);

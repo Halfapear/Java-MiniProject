@@ -33,8 +33,8 @@ public class HomeScreenPanel extends JPanel {
         addButton(buttonGrid, "Task 3: Area Calculation", Constants.TASK_ID_AREA_CALC);
         addButton(buttonGrid, "Task 4: Circle Calc",      Constants.TASK_ID_CIRCLE_CALC);
 
-        addButton(buttonGrid, "Bonus 1: Compound Area", "B1_PLACEHOLDER_ID");
-        addButton(buttonGrid, "Bonus 2: Sector Calc", "B2_PLACEHOLDER_ID");
+        addButton(buttonGrid, "Bonus 1: Compound Area", Constants.TASK_ID_COMPOUND_AREA);
+        addButton(buttonGrid, "Bonus 2: Sector Calc", Constants.TASK_ID_SECTOR_CALC);
         add(buttonGrid, BorderLayout.CENTER);
 
         JLabel instructions = new JLabel("Click a task to start learning!", SwingConstants.CENTER);
