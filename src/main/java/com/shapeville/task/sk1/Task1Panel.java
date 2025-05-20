@@ -273,7 +273,8 @@ public class Task1Panel extends JPanel implements TaskPanel {
 
     @Override
     public String getPanelId() {
-        return Constants.SHAPE_RECOGNITION_PANEL_ID;
+        return Constants.SHAPE_IDENTIFICATION_PANEL_ID;
+        
     }
 
     @Override

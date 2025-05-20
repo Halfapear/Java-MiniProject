@@ -40,11 +40,15 @@ public class TaskManager {
         defineMasterTasks();
         //defineDefaultSessionSequence(); // Define the flow for a "full game"
     }
-
+    //task addition
     private void defineMasterTasks() {
-        masterTaskList.add(new TaskDefinition(Constants.TASK_ID_SHAPE_ID_2D, Constants.SHAPE_IDENTIFICATION_PANEL_ID, Constants.TASK_TYPE_SHAPE_IDENTIFICATION_2D, Constants.SCORE_BASIC));
-        masterTaskList.add(new TaskDefinition(Constants.TASK_ID_SHAPE_ID_3D, Constants.SHAPE_IDENTIFICATION_PANEL_ID, Constants.TASK_TYPE_SHAPE_IDENTIFICATION_3D, Constants.SCORE_ADVANCED));
+        // masterTaskList.add(new TaskDefinition(Constants.TASK_ID_SHAPE_ID_2D, Constants.SHAPE_IDENTIFICATION_PANEL_ID, Constants.TASK_TYPE_SHAPE_IDENTIFICATION_2D, Constants.SCORE_BASIC));
+        // masterTaskList.add(new TaskDefinition(Constants.TASK_ID_SHAPE_ID_3D, Constants.SHAPE_IDENTIFICATION_PANEL_ID, Constants.TASK_TYPE_SHAPE_IDENTIFICATION_3D, Constants.SCORE_ADVANCED));
+        /*----------------------------------------------*/
+        masterTaskList.add(new TaskDefinition(Constants.TASK_ID_SHAPE_ID_2D_AND_3D, Constants.SHAPE_IDENTIFICATION_PANEL_ID, Constants.TASK_TYPE_SHAPE_IDENTIFICATION_2D_AND_3D, Constants.SCORE_BASIC));
         masterTaskList.add(new TaskDefinition(Constants.TASK_ID_ANGLE_TYPE, Constants.ANGLE_TYPE_PANEL_ID, Constants.TASK_TYPE_ANGLE_IDENTIFICATION, Constants.SCORE_BASIC));
+        
+        /*----------------------------------------------*/
         masterTaskList.add(new TaskDefinition(Constants.TASK_ID_AREA_CALC, Constants.AREA_CALC_PANEL_ID, Constants.TASK_TYPE_AREA_CALC, Constants.SCORE_BASIC));
         masterTaskList.add(new TaskDefinition(Constants.TASK_ID_CIRCLE_CALC, Constants.CIRCLE_CALC_PANEL_ID, Constants.TASK_TYPE_CIRCLE_CALC, Constants.SCORE_BASIC));
         masterTaskList.add(new TaskDefinition(Constants.TASK_ID_COMPOUND_AREA, Constants.COMPOUND_AREA_PANEL_ID, Constants.TASK_TYPE_COMPOUND_AREA, Constants.SCORE_ADVANCED));
@@ -105,19 +109,23 @@ public class TaskManager {
         currentPanelId = taskDef.getPanelId();
 
         try {
-            if (taskDef.getTaskId().equals(Constants.TASK_ID_SHAPE_ID_2D)) {
+            if (taskDef.getTaskId().equals(Constants.TASK_ID_SHAPE_ID_2D_AND_3D)) {
                 // Task 1: 形状识别（2D和3D）
                 currentActiveTaskPanel = new Task1Panel(mainFrameRef);
-            } else if (taskDef.getTaskId().equals(Constants.TASK_ID_ANGLE_TYPE)) {
+            } 
+            else if (taskDef.getTaskId().equals(Constants.TASK_ID_ANGLE_TYPE)) {
                 // Task 2: 角度类型识别
                 currentActiveTaskPanel = new Task2Panel(mainFrameRef);
-            } else if (taskDef.getTaskId().equals(Constants.TASK_ID_AREA_CALC)) {
+            } 
+            else if (taskDef.getTaskId().equals(Constants.TASK_ID_AREA_CALC)) {
                 // Task 3 – Shapes area
                 currentActiveTaskPanel = new Task3Panel(mainFrameRef);
-            } else if (taskDef.getTaskId().equals(Constants.TASK_ID_CIRCLE_CALC)) {
+            }
+            else if (taskDef.getTaskId().equals(Constants.TASK_ID_CIRCLE_CALC)) {
                 // Task 4 – Circle area / circumference
                 currentActiveTaskPanel = new Task4Panel(mainFrameRef);
-            } else {
+            } 
+            else {
                 // Fallback for tasks that are not implemented yet
                 JPanel placeholderPanel = new JPanel();
                 placeholderPanel.add(new JLabel("Task UI Placeholder: " + taskDef.getTaskType()));

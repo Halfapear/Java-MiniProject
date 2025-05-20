@@ -34,8 +34,9 @@ public class HomeScreenPanel extends JPanel {
 
     private void initializeUI() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        add(createTaskButton("2D Shape Identification", Constants.TASK_ID_SHAPE_ID_2D));
-        add(createTaskButton("3D Shape Identification", Constants.TASK_ID_SHAPE_ID_3D));
+        // add(createTaskButton("2D Shape Identification", Constants.TASK_ID_SHAPE_ID_2D));
+        // add(createTaskButton("3D Shape Identification", Constants.TASK_ID_SHAPE_ID_3D));
+        add(createTaskButton("3D & 2D Shape Identification", Constants.TASK_ID_SHAPE_ID_2D_AND_3D));
         add(createTaskButton("Angle Recognition", Constants.TASK_ID_ANGLE_TYPE));
         add(createTaskButton("Area Calculation", Constants.TASK_ID_AREA_CALC));
         add(createTaskButton("Circle Calculation", Constants.TASK_ID_CIRCLE_CALC));
