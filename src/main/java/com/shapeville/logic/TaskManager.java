@@ -3,11 +3,15 @@ package com.shapeville.logic;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import com.shapeville.main.MainFrame;
 import com.shapeville.model.TaskDefinition;
+import com.shapeville.task.sk2.Task3Panel;
+import com.shapeville.task.sk2.Task4Panel;
+import com.shapeville.ui.panel_templates.TaskPanel;
 import com.shapeville.utils.Constants;
 
 public class TaskManager {
@@ -107,7 +111,7 @@ public class TaskManager {
         }
         return null;
     }
-nel(currentActiveTaskPanel);
+    mainFrameRef.registerPanel(currentPanelId, currentActiveTaskPanel);
         
             // 注册并显示该面板
 

@@ -1,3 +1,4 @@
+package com.shapeville.task.sk1.shape;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
