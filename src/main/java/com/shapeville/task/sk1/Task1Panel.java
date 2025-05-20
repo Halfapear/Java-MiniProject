@@ -1,0 +1,294 @@
+package com.shapeville.task.sk1.shape;
+
+import com.shapeville.main.MainFrame;
+import com.shapeville.model.Shape;
+import com.shapeville.ui.panel_templates.TaskPanel;
+import com.shapeville.utils.Constants;
+import com.shapeville.logic.ScoreManager;
+import com.shapeville.logic.TaskLogic;
+import com.shapeville.model.Feedback;
+import com.shapeville.model.Problem;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+/**
+ * Task 1: 2D and 3D Shape Recognition
+ */
+public class Task1Panel extends JPanel implements TaskPanel {
+    private MainFrame mainFrame;
+    private JLabel shapeImageLabel;
+    private JTextField answerTextField;
+    private JButton submitButton;
+    private JLabel resultLabel;
+    private JLabel scoreLabel;
+    private JLabel attemptsLabel;
+    private JLabel promptLabel;
+    private JLabel typePromptLabel; // 新增：图形类型提示标签
+    private List<Shape> shapes;
+    private Shape currentShape;
+    private ScoreManager scoreManager;
+    private int attemptsLeft = 3;
+    private int attemptsUsed = 1;
+    private int completedShapes = 0;
+    private JPanel imageContainer;
+    private JPanel inputContainer;
+    private JPanel feedbackContainer;
+
+    public Task1Panel(MainFrame mainFrame) {
+        this.mainFrame = mainFrame;
+        this.scoreManager = mainFrame.getScoreManager();
+        initializeUI();
+        initializeShapes();
+        loadRandomShape();
+    }
+
+    private void initializeUI() {
+        setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.gridx = 0;
+
+        // 标题区域（居中）
+        JLabel titleLabel = new JLabel("Task 1: 2D and 3D Shape Recognition");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        gbc.gridy = 0;
+        add(titleLabel, gbc);
+
+        // 固定大小的图片容器（300x300像素）
+        imageContainer = new JPanel(new BorderLayout());
+        imageContainer.setPreferredSize(new Dimension(300, 300));
+        imageContainer.setMaximumSize(new Dimension(300, 300));
+        imageContainer.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+        
+        shapeImageLabel = new JLabel();
+        shapeImageLabel.setHorizontalAlignment(JLabel.CENTER);
+        shapeImageLabel.setVerticalAlignment(JLabel.CENTER);
+        imageContainer.add(shapeImageLabel, BorderLayout.CENTER);
+        
+        gbc.gridy = 1;
+        add(imageContainer, gbc);
+
+        // 居中的输入区域
+        inputContainer = new JPanel();
+        inputContainer.setLayout(new BoxLayout(inputContainer, BoxLayout.Y_AXIS));
+        inputContainer.setAlignmentX(Component.CENTER_ALIGNMENT);
+        
+        // 新增：图形类型提示标签
+        typePromptLabel = new JLabel("Current Shape Type: ");
+        typePromptLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        typePromptLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        typePromptLabel.setForeground(Color.BLUE); // 使用蓝色突出显示
+        inputContainer.add(typePromptLabel);
+        
+        promptLabel = new JLabel("Enter the correct shape name:");
+        promptLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        promptLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        inputContainer.add(promptLabel);
+        
+        answerTextField = new JTextField(20);
+        answerTextField.setFont(new Font("Arial", Font.PLAIN, 16));
+        answerTextField.setAlignmentX(Component.CENTER_ALIGNMENT);
+        answerTextField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
+        answerTextField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    checkAnswer();
+                }
+            }
+        });
+        inputContainer.add(answerTextField);
+        
+        submitButton = new JButton("Submit Answer");
+        submitButton.setFont(new Font("Arial", Font.PLAIN, 16));
+        submitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                checkAnswer();
+            }
+        });
+        inputContainer.add(submitButton);
+        
+        gbc.gridy = 2;
+        add(inputContainer, gbc);
+
+        // 居中的反馈区域
+        feedbackContainer = new JPanel();
+        feedbackContainer.setLayout(new BoxLayout(feedbackContainer, BoxLayout.Y_AXIS));
+        feedbackContainer.setAlignmentX(Component.CENTER_ALIGNMENT);
+        
+        resultLabel = new JLabel("");
+        resultLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        resultLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        feedbackContainer.add(resultLabel);
+        
+        attemptsLabel = new JLabel("Remaining attempts: " + attemptsLeft);
+        attemptsLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        attemptsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        feedbackContainer.add(attemptsLabel);
+        
+        scoreLabel = new JLabel("Current Score: " + scoreManager.getCurrentScore());
+        scoreLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        scoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        feedbackContainer.add(scoreLabel);
+        
+        gbc.gridy = 3;
+        gbc.weighty = 1.0; // 让底部区域占据剩余空间
+        add(feedbackContainer, gbc);
+    }
+
+    private void initializeShapes() {
+        shapes = new ArrayList<>();
+        
+        // 添加2D形状
+        shapes.add(new Shape("circle", "/assets/2d/circle.png", "2D"));
+        shapes.add(new Shape("rectangle", "/assets/2d/rectangle.png", "2D"));
+        shapes.add(new Shape("triangle", "/assets/2d/triangle.png", "2D"));
+        shapes.add(new Shape("square", "/assets/2d/square.png", "2D"));
+        shapes.add(new Shape("heptagon", "/assets/2d/heptagon.png", "2D"));
+        shapes.add(new Shape("hexagon", "/assets/2d/hexagon.png", "2D"));
+        shapes.add(new Shape("kite", "/assets/2d/kite.png", "2D"));
+        shapes.add(new Shape("octagon", "/assets/2d/octagon.png", "2D"));
+        shapes.add(new Shape("oval", "/assets/2d/oval.png", "2D"));
+        shapes.add(new Shape("pentagon", "/assets/2d/pentagon.png", "2D"));
+        shapes.add(new Shape("rhombus", "/assets/2d/rhombus.png", "2D"));
+
+        // 添加3D形状
+        shapes.add(new Shape("cone", "/assets/3d/cone.png", "3D"));
+        shapes.add(new Shape("cube", "/assets/3d/cube.png", "3D"));
+        shapes.add(new Shape("cuboid", "/assets/3d/cuboid.png", "3D"));
+        shapes.add(new Shape("cylinder", "/assets/3d/cylinder.png", "3D"));
+        shapes.add(new Shape("sphere", "/assets/3d/sphere.png", "3D"));
+        shapes.add(new Shape("square-based pyramid", "/assets/3d/square-based pyramid.png", "3D"));
+        shapes.add(new Shape("tetrahedron", "/assets/3d/tetrahedron.png", "3D"));
+        shapes.add(new Shape("triangular prism", "/assets/3d/triangular prism.png", "3D"));
+    }
+
+    private void loadRandomShape() {
+        if (completedShapes >= Constants.SHAPES_PER_IDENTIFICATION_QUIZ) {
+            Object[] options = {"Return to Home", "Try Again"};
+            int choice = JOptionPane.showOptionDialog(this,
+                    "You've completed " + Constants.SHAPES_PER_IDENTIFICATION_QUIZ + 
+                    " shape recognitions! Your total score is: " + scoreManager.getCurrentScore() +
+                    ". What would you like to do next?",
+                    "Task Completed",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    options,
+                    options[0]);
+            
+            if (choice == 0) {
+                mainFrame.navigateToHome();
+            } else {
+                resetState();
+            }
+            scoreManager.incrementTaskTypeCompletedCount();
+            return;
+        }
+        
+        Random random = new Random();
+        currentShape = shapes.get(random.nextInt(shapes.size()));
+        ImageIcon icon = new ImageIcon(getClass().getResource(currentShape.getImagePath()));
+        
+        shapeImageLabel.setIcon(null);
+        if (icon != null && icon.getImageLoadStatus() == MediaTracker.COMPLETE) {
+            shapeImageLabel.setIcon(icon);
+        } else {
+            shapeImageLabel.setText("Failed to load image");
+        }
+        
+        // 更新类型提示
+        typePromptLabel.setText("Current Shape Type: " + currentShape.getType());
+        
+        attemptsLeft = 3;
+        attemptsUsed = 1;
+        resultLabel.setText("");
+        answerTextField.setText("");
+        attemptsLabel.setText("Remaining attempts: " + attemptsLeft);
+        submitButton.setEnabled(true);
+    }
+
+    private void checkAnswer() {
+        String userAnswer = answerTextField.getText().trim();
+        boolean isCorrect = userAnswer.equalsIgnoreCase(currentShape.getName());
+        int points = attemptsUsed == 1 ? 3 : attemptsUsed == 2 ? 2 : 1;
+        
+        String message;
+        if (isCorrect) {
+            scoreManager.recordScoreAndFeedback(points);
+            completedShapes++;
+            message = "Correct! +" + points + " points";
+        } else {
+            attemptsLeft--;
+            if (attemptsLeft <= 0) {
+                message = "Incorrect! The correct answer is: " + currentShape.getName();
+                scoreManager.recordScoreAndFeedback(0);
+                completedShapes++;
+            } else {
+                message = "Incorrect! Remaining attempts: " + attemptsLeft;
+                attemptsUsed++;
+            }
+        }
+        
+        resultLabel.setText(message);
+        attemptsLabel.setText("Remaining attempts: " + attemptsLeft);
+        scoreLabel.setText("Current Score: " + scoreManager.getCurrentScore());
+        
+        Feedback feedback = new Feedback(
+            isCorrect, 
+            points, 
+            message, 
+            currentShape.getName(), 
+            true, 
+            completedShapes >= Constants.SHAPES_PER_IDENTIFICATION_QUIZ
+        );
+        showFeedback(feedback);
+        
+        if (isCorrect || attemptsLeft <= 0) {
+            submitButton.setEnabled(false);
+            Timer timer = new Timer(1500, e -> loadRandomShape());
+            timer.setRepeats(false);
+            timer.start();
+        }
+    }
+
+    @Override
+    public void resetState() {
+        completedShapes = 0;
+        scoreManager.resetSession();
+        loadRandomShape();
+    }
+
+    @Override
+    public String getPanelId() {
+        return Constants.SHAPE_RECOGNITION_PANEL_ID;
+    }
+
+    @Override
+    public void setTaskLogicCallback(TaskLogic logic) {
+        // 实现任务逻辑回调
+    }
+
+    @Override
+    public void displayProblem(Problem problem) {
+        // 显示问题
+    }
+
+    @Override
+    public void showFeedback(Feedback feedback) {
+        resultLabel.setText(feedback.getMessage());
+        scoreLabel.setText("Current Score: " + scoreManager.getCurrentScore());
+    }
+}

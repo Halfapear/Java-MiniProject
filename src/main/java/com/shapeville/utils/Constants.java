@@ -9,6 +9,11 @@ public class Constants {
     public static final String AREA_CALC_PANEL_ID = "AREA_CALC_PANEL";
     public static final String CIRCLE_CALC_PANEL_ID = "CIRCLE_CALC_PANEL";
     public static final String COMPOUND_AREA_PANEL_ID = "COMPOUND_AREA_PANEL";
+
+    /*--------------------------------------------------------------------------*/
+    public static final String SHAPE_RECOGNITION_PANEL_ID = "shape_recognition";
+    public static final String ANGLE_RECOGNITION_PANEL_ID = "angle_recognition";
+    /*-------------------------------------------------------------------------*/
     // TODO: Add Panel IDs for Task 3, 4, Bonus 1, 2
 
     // --- Task Type Identifiers (for TaskDefinition.taskType and TaskManager logic mapping) ---
@@ -41,5 +46,7 @@ public class Constants {
     // TODO: Add other constants (e.g., time limits in milliseconds)
 
     public static final int TASK_TIME_LIMIT_SEC = 180;  // 3 minutes in seconds
+
+    
 }
 
