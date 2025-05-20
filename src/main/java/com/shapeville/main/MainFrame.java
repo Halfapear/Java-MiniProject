@@ -15,6 +15,7 @@ import com.shapeville.ui.NavigationBar;
 import com.shapeville.ui.panel_templates.EndPanel;
 import com.shapeville.ui.panel_templates.HomeScreenPanel;
 import com.shapeville.ui.panel_templates.TaskPanel;
+import com.shapeville.utils.Constants;
 
 /**
  * The main window (JFrame) of the application.
@@ -77,12 +78,9 @@ public class MainFrame extends JFrame {
     }
 
     private void registerCorePanels() {
-        // Register mandatory panels
-        registerPanel(HOME_PANEL_ID, new HomeScreenPanel(this)); // Pass mainframe ref
-        registerPanel(END_PANEL_ID, new EndPanel());
-
-        // Task panels will be registered by TaskManager when needed,
-        // or you can pre-register them all here if preferred.
+        registerPanel(Constants.HOME_PANEL_ID, new HomeScreenPanel(this));
+        registerPanel(Constants.END_PANEL_ID, new EndPanel());
+        // 任务面板将在 TaskManager 中动态注册
     }
 
     /**
