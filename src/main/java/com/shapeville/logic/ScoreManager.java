@@ -70,4 +70,5 @@ public class ScoreManager {
             // For now, let's assume TaskManager informs NavigationBar directly or via MainFrame
         }
     }
+
 }
