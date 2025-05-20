@@ -1,4 +1,4 @@
-package com.shapeville.ui;
+package com.shapeville.ui.panel_templates;
 
 import java.awt.BorderLayout;
 import java.awt.Font;

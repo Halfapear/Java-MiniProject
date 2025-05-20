@@ -1,4 +1,4 @@
-package com.shapeville.ui;
+package com.shapeville.task.sk2;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -35,6 +35,7 @@ public class Task3Panel extends JPanel implements TaskPanel {
     private double currentCorrectAnswer;
     private String currentFormula;
     // Track which shapes have been completed in this session
+    private final String[] shapes = {"Rectangle", "Parallelogram", "Triangle", "Trapezium"};
     private java.util.Set<String> completedShapes;
 
     public Task3Panel(MainFrame mainFrame) {

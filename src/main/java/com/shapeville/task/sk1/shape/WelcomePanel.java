@@ -1,3 +1,4 @@
+package com.shapeville.task.sk1.shape;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;

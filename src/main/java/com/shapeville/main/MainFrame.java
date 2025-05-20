@@ -11,9 +11,9 @@ import javax.swing.JPanel;
 
 import com.shapeville.logic.ScoreManager;
 import com.shapeville.logic.TaskManager;
-import com.shapeville.ui.EndPanel;
-import com.shapeville.ui.HomeScreenPanel;
 import com.shapeville.ui.NavigationBar;
+import com.shapeville.ui.panel_templates.EndPanel;
+import com.shapeville.ui.panel_templates.HomeScreenPanel;
 import com.shapeville.ui.panel_templates.TaskPanel;
 
 /**

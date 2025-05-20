@@ -1,3 +1,4 @@
+package com.shapeville.task.sk1.angle;
 import javax.swing.*;
 
 /**
