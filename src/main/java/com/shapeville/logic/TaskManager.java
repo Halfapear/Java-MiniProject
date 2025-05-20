@@ -111,9 +111,7 @@ public class TaskManager {
         }
         return null;
     }
-    mainFrameRef.registerPanel(currentPanelId, currentActiveTaskPanel);
-        
-            // 注册并显示该面板
+    // Removed misplaced line as it is outside any method or block
 
 
     private void loadTaskUIAndLogic(TaskDefinition taskDef) {

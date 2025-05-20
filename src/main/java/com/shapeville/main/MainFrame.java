@@ -64,6 +64,7 @@ public class MainFrame extends JFrame {
 
         // Create Navigation Bar (pass reference to this MainFrame for callbacks)
         navigationBar = new NavigationBar(this);
+        add(navigationBar, BorderLayout.NORTH);
         scoreManager.setNavigationBar(navigationBar); // Link score manager to UI display
 
         // Create Content Pane Container with CardLayout
