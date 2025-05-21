@@ -35,19 +35,8 @@ com.shapeville
 ├── logic                // 核心业务逻辑 (TaskManager, ScoreManager, etc.)
 ├── tasks                // 各个任务模块的包
 │   ├── ks1
-│   │   ├── shape          // Task 1: Shape Identification
-│   │   │   ├── ResultsPanel.java
-│   │   │   ├── ShapeRecognitionApp.java
-│   │   │   ├── ShapeTask.java
-│   │   │   ├── TaskPanel.java
-│   │   │   ├── WelcomePanel.java
-│   │   │   └── assets/
-│   │   │       ├── 3d/
-│   │   │       └── 2d/
-│   │   └── angle         // Task 2: Angle Types
-│   │       ├── AngelRecognitionApp.java
-│   │       ├── AngleRecognitionPanel.java
-│   │       └── AngleVisualPanel.java
+│   │   ├──Task1Panel.java
+│   │   └──Task2Panel.java
 │   ├── ks2
 │   │   ├── area          // Task 3: Area Calculation
 │   │   └── circle        // Task 4: Circle Calculations
