@@ -186,10 +186,12 @@ public class TaskManager {
             } else {
                 System.err.println("Error: Next task in sequence not found: " + nextTaskId);
                 mainFrameRef.navigateToHome(); // Or handle error
+                
             }
         } else {
             System.out.println("Entire session task sequence completed!");
             mainFrameRef.endSession(); // All predefined tasks in sequence are done
+            mainFrameRef.showPanel(Constants.END_PANEL_ID);
         }
     }
 

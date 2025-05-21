@@ -217,7 +217,8 @@ public class Task2Panel extends JPanel implements TaskPanel {
             } catch (NumberFormatException ex) {
                 feedbackLabel.setText("Please enter a valid number");
             }
-        } else {
+        } 
+        else {
             // Second step: Identify angle type
             String input = angleInputField.getText().trim().toLowerCase();
             String correctType = determineAngleType(currentAngle).toLowerCase();
@@ -234,7 +235,8 @@ public class Task2Panel extends JPanel implements TaskPanel {
                 Timer timer = new Timer(2000, evt -> loadNextAngle());
                 timer.setRepeats(false);
                 timer.start();
-            } else {
+            } 
+            else {
                 // Incorrect answer
                 currentAttempts--;
                 attemptsLabel.setText("Attempts left: " + currentAttempts);
