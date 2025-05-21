@@ -1,4 +1,4 @@
-package com.shapeville.task.sk2;
+package com.shapeville.ui;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -43,6 +43,8 @@ public class Task4Panel extends JPanel implements TaskPanel {
     private boolean givenIsRadius;
     private double currentCorrectAnswer;
     private String currentFormula;
+    // Panel for drawing the circle and labeling given dimensions
+    private CircleDrawingPanel circleDrawingPanel;
 
     public Task4Panel(MainFrame mainFrame) {
         this.mainFrameRef = mainFrame;
@@ -81,6 +83,11 @@ public class Task4Panel extends JPanel implements TaskPanel {
         questionLabel.setFont(new Font("Arial", Font.BOLD, 16));
         questionLabel.setAlignmentX(LEFT_ALIGNMENT);
         add(questionLabel);
+        add(Box.createVerticalStrut(10));
+
+        // Panel for drawing the circle and labeling dimensions
+        circleDrawingPanel = new CircleDrawingPanel();
+        add(circleDrawingPanel);
         add(Box.createVerticalStrut(10));
 
         // Answer input panel
@@ -158,7 +165,7 @@ public class Task4Panel extends JPanel implements TaskPanel {
             } else if (!doneAreaDiameter) {
                 givenIsRadius = false;
             } else {
-                return;  // no scenario left (should not reach here due to checks above)
+                return;  // no scenario left (should not reach here)
             }
         } else {
             if (!doneCircRadius && !doneCircDiameter) {
@@ -190,7 +197,7 @@ public class Task4Panel extends JPanel implements TaskPanel {
         String valueDescription = (givenIsRadius ? "radius " + value : "diameter " + value);
         if (currentIsArea) {
             // Area calculation scenario
-            questionLabel.setText("Calculate the area of a circle with " + valueDescription + ".");
+            questionLabel.setText("<html><div style='width:400px;'>Calculate the area of a circle with " + valueDescription + ".</div></html>");
             double r = givenIsRadius ? value : (value / 2.0);
             double area = Math.PI * r * r;
             currentCorrectAnswer = area;
@@ -201,7 +208,7 @@ public class Task4Panel extends JPanel implements TaskPanel {
             }
         } else {
             // Circumference calculation scenario
-            questionLabel.setText("Calculate the circumference of a circle with " + valueDescription + ".");
+            questionLabel.setText("<html><div style='width:400px;'>Calculate the circumference of a circle with " + valueDescription + ".</div></html>");
             if (givenIsRadius) {
                 double circumference = 2 * Math.PI * value;
                 currentCorrectAnswer = circumference;
@@ -212,6 +219,8 @@ public class Task4Panel extends JPanel implements TaskPanel {
                 currentFormula = "Circumference = π × d = π × " + value + " = " + formatNumber(circumference);
             }
         }
+        // Draw the circle and label the given dimension
+        circleDrawingPanel.setCircleData(value, givenIsRadius);
 
         // Start the 3-minute timer
         timer = new Timer(1000, new ActionListener() {
@@ -230,16 +239,16 @@ public class Task4Panel extends JPanel implements TaskPanel {
                     submitButton.setEnabled(false);
                     // Show solution and mark scenario as done
                     resultMessageLabel.setText("Time's up! The solution is shown below.");
-                    formulaLabel.setText(currentFormula);
+                    formulaLabel.setText("<html><div style='width:400px;'>" + currentFormula + "</div></html>");
                     markCurrentScenarioDone();
-                    // Check if all four scenarios (area/circumference × radius/diameter) are completed
+                    // Check if all four scenarios are completed
                     if (allScenariosDone()) {
                         JOptionPane.showMessageDialog(mainFrameRef,
                                 "Congratulations, you have completed all circle calculations.",
                                 "Task Complete", JOptionPane.INFORMATION_MESSAGE);
                         mainFrameRef.getTaskManager().currentTaskTypeCompleted(new TaskLogic(){});
                     } else {
-                        updateModeButtons();  // re-enable any remaining mode for further practice
+                        updateModeButtons();
                     }
                 }
             }
@@ -276,7 +285,7 @@ public class Task4Panel extends JPanel implements TaskPanel {
             scoreManager.recordScoreAndFeedback(points);
             // Show success feedback and formula
             resultMessageLabel.setText("Correct!");
-            formulaLabel.setText(currentFormula);
+            formulaLabel.setText("<html><div style='width:400px;'>" + currentFormula + "</div></html>");
             if (allScenariosDone()) {
                 JOptionPane.showMessageDialog(mainFrameRef,
                         "Congratulations, you have completed all circle calculations.",
@@ -301,7 +310,7 @@ public class Task4Panel extends JPanel implements TaskPanel {
                 submitButton.setEnabled(false);
                 markCurrentScenarioDone();
                 resultMessageLabel.setText("No attempts left. The solution is shown below.");
-                formulaLabel.setText(currentFormula);
+                formulaLabel.setText("<html><div style='width:400px;'>" + currentFormula + "</div></html>");
                 if (allScenariosDone()) {
                     JOptionPane.showMessageDialog(mainFrameRef,
                             "Congratulations, you have completed all circle calculations.",
@@ -314,7 +323,7 @@ public class Task4Panel extends JPanel implements TaskPanel {
         }
     }
 
-    // Helper to mark the current scenario (combination of mode and input type) as completed
+    // Mark the current scenario (mode and input type) as completed and update progress
     private void markCurrentScenarioDone() {
         if (currentIsArea) {
             if (givenIsRadius) {
@@ -329,6 +338,13 @@ public class Task4Panel extends JPanel implements TaskPanel {
                 doneCircDiameter = true;
             }
         }
+        // Update progress bar
+        int completedCount = 0;
+        if (doneAreaRadius) completedCount++;
+        if (doneAreaDiameter) completedCount++;
+        if (doneCircRadius) completedCount++;
+        if (doneCircDiameter) completedCount++;
+        mainFrameRef.getNavigationBar().updateProgress(completedCount, 4);
     }
 
     // Check if all four scenario combinations have been completed
@@ -382,5 +398,75 @@ public class Task4Panel extends JPanel implements TaskPanel {
             timer.stop();
         }
         problemActive = false;
+    }
+
+    /**
+     * Inner panel class for drawing the circle and annotating radius/diameter.
+     */
+    private class CircleDrawingPanel extends JPanel {
+        private int givenValue;
+        private boolean givenIsRadius;
+
+        public CircleDrawingPanel() {
+            setPreferredSize(new Dimension(250, 200));
+            this.givenValue = 0;
+            this.givenIsRadius = true;
+        }
+
+        public void setCircleData(int value, boolean isRadius) {
+            this.givenValue = value;
+            this.givenIsRadius = isRadius;
+            repaint();
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            if (givenValue <= 0) {
+                return;
+            }
+            Graphics2D g2 = (Graphics2D) g;
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.setFont(new Font("Arial", Font.PLAIN, 14));
+            FontMetrics fm = g2.getFontMetrics();
+            // Determine center of panel and fixed radius for drawing
+            int cx = getWidth() / 2;
+            int cy = getHeight() / 2;
+            int radiusPx = 50;
+            int arrowSize = 8;
+            // Draw circle outline and center point
+            g2.setColor(Color.BLACK);
+            g2.drawOval(cx - radiusPx, cy - radiusPx, 2 * radiusPx, 2 * radiusPx);
+            g2.fillOval(cx - 3, cy - 3, 6, 6);
+            if (givenIsRadius) {
+                // Draw radius line and arrow
+                g2.drawLine(cx, cy, cx + radiusPx, cy);
+                // Arrow at circumference end of radius
+                g2.drawLine(cx + radiusPx, cy, cx + radiusPx - arrowSize, cy - arrowSize / 2);
+                g2.drawLine(cx + radiusPx, cy, cx + radiusPx - arrowSize, cy + arrowSize / 2);
+                // Label "radius = value"
+                String radiusLabel = "radius = " + givenValue;
+                int textWidth = fm.stringWidth(radiusLabel);
+                int x_text = cx + radiusPx/2 - textWidth / 2;
+                int descent = fm.getDescent();
+                int baseLineY = cy - descent - 2;
+                g2.drawString(radiusLabel, x_text, baseLineY);
+            } else {
+                // Draw diameter line through center
+                g2.drawLine(cx - radiusPx, cy, cx + radiusPx, cy);
+                // Arrowheads at both ends of diameter
+                g2.drawLine(cx - radiusPx, cy, cx - radiusPx + arrowSize, cy - arrowSize / 2);
+                g2.drawLine(cx - radiusPx, cy, cx - radiusPx + arrowSize, cy + arrowSize / 2);
+                g2.drawLine(cx + radiusPx, cy, cx + radiusPx - arrowSize, cy - arrowSize / 2);
+                g2.drawLine(cx + radiusPx, cy, cx + radiusPx - arrowSize, cy + arrowSize / 2);
+                // Label "diameter = value"
+                String diameterLabel = "diameter = " + givenValue;
+                int textWidth = fm.stringWidth(diameterLabel);
+                int x_text = cx - textWidth / 2;
+                int descent = fm.getDescent();
+                int baseLineY = cy - descent - 2;
+                g2.drawString(diameterLabel, x_text, baseLineY);
+            }
+        }
     }
 }
