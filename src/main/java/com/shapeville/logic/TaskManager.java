@@ -15,6 +15,10 @@ import com.shapeville.task.sk1.Task2Panel;
 
 import com.shapeville.task.sk2.Task3Panel;
 import com.shapeville.task.sk2.Task4Panel;
+
+import com.shapeville.task.bonus.compound;
+import com.shapeville.task.bonus.sector;
+
 import com.shapeville.ui.panel_templates.TaskPanel;
 import com.shapeville.utils.Constants;
 
@@ -51,7 +55,8 @@ public class TaskManager {
         /*----------------------------------------------*/
         masterTaskList.add(new TaskDefinition(Constants.TASK_ID_AREA_CALC, Constants.AREA_CALC_PANEL_ID, Constants.TASK_TYPE_AREA_CALC, Constants.SCORE_BASIC));
         masterTaskList.add(new TaskDefinition(Constants.TASK_ID_CIRCLE_CALC, Constants.CIRCLE_CALC_PANEL_ID, Constants.TASK_TYPE_CIRCLE_CALC, Constants.SCORE_BASIC));
-        masterTaskList.add(new TaskDefinition(Constants.TASK_ID_COMPOUND_AREA, Constants.COMPOUND_AREA_PANEL_ID, Constants.TASK_TYPE_COMPOUND_AREA, Constants.SCORE_ADVANCED));
+        masterTaskList.add(new TaskDefinition(Constants.TASK_ID_COMPOUND_AREA_CALC, Constants.COMPOUND_AREA_PANEL_ID, Constants.TASK_TYPE_COMPOUND_AREA_CALC, Constants.SCORE_ADVANCED));
+        masterTaskList.add(new TaskDefinition(Constants.TASK_ID_SECTOR_CIRCLE_CALC, Constants.SECTOR_CIRCLE_CALC_PANEL_ID, Constants.TASK_TYPE_SECTOR_CIRCLE_CALC, Constants.SCORE_ADVANCED));
     }
 
     private void defineDefaultSessionSequence() {
@@ -124,6 +129,14 @@ public class TaskManager {
             else if (taskDef.getTaskId().equals(Constants.TASK_ID_CIRCLE_CALC)) {
                 // Task 4 – Circle area / circumference
                 currentActiveTaskPanel = new Task4Panel(mainFrameRef);
+            }
+            else if (taskDef.getTaskId().equals(Constants.TASK_ID_COMPOUND_AREA_CALC)) {
+                // Bonus1 – Compound Shapes Area Calculation
+                currentActiveTaskPanel = new compound();
+            }
+            else if (taskDef.getTaskId().equals(Constants.TASK_ID_SECTOR_CIRCLE_CALC)) {
+                // Bonus2 – Sector of a Circle Area
+                currentActiveTaskPanel = new sector();
             } 
             else {
                 // Fallback for tasks that are not implemented yet

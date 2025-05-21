@@ -40,7 +40,8 @@ public class HomeScreenPanel extends JPanel {
         add(createTaskButton("Angle Recognition", Constants.TASK_ID_ANGLE_TYPE));
         add(createTaskButton("Area Calculation", Constants.TASK_ID_AREA_CALC));
         add(createTaskButton("Circle Calculation", Constants.TASK_ID_CIRCLE_CALC));
-        add(createTaskButton("Compound Area", Constants.TASK_ID_COMPOUND_AREA));
+        add(createTaskButton("Compound Area", Constants.TASK_ID_COMPOUND_AREA_CALC));
+        add(createTaskButton("Sector Circle Calculation", Constants.TASK_ID_SECTOR_CIRCLE_CALC));
     }
 
     private JButton createTaskButton(String label, String taskId) {
