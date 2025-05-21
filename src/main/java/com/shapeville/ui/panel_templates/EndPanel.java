@@ -11,10 +11,8 @@ import javax.swing.SwingConstants;
 import com.shapeville.logic.ScoreManager;
 
 public class EndPanel extends JPanel {
-    private ScoreManager scoreManager;
 
     public EndPanel(ScoreManager scoreManager) {
-        this.scoreManager = scoreManager; // 保存 ScoreManager 的引用
         int finalScore = scoreManager.getCurrentScore(); // 调用 getCurrentScore()
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createEmptyBorder(100, 100, 100, 100));

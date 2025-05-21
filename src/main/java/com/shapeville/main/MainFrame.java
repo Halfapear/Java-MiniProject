@@ -64,7 +64,7 @@ public class MainFrame extends JFrame {
         setResizable(false);
 
         // Create Navigation Bar (pass reference to this MainFrame for callbacks)
-        navigationBar = new NavigationBar(this);
+        navigationBar = new NavigationBar(this, scoreManager);
         add(navigationBar, BorderLayout.NORTH);
         scoreManager.setNavigationBar(navigationBar); // Link score manager to UI display
 
@@ -119,7 +119,7 @@ public class MainFrame extends JFrame {
     public void navigateToHome() {
         // TODO: Add logic if leaving a task needs confirmation or state reset
         showPanel(HOME_PANEL_ID);
-        taskManager.resetCurrentTask(); // Tell TaskManager the flow is interrupted
+        // taskManager.resetCurrentTask(); // Tell TaskManager the flow is interrupted
     }
 
     public void endSession() {
