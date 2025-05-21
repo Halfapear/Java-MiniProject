@@ -14,5 +14,5 @@ public interface TaskPanel {
     void setTaskLogicCallback(TaskLogic logic);
     String getPanelId(); // For CardLayout registration
     void resetState();   // To clear UI for next problem or when leaving panel
-    // void onPanelShown(); // Optional: called when panel becomes visible
+//    void updateProgress(int current, int total); // 新增方法
 }
