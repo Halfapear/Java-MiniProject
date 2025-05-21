@@ -59,7 +59,7 @@ public class Task1Panel2D extends JPanel implements TaskPanel {
         gbc.gridx = 0;
 
         // 标题区域（居中）
-        JLabel titleLabel = new JLabel("Task 1: 2D and 3D Shape Recognition");
+        JLabel titleLabel = new JLabel("2D Shape Recognition");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         gbc.gridy = 0;
         add(titleLabel, gbc);

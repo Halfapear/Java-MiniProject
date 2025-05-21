@@ -43,7 +43,6 @@ public class Task1Panel3D extends JPanel implements TaskPanel {
     private JPanel feedbackContainer;
 
     public Task1Panel3D(MainFrame mainFrame) {
-        System.out.println("Task1Panel3D initialized.");
         this.mainFrame = mainFrame;
         this.scoreManager = mainFrame.getScoreManager();
         initializeUI();
@@ -83,8 +82,6 @@ public class Task1Panel3D extends JPanel implements TaskPanel {
         inputContainer = new JPanel();
         inputContainer.setLayout(new BoxLayout(inputContainer, BoxLayout.Y_AXIS));
         inputContainer.setAlignmentX(Component.CENTER_ALIGNMENT);
-        
-
         
         promptLabel = new JLabel("Enter the correct shape name:");
         promptLabel.setFont(new Font("Arial", Font.PLAIN, 16));
@@ -133,6 +130,11 @@ public class Task1Panel3D extends JPanel implements TaskPanel {
         attemptsLabel.setFont(new Font("Arial", Font.PLAIN, 16));
         attemptsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         feedbackContainer.add(attemptsLabel);
+        
+        scoreLabel = new JLabel("Current Score: " + scoreManager.getCurrentScore());
+        scoreLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        scoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        feedbackContainer.add(scoreLabel);
         
         gbc.gridy = 3;
         gbc.weighty = 1.0; // 让底部区域占据剩余空间
@@ -198,8 +200,8 @@ public class Task1Panel3D extends JPanel implements TaskPanel {
     private void checkAnswer() {
         String userAnswer = answerTextField.getText().trim();
         boolean isCorrect = userAnswer.equalsIgnoreCase(currentShape.getName());
-        int points = scoreManager.calculatePoints(attemptsUsed,true);   
-        
+        // int points = attemptsUsed == 1 ? 3 : attemptsUsed == 2 ? 2 : 1;
+        int points = scoreManager.calculatePoints(attemptsUsed,false);        
         String message;
         if (isCorrect) {
             scoreManager.recordScoreAndFeedback(points);
@@ -219,7 +221,7 @@ public class Task1Panel3D extends JPanel implements TaskPanel {
         
         resultLabel.setText(message);
         attemptsLabel.setText("Remaining attempts: " + attemptsLeft);
-
+        scoreLabel.setText("Current Score: " + scoreManager.getCurrentScore());
         
         Feedback feedback = new Feedback(
             isCorrect, 
@@ -268,3 +270,4 @@ public class Task1Panel3D extends JPanel implements TaskPanel {
         scoreLabel.setText("Current Score: " + scoreManager.getCurrentScore());
     }
 }
+
