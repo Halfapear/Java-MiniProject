@@ -35,8 +35,8 @@ public class MainFrame extends JFrame {
     private Map<String, JPanel> registeredPanels;
 
     // Panel Identifiers (Constants are better defined in a dedicated Constants class)
-    public static final String HOME_PANEL_ID = "HOME";
-    public static final String END_PANEL_ID = "END";
+    public static final String HOME_PANEL_ID = "HOME_PANEL";
+    public static final String END_PANEL_ID = "END_PANEL";
     // Add IDs for all task panels, e.g., public static final String SHAPE_ID_PANEL_ID = "SHAPE_ID";
 
 
