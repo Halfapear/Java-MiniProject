@@ -1,4 +1,4 @@
-package com.shapeville.task.sk1.shape;
+package com.shapeville.task.sk1;
 
 import com.shapeville.main.MainFrame;
 import com.shapeville.model.Shape;

@@ -1,6 +1,6 @@
 
 
-package com.shapeville.task.sk1.angle;
+package com.shapeville.task.sk1;
 
 import com.shapeville.main.MainFrame;
 import com.shapeville.logic.*;
