@@ -79,7 +79,7 @@ public class MainFrame extends JFrame {
 
     private void registerCorePanels() {
         registerPanel(Constants.HOME_PANEL_ID, new HomeScreenPanel(this));
-        registerPanel(Constants.END_PANEL_ID, new EndPanel());
+        registerPanel(Constants.END_PANEL_ID, new EndPanel(scoreManager));
         // 任务面板将在 TaskManager 中动态注册
     }
 
