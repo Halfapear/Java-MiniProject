@@ -5,7 +5,7 @@ import javax.swing.JOptionPane;
 import com.shapeville.ui.NavigationBar; // For "Great Job!"
 
 public class ScoreManager {
-    private int currentScore;
+    private int currentScore = 0;
     private int tasksOfTypeCompletedInSession; // Renamed for clarity
     private NavigationBar navigationBar;
 
@@ -52,6 +52,7 @@ public class ScoreManager {
     }
 
     public int getCurrentScore() { return currentScore; }
+    //public int getCurrentScore() { return 2; }
     public int getTasksOfTypeCompletedCount() { return tasksOfTypeCompletedInSession; }
 
     public void resetSession() {
@@ -64,7 +65,7 @@ public class ScoreManager {
 
     private void updateUI() {
         if (navigationBar != null) {
-            navigationBar.updateScore(currentScore);
+            navigationBar.updateScore();
             // Progress bar update needs total number of tasks in the *entire session flow*
             // This might be managed by TaskManager
             // For now, let's assume TaskManager informs NavigationBar directly or via MainFrame

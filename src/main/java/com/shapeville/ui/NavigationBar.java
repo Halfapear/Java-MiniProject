@@ -3,9 +3,9 @@ package com.shapeville.ui;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.*;
 
+import com.shapeville.logic.ScoreManager;
 import com.shapeville.main.MainFrame;
 
 /**
@@ -17,14 +17,17 @@ public class NavigationBar extends JPanel {
     private JButton endSessionButton; // 结束会话按钮
     private JProgressBar progressBar; // 显示任务进度
     private MainFrame mainFrameRef; // 引用 MainFrame，用于交互
+    private ScoreManager scoreManager; // 分数管理器
 
     /**
      * 构造函数，初始化导航栏组件。
      * 
      * @param mainFrame MainFrame 的引用，用于导航操作。
+     * @param scoreManager ScoreManager 的引用，用于分数显示。
      */
-    public NavigationBar(MainFrame mainFrame) {
+    public NavigationBar(MainFrame mainFrame, ScoreManager scoreManager) {
         this.mainFrameRef = mainFrame;
+        this.scoreManager = scoreManager; // 初始化 ScoreManager
         initializeUI();
     }
 
@@ -73,11 +76,11 @@ public class NavigationBar extends JPanel {
 
     /**
      * 更新分数显示。
-     * 
-     * @param score 当前分数。
      */
-    public void updateScore(int score) {
+    public void updateScore() {
+        int score = scoreManager.getCurrentScore(); 
         scoreLabel.setText("Score: " + score);
+        //scoreLabel.setText("Score: " + 1);
     }
 
     /**
