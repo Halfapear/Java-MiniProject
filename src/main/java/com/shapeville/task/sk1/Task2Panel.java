@@ -21,6 +21,7 @@ public class Task2Panel extends JPanel implements TaskPanel {
     private JLabel feedbackLabel;
     private JLabel angleTypeLabel;
     private JLabel attemptsLabel;
+    private JLabel inputPromptLabel; // 新增：输入框前的提示标签
     private int currentAttempts = 3;
     private int completedAngles = 0;
     private final int[] targetAngles = {30, 90, 120, 180, 200, 270, 300, 360};
@@ -28,9 +29,9 @@ public class Task2Panel extends JPanel implements TaskPanel {
     private int currentAngle = 0; // 控制UI显示的角度，初始为0
     private int targetAngle = 0;  // 存储目标角度
     private boolean angleEntered = false;
-    private static final int VISUALIZATION_WIDTH = 450;
-    private static final int VISUALIZATION_HEIGHT = 450;
-    private int anglesToIdentify = 4; // 需要识别4种角度类型
+    private static final int VISUALIZATION_WIDTH = 300;
+    private static final int VISUALIZATION_HEIGHT = 300;
+    private static final int anglesToIdentify = 4; // 需要识别4种角度类型
 
     public Task2Panel(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
@@ -46,7 +47,9 @@ public class Task2Panel extends JPanel implements TaskPanel {
         // Title
         JLabel title = new JLabel("Angle Recognition", SwingConstants.CENTER);
         title.setFont(new Font("Arial", Font.BOLD, 24));
-        add(title);
+        JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        titlePanel.add(title);
+        add(titlePanel);
         add(Box.createVerticalStrut(10));
 
         // Angle visualization panel
@@ -54,21 +57,28 @@ public class Task2Panel extends JPanel implements TaskPanel {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                drawAngle(g, currentAngle, getWidth(), getHeight());
+                drawAngle(g, currentAngle, VISUALIZATION_WIDTH, VISUALIZATION_HEIGHT);
             }
         };
 
         angleVisualLabel.setPreferredSize(new Dimension(VISUALIZATION_WIDTH, VISUALIZATION_HEIGHT));
         angleVisualLabel.setMaximumSize(new Dimension(VISUALIZATION_WIDTH, VISUALIZATION_HEIGHT));
+        angleVisualLabel.setMinimumSize(new Dimension(VISUALIZATION_WIDTH, VISUALIZATION_HEIGHT));
         angleVisualLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-        add(angleVisualLabel);
+        // 居中显示
+        JPanel visualizationWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        visualizationWrapper.add(angleVisualLabel);
+        add(visualizationWrapper);
         add(Box.createVerticalStrut(20));
 
         // Input panel
         JPanel inputPanel = new JPanel();
+        inputPromptLabel = new JLabel("Enter angle (0-360, multiples of 10):"); // 新增：输入框前的提示标签
+        inputPromptLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+        inputPanel.add(inputPromptLabel);
         angleInputField = new JTextField(10);
         angleInputField.setFont(new Font("Arial", Font.PLAIN, 18));
-        inputPanel.add(new JLabel("Enter angle (0-360, multiples of 10):"));
+        angleInputField.setToolTipText("Enter angle (0-360, multiples of 10)");
         inputPanel.add(angleInputField);
         add(inputPanel);
         add(Box.createVerticalStrut(10));
@@ -85,22 +95,28 @@ public class Task2Panel extends JPanel implements TaskPanel {
         submitButton.setFont(new Font("Arial", Font.BOLD, 18));
         submitButton.setPreferredSize(new Dimension(150, 40));
         submitButton.addActionListener(this::handleSubmit);
-        add(submitButton);
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.add(submitButton);
+        add(buttonPanel);
         add(Box.createVerticalStrut(10));
 
         // Feedback label
         feedbackLabel = new JLabel(" ", SwingConstants.CENTER);
         feedbackLabel.setFont(new Font("Arial", Font.PLAIN, 18));
-        add(feedbackLabel);
+        // 将 feedbackLabel 放置在一个居中布局的面板中
+        JPanel feedbackPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        feedbackPanel.add(feedbackLabel);
+        add(feedbackPanel);
         add(Box.createVerticalStrut(5));
 
         // Attempts counter
         attemptsLabel = new JLabel("Attempts left: 3", SwingConstants.CENTER);
         attemptsLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        add(attemptsLabel);
+        // 将 attemptsLabel 放置在一个居中布局的面板中
+        JPanel attemptsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        attemptsPanel.add(attemptsLabel);
+        add(attemptsPanel);
         add(Box.createVerticalStrut(20));
-
-        
     }
 
     private void drawAngle(Graphics g, int degrees, int width, int height) {
@@ -117,10 +133,10 @@ public class Task2Panel extends JPanel implements TaskPanel {
         int centerY = height / 2;
         int radius = Math.min(width, height) / 3;
 
-        // Draw base line (horizontal)
+        // Draw base line (horizontal ray from origin) with half the width
         g2d.setColor(Color.BLACK);
-        g2d.setStroke(new BasicStroke(3));
-        g2d.drawLine(centerX - radius, centerY, centerX + radius, centerY);
+        g2d.setStroke(new BasicStroke(3.0f)); // Set the stroke width to half (3/2 = 1.5)
+        g2d.drawLine(centerX, centerY, centerX + radius, centerY); // Draw a ray starting from the origin
 
         // Only draw angle line after user input
         if (degrees > 0) {
@@ -153,19 +169,13 @@ public class Task2Panel extends JPanel implements TaskPanel {
         int textX = centerX + (int) (radius * 0.6 * Math.cos(Math.toRadians(angleEntered ? degrees / 2 : 0))) - textWidth / 2;
         int textY = centerY - (int) (radius * 0.6 * Math.sin(Math.toRadians(angleEntered ? degrees / 2 : 0))) - 5;
 
-        // Text background
-        g2d.setColor(new Color(255, 255, 255, 200));
-        g2d.fillRoundRect(textX - 5, textY - fm.getAscent() - 2, textWidth + 10, fm.getHeight() + 4, 10, 10);
-        g2d.setColor(Color.BLACK);
-        g2d.drawRoundRect(textX - 5, textY - fm.getAscent() - 2, textWidth + 10, fm.getHeight() + 4, 10, 10);
-
         // Draw angle text
         g2d.setColor(Color.RED);
         g2d.drawString(angleText, textX, textY);
     }
 
     private void loadNextAngle() {
-        completedAngles++; 
+        completedAngles++;
 
         // 选择下一个目标角度，但不更新currentAngle（保持0度）
         targetAngle = targetAngles[currentIndex % targetAngles.length];
@@ -174,12 +184,15 @@ public class Task2Panel extends JPanel implements TaskPanel {
         // 重置UI状态，保持角度为0
         currentAngle = 0;
         angleInputField.setText("");
+        inputPromptLabel.setText("Enter angle (0-360, multiples of 10):"); // 重置提示语
+        angleInputField.setToolTipText("Enter angle (0-360, multiples of 10)");
         angleInputField.requestFocus();
         currentAttempts = 3;
         angleEntered = false;
-        feedbackLabel.setText("Enter the angle shown");
         angleTypeLabel.setText("");
         attemptsLabel.setText("Attempts left: 3");
+        // 去掉鼓励性提示语
+        feedbackLabel.setText(" ");
 
         // 刷新UI显示0度
         SwingUtilities.invokeLater(() -> angleVisualLabel.repaint());
@@ -199,16 +212,15 @@ public class Task2Panel extends JPanel implements TaskPanel {
                 currentAngle = angle;
                 angleEntered = true;
                 angleInputField.setText("");
+                inputPromptLabel.setText("Enter angle type (acute, right, obtuse, reflex):"); // 更新提示语
                 angleInputField.setToolTipText("Enter angle type (acute, right, obtuse, reflex)");
-                feedbackLabel.setText("What type of angle is " + angle + "°?");
 
                 // 刷新UI显示用户输入的角度
                 SwingUtilities.invokeLater(() -> angleVisualLabel.repaint());
             } catch (NumberFormatException ex) {
                 feedbackLabel.setText("Please enter a valid number");
             }
-        } 
-        else {
+        } else {
             // Second step: Identify angle type
             String input = angleInputField.getText().trim().toLowerCase();
             String correctType = determineAngleType(currentAngle).toLowerCase();
@@ -217,15 +229,13 @@ public class Task2Panel extends JPanel implements TaskPanel {
                 // Correct answer
                 int points = scoreManager.calculatePoints(3 - currentAttempts + 1, false);
                 feedbackLabel.setText("Correct! " + getRandomCongratulation() + " +" + points + " points");
-                angleTypeLabel.setText("This is a " + correctType + " angle");
                 scoreManager.recordScoreAndFeedback(points);
 
                 // Move to next angle after delay
-                Timer timer = new Timer(2000, evt -> loadNextAngle());
+                Timer timer = new Timer(1000, evt -> loadNextAngle());
                 timer.setRepeats(false);
                 timer.start();
-            } 
-            else {
+            } else {
                 // Incorrect answer
                 currentAttempts--;
                 attemptsLabel.setText("Attempts left: " + currentAttempts);
@@ -243,7 +253,6 @@ public class Task2Panel extends JPanel implements TaskPanel {
                     timer.start();
                 }
             }
-
         }
     }
 
@@ -270,16 +279,16 @@ public class Task2Panel extends JPanel implements TaskPanel {
     private void showCompletionDialog() {
         Object[] options = {"Return to Home", "Try Again"};
         int choice = JOptionPane.showOptionDialog(this,
-                "You've completed " + anglesToIdentify + 
-                " angle recognitions! Your total score is: " + scoreManager.getCurrentScore() +
-                ". What would you like to do next?",
+                "You've completed " + anglesToIdentify +
+                        " angle recognitions! Your total score is: " + scoreManager.getCurrentScore() +
+                        ". What would you like to do next?",
                 "Task Completed",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
                 null,
                 options,
                 options[0]);
-        
+
         if (choice == 0) {
             mainFrame.navigateToHome();
         } else {

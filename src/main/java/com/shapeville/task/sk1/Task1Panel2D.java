@@ -22,7 +22,7 @@ import java.util.Random;
 /**
  * Task 1: 2D and 3D Shape Recognition
  */
-public class Task1Panel extends JPanel implements TaskPanel {
+public class Task1Panel2D extends JPanel implements TaskPanel {
     private MainFrame mainFrame;
     private JLabel shapeImageLabel;
     private JTextField answerTextField;
@@ -42,7 +42,7 @@ public class Task1Panel extends JPanel implements TaskPanel {
     private JPanel inputContainer;
     private JPanel feedbackContainer;
 
-    public Task1Panel(MainFrame mainFrame) {
+    public Task1Panel2D(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
         this.scoreManager = mainFrame.getScoreManager();
         initializeUI();
@@ -82,13 +82,6 @@ public class Task1Panel extends JPanel implements TaskPanel {
         inputContainer = new JPanel();
         inputContainer.setLayout(new BoxLayout(inputContainer, BoxLayout.Y_AXIS));
         inputContainer.setAlignmentX(Component.CENTER_ALIGNMENT);
-        
-        // 新增：图形类型提示标签
-        typePromptLabel = new JLabel("Current Shape Type: ");
-        typePromptLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        typePromptLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        typePromptLabel.setForeground(Color.BLUE); // 使用蓝色突出显示
-        inputContainer.add(typePromptLabel);
         
         promptLabel = new JLabel("Enter the correct shape name:");
         promptLabel.setFont(new Font("Arial", Font.PLAIN, 16));
@@ -163,16 +156,6 @@ public class Task1Panel extends JPanel implements TaskPanel {
         shapes.add(new Shape("oval", "/assets/2d/oval.png", "2D"));
         shapes.add(new Shape("pentagon", "/assets/2d/pentagon.png", "2D"));
         shapes.add(new Shape("rhombus", "/assets/2d/rhombus.png", "2D"));
-
-        // 添加3D形状
-        shapes.add(new Shape("cone", "/assets/3d/cone.png", "3D"));
-        shapes.add(new Shape("cube", "/assets/3d/cube.png", "3D"));
-        shapes.add(new Shape("cuboid", "/assets/3d/cuboid.png", "3D"));
-        shapes.add(new Shape("cylinder", "/assets/3d/cylinder.png", "3D"));
-        shapes.add(new Shape("sphere", "/assets/3d/sphere.png", "3D"));
-        shapes.add(new Shape("square-based pyramid", "/assets/3d/square-based pyramid.png", "3D"));
-        shapes.add(new Shape("tetrahedron", "/assets/3d/tetrahedron.png", "3D"));
-        shapes.add(new Shape("triangular prism", "/assets/3d/triangular prism.png", "3D"));
     }
 
     private void loadRandomShape() {
@@ -209,9 +192,6 @@ public class Task1Panel extends JPanel implements TaskPanel {
             shapeImageLabel.setText("Failed to load image");
         }
         
-        // 更新类型提示
-        typePromptLabel.setText("Current Shape Type: " + currentShape.getType());
-        
         attemptsLeft = 3;
         attemptsUsed = 1;
         resultLabel.setText("");
@@ -223,8 +203,8 @@ public class Task1Panel extends JPanel implements TaskPanel {
     private void checkAnswer() {
         String userAnswer = answerTextField.getText().trim();
         boolean isCorrect = userAnswer.equalsIgnoreCase(currentShape.getName());
-        int points = attemptsUsed == 1 ? 3 : attemptsUsed == 2 ? 2 : 1;
-        
+        // int points = attemptsUsed == 1 ? 3 : attemptsUsed == 2 ? 2 : 1;
+        int points = scoreManager.calculatePoints(attemptsUsed,false);        
         String message;
         if (isCorrect) {
             scoreManager.recordScoreAndFeedback(points);

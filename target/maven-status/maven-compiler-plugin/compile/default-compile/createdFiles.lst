@@ -3,8 +3,8 @@ com\shapeville\task\sk2\Task4Panel$1.class
 com\shapeville\task\sk2\Task3Panel$3$1.class
 com\shapeville\ui\panel_templates\HomeScreenPanel.class
 com\shapeville\model\Angle.class
+com\shapeville\task\sk1\Task1Panel2D$1.class
 com\shapeville\task\sk1\Task2Panel.class
-com\shapeville\task\sk1\Task1Panel$1.class
 com\shapeville\task\bonus\sector.class
 com\shapeville\task\sk2\Task4Panel.class
 com\shapeville\main\MainFrame.class
@@ -14,8 +14,8 @@ com\shapeville\task\bonus\compound$CompoundShape.class
 com\shapeville\task\sk2\Task4Panel$4.class
 com\shapeville\task\sk2\Task4Panel$2.class
 com\shapeville\model\Feedback.class
+com\shapeville\task\sk1\Task1Panel3D.class
 com\shapeville\task\bonus\compound.class
-com\shapeville\task\sk1\Task1Panel$2.class
 com\shapeville\task\sk2\Task3Panel$2.class
 com\shapeville\ui\NavigationBar.class
 com\shapeville\task\sk2\Task4Panel$4$1.class
@@ -24,7 +24,7 @@ com\shapeville\task\sk2\Task4Panel$5.class
 com\shapeville\task\sk2\Task3Panel$5.class
 com\shapeville\utils\Constants.class
 com\shapeville\task\bonus\sector$1.class
-com\shapeville\task\sk1\Task1Panel.class
+com\shapeville\task\sk1\Task1Panel3D$1.class
 com\shapeville\task\sk2\Task3Panel.class
 com\shapeville\model\AngleType.class
 com\shapeville\task\sk2\Task3Panel$1.class
@@ -33,8 +33,11 @@ com\shapeville\task\sk2\Task4Panel$6.class
 com\shapeville\task\sk1\Task2Panel$1.class
 com\shapeville\task\bonus\sector$SectorShape.class
 com\shapeville\logic\TaskLogic.class
+com\shapeville\task\sk1\Task1Panel3D$2.class
 com\shapeville\task\sk2\Task3Panel$4.class
+com\shapeville\task\sk1\Task1Panel2D$2.class
 com\shapeville\model\Problem.class
+com\shapeville\task\sk1\Task1Panel2D.class
 com\shapeville\utils\ImageLoader.class
 com\shapeville\ui\panel_templates\EndPanel.class
 com\shapeville\model\TaskDefinition.class
