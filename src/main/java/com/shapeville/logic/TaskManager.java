@@ -201,7 +201,7 @@ currentActiveTaskPanel = new Task1Panel2D(mainFrameRef);
     public void currentTaskInterrupted() {
         System.out.println("Current task interrupted.");
         if (currentActiveTaskPanel instanceof TaskPanel) {
-        ((TaskPanel) currentActiveTaskPanel).resetState();
+            ((TaskPanel) currentActiveTaskPanel).resetState();
         }
         // TODO: Add any cleanup logic for the currentActiveTaskLogic if needed (e.g., stop timers)
         // if (currentActiveTaskLogic != null && currentActiveTaskLogic instanceof SomeTimerInterface) {
