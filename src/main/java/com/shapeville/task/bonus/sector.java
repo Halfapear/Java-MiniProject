@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +24,7 @@ import javax.swing.SwingUtilities;
  * Bonus 2: Sector Area Calculation
  * Allows users to choose a sector and calculate its area.
  */
-public class sector extends JPanel {
+public class Sector extends JPanel {
     private JTextField answerField;
     private int attempt = 0;
     private int currentSectorIndex = 0;
@@ -43,7 +42,7 @@ public class sector extends JPanel {
     /**
      * Constructor
      */
-    public sector() {
+    public Sector() {
         setLayout(new BorderLayout());
         content = new JPanel();
         add(content, BorderLayout.CENTER);
@@ -62,48 +61,48 @@ public class sector extends JPanel {
         sectors.add(new SectorShape(
             "Sector 1",
             "Calculate the area of the shaded region. Round to two decimal places. (Use π = 3.14)",
-            157.75, // (90/360) * π * 8² 
+            50.24, // (90/360) * π * 8² 
             new String[]{"Sector area = (central angle/360°) × π × radius²", "= (90/360) × 3.14 × 8² = 50.24 square centimeters"},
             createSectorImage(1),
             "Radius = 8 cm, Central angle = 90°"
         ));
         
-        // Sector 5: 100-degree sector, radius 35 meters
+        // Sector 2: 100-degree sector, radius 35 meters
         sectors.add(new SectorShape(
             "Sector 2",
             "Calculate the area of the shaded region. Round to two decimal places. (Use π = 3.14)",
-            3355.00, // (100/360) * π * 35² 
-            new String[]{"Sector area = (central angle/360°) × π × radius²", "= (100/360) × 3.14 × 35² = 3355.00 square meters"},
+            1068.47, // (100/360) * π * 35²=1068.47 square meters
+            new String[]{"Sector area = (central angle/360°) × π × radius²", "= (100/360) × 3.14 × 35² = 1068.47 square meters"},
             createSectorImage(2),
             "Radius = 35 meters, Central angle = 100°"
         ));
         
-        // Sector 4: 110-degree sector, radius 22 feet
+        // Sector 3: 110-degree sector, radius 22 feet
         sectors.add(new SectorShape(
             "Sector 3",
             "Calculate the area of the shaded region. Round to two decimal places. (Use π = 3.14)",
-            1458.12, // (110/360) * π * 22² 
-            new String[]{"Sector area = (central angle/360°) × π × radius²", "= (110/360) × 3.14 × 22² = 1458.12 square feet"},
+            464.37, // (110/360) * π * 22² 
+            new String[]{"Sector area = (central angle/360°) × π × radius²", "= (110/360) × 3.14 × 22² = 464.37 square feet"},
             createSectorImage(3),
             "Radius = 22 feet, Central angle = 110°"
         ));
         
-        // Sector 2: 130-degree sector, radius 18 feet
+        // Sector 4: 130-degree sector, radius 18 feet
         sectors.add(new SectorShape(
             "Sector 4",
             "Calculate the area of the shaded region. Round to two decimal places. (Use π = 3.14)",
-            1153.57, // [(130/360) * π * 18²] 
-            new String[]{"Sector area = (central angle/360°) × π × radius²", "= (130/360) × 3.14 × 18² = 1153.57 square feet"},
+            367.38, // [(130/360) * π * 18²] 
+            new String[]{"Sector area = (central angle/360°) × π × radius²", "= (130/360) × 3.14 × 18² = 367.38 square feet"},
             createSectorImage(4),
             "Radius = 18 feet, Central angle = 130°"
         ));
         
-        // Sector 3: 240-degree sector, radius 14 cm
+        // Sector 5: 240-degree sector, radius 14 cm
         sectors.add(new SectorShape(
             "Sector 5",
             "Calculate the area of the shaded region. Round to two decimal places. (Use π = 3.14)",
-            1288.32, // (240/360) * π * 14²
-            new String[]{"Sector area = (central angle/360°) × π × radius²", "= (240/360) × 3.14 × 14² = 1288.32 square centimeters"},
+            410.29, // (240/360) * π * 14²
+            new String[]{"Sector area = (central angle/360°) × π × radius²", "= (240/360) × 3.14 × 14² = 410.29 square centimeters"},
             createSectorImage(5),
             "Radius = 14 cm, Central angle = 240°"
         ));
@@ -112,8 +111,8 @@ public class sector extends JPanel {
         sectors.add(new SectorShape(
             "Sector 6",
             "Calculate the area of the shaded region. Round to two decimal places. (Use π = 3.14)",
-            1540.56, // (250/360) * π * 15²
-            new String[]{"Sector area = (central angle/360°) × π × radius²", "= (250/360) × 3.14 × 15² = 1540.56 square millimeters"},
+            490.63, // (250/360) * π * 15²
+            new String[]{"Sector area = (central angle/360°) × π × radius²", "= (250/360) × 3.14 × 15² = 490.63 square millimeters"},
             createSectorImage(6),
             "Radius = 15 mm, Central angle = 250°"
         ));
@@ -122,8 +121,8 @@ public class sector extends JPanel {
         sectors.add(new SectorShape(
             "Sector 7",
             "Calculate the area of the shaded region. Round to two decimal places. (Use π = 3.14)",
-            473.26, // (270/360) * π * 8² 
-            new String[]{"Sector area = (central angle/360°) × π × radius²", "= (270/360) × 3.14 × 8² = 473.26 square inches"},
+            150.72, // (270/360) * π * 8² 
+            new String[]{"Sector area = (central angle/360°) × π × radius²", "= (270/360) × 3.14 × 8² = 410.29 square inches"},
             createSectorImage(7),
             "Radius = 8 inches, Central angle = 270°"
         ));
@@ -132,8 +131,8 @@ public class sector extends JPanel {
         sectors.add(new SectorShape(
             "Sector 8",
             "Calculate the area of the shaded region. Round to two decimal places. (Use π = 3.14)",
-            1104.28, // (280/360) * π * 12²
-            new String[]{"Sector area = (central angle/360°) × π × radius²", "= (280/360) × 3.14 × 12² = 1104.28 square yards"},
+            351.68, // (280/360) * π * 12²
+            new String[]{"Sector area = (central angle/360°) × π × radius²", "= (280/360) × 3.14 × 12² = 351.68 square yards"},
             createSectorImage(8),
             "Radius = 12 yards, Central angle = 280°"
         ));
@@ -146,7 +145,7 @@ public class sector extends JPanel {
      */
     private ImageIcon createSectorImage(int sectorNumber) {
         // Load image from resources/assets/sector directory
-        String imagePath = "/assets/sector/sector" + sectorNumber + ".png";
+        String imagePath = "/assets/sectors/sector" + sectorNumber + ".png";
         return com.shapeville.utils.ImageLoader.loadImageAndScale(imagePath, 300, 300);
     }
 
@@ -156,30 +155,69 @@ public class sector extends JPanel {
     private void setupUI() {
         content.setLayout(new BorderLayout(10, 10));
         
-        // North area for title and timer
+        // North area for title, timer and attempts
         JPanel northPanel = new JPanel(new BorderLayout());
-        JLabel titleLabel = new JLabel("Bonus 2: Sector Area Calculation", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        northPanel.add(titleLabel, BorderLayout.NORTH);
         
-        timerLabel = new JLabel("Time Remaining: 5:00", SwingConstants.CENTER);
-        northPanel.add(timerLabel, BorderLayout.CENTER);
+        // 创建顶部选择面板 - 模仿图片中的界面
+        JPanel selectionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        JLabel selectLabel = new JLabel("Select shape:");
+        selectLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        selectionPanel.add(selectLabel);
+        
+        // 添加扇形选择按钮 - 使用单个按钮"Sector"
+        JButton sectorButton = new JButton("Sector");
+        sectorButton.addActionListener(e -> {
+            // 显示扇形选择对话框
+            String[] options = new String[sectors.size()];
+            for (int i = 0; i < sectors.size(); i++) {
+                options[i] = "Sector " + (i + 1);
+            }
+            
+            int choice = JOptionPane.showOptionDialog(
+                this,
+                "Select one of the 8 options of a sector of a circle:",
+                "Select Sector",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]
+            );
+            
+            if (choice >= 0) {
+                currentSectorIndex = choice;
+                resetTimer(); // 重置计时器
+                attempt = 0;  // 重置尝试次数
+                showCurrentSector();
+            }
+        });
+        selectionPanel.add(sectorButton);
+        
+        northPanel.add(selectionPanel, BorderLayout.NORTH);
+        
+        // 添加时间和尝试次数面板
+        JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 5));
+        timerLabel = new JLabel("Time left: 05:00");
+        JLabel attemptsLabel = new JLabel("Attempts left: 3");
+        infoPanel.add(timerLabel);
+        infoPanel.add(attemptsLabel);
+        northPanel.add(infoPanel, BorderLayout.CENTER);
         
         content.add(northPanel, BorderLayout.NORTH);
         
         // Center area for problem description and sector image
         JPanel centerPanel = new JPanel(new BorderLayout(10, 10));
         
-        JPanel infoPanel = new JPanel(new BorderLayout());
+        JPanel infoPanel2 = new JPanel(new BorderLayout());
         questionLabel = new JLabel("", SwingConstants.CENTER);
-        infoPanel.add(questionLabel, BorderLayout.NORTH);
+        infoPanel2.add(questionLabel, BorderLayout.NORTH);
         
         JLabel formulaLabel = new JLabel("<html><body style='width: 300px; text-align: center;'>" +
                 "Sector area = (central angle/360°) × π × radius²</body></html>", SwingConstants.CENTER);
         formulaLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-        infoPanel.add(formulaLabel, BorderLayout.CENTER);
+        infoPanel2.add(formulaLabel, BorderLayout.CENTER);
         
-        centerPanel.add(infoPanel, BorderLayout.NORTH);
+        centerPanel.add(infoPanel2, BorderLayout.NORTH);
         
         sectorImageLabel = new JLabel("", SwingConstants.CENTER);
         sectorImageLabel.setPreferredSize(new Dimension(300, 300));
@@ -201,42 +239,15 @@ public class sector extends JPanel {
         submitButton.addActionListener(e -> checkAnswer(answerField.getText()));
         southPanel.add(submitButton);
         
-        // Add sector selection buttons
-        JPanel sectorSelectionPanel = new JPanel();
-        sectorSelectionPanel.setLayout(new GridLayout(2, 4, 5, 5));
-        
-        for (int i = 0; i < sectors.size(); i++) {
-            final int index = i;
-            JButton sectorButton = new JButton("Sector " + (i + 1));
-            sectorButton.addActionListener(e -> {
-                currentSectorIndex = index;
-                resetTimer();
-                showCurrentSector();
-            });
-            sectorSelectionPanel.add(sectorButton);
-        }
-        
-        // Add home button
-        JButton homeButton = new JButton("Return to Home");
-        homeButton.addActionListener(e -> {
-            // Logic to return to the home page
-            if (timer != null) {
-                timer.cancel();
-            }
-             // 获取MainFrame实例并导航到主页
-            javax.swing.JFrame topFrame = (javax.swing.JFrame) SwingUtilities.getWindowAncestor(this);
-            if (topFrame instanceof com.shapeville.main.MainFrame) {
-                ((com.shapeville.main.MainFrame) topFrame).navigateToHome();
-            }
-        });
-        sectorSelectionPanel.add(homeButton);
-        
-        content.add(sectorSelectionPanel, BorderLayout.SOUTH);
-        content.add(southPanel, BorderLayout.AFTER_LAST_LINE);
+   content.add(southPanel, BorderLayout.SOUTH);
         
         // Display the first sector
         showCurrentSector();
         startTimer();
+        
+        // 更新尝试次数标签
+        attempt = 0;
+        attemptsLabel.setText("Attempts left: " + (3 - attempt));
     }
     
     /**
@@ -287,7 +298,7 @@ public class sector extends JPanel {
                     timer.cancel();
                     timerRunning = false;
                     SwingUtilities.invokeLater(() -> {
-                        JOptionPane.showMessageDialog(sector.this, 
+                        JOptionPane.showMessageDialog(Sector.this, 
                                 "Time's up! Let's see the solution.");
                         showSolution();
                     });
@@ -337,22 +348,26 @@ public class sector extends JPanel {
                     timer.cancel();
                     timerRunning = false;
                 }
-                 // 记录分数 - 根据尝试次数计算得分
+                // 记录分数 - 根据尝试次数计算得分
                 recordScore(attempt + 1);
-                
-                JOptionPane.showMessageDialog(this, "Correct answer!");
-                practicedSectors++;
-
-                JOptionPane.showMessageDialog(this, "Correct answer!");
-                practicedSectors++;
                 
                 // Mark this sector as completed
                 currentSector.setCompleted(true);
+                practicedSectors++;
+                
+                // 修复问题1：先增加完成数量，再更新进度条
+                updateProgress(practicedSectors, sectors.size());
+                
+                JOptionPane.showMessageDialog(this, "Correct answer!");
                 
                 // Check if all sectors are completed
                 if (practicedSectors >= sectors.size()) {
                     JOptionPane.showMessageDialog(this, "Congratulations! You have completed all sector area calculation exercises!");
                     // Return to home page or proceed to the next task
+                    javax.swing.JFrame topFrame = (javax.swing.JFrame) SwingUtilities.getWindowAncestor(this);
+                if (topFrame instanceof com.shapeville.main.MainFrame) {
+                    ((com.shapeville.main.MainFrame) topFrame).navigateToHome();
+                }
                 } else {
                     // Move to the next incomplete sector
                     moveToNextSector();
@@ -372,10 +387,17 @@ public class sector extends JPanel {
                     currentSector.setCompleted(true);
                     practicedSectors++;
                     
+                    // 修复问题1：先增加完成数量，再更新进度条
+                    updateProgress(practicedSectors, sectors.size());
+                    
                     // Check if all sectors are completed
                     if (practicedSectors >= sectors.size()) {
-                        JOptionPane.showMessageDialog(this, "You have completed all sector area calculation exercises!");
+                        JOptionPane.showMessageDialog(this, "Congratulations! You have completed all sector area calculation exercises!");
                         // Return to home page or proceed to the next task
+                        javax.swing.JFrame topFrame = (javax.swing.JFrame) SwingUtilities.getWindowAncestor(this);
+                    if (topFrame instanceof com.shapeville.main.MainFrame) {
+                        ((com.shapeville.main.MainFrame) topFrame).navigateToHome();
+                    }
                     } else {
                         // Move to the next incomplete sector
                         moveToNextSector();
@@ -384,7 +406,7 @@ public class sector extends JPanel {
                     JOptionPane.showMessageDialog(this, "Incorrect answer. Please try again!\nYou have " + (3 - attempt) + " attempts remaining.");
                 }
             }
-        } catch (NumberFormatException e) {
+        }catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Please enter a valid number!");
         }
 
@@ -440,6 +462,11 @@ private void recordScore(int attemptsUsed) {
         
         currentSectorIndex = nextIndex;
         answerField.setText("");
+        attempt = 0; // 重置尝试次数
+        
+        // 修复问题2：确保在这里重置计时器
+        resetTimer();
+        
         showCurrentSector();
     }
     
@@ -538,4 +565,21 @@ private void recordScore(int attemptsUsed) {
             return values;
         }
     }
+
+    /**
+ * 更新进度条
+ * @param current 当前完成的扇形数量
+ * @param total 总扇形数量
+ */
+private void updateProgress(int current, int total) {
+    // 获取MainFrame实例
+    javax.swing.JFrame topFrame = (javax.swing.JFrame) SwingUtilities.getWindowAncestor(this);
+    if (topFrame instanceof com.shapeville.main.MainFrame) {
+        com.shapeville.main.MainFrame mainFrame = (com.shapeville.main.MainFrame) topFrame;
+        // 获取NavigationBar并更新进度
+        mainFrame.getNavigationBar().updateProgress(current, total);
+    }
 }
+
+}
+

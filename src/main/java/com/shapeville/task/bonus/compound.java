@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -18,12 +17,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities; 
+import javax.swing.SwingUtilities;
 /**
  * Bonus 1: Compound Shape Area Calculation
  * Allows users to select a compound shape and calculate its area.
  */
-public class compound extends JPanel {
+public class Compound extends JPanel {
     private JTextField answerField;
     private int attempt = 0;
     private int currentShapeIndex = 0;
@@ -40,7 +39,7 @@ public class compound extends JPanel {
     /**
      * Constructor
      */
-    public compound() {
+    public Compound() {
         setLayout(new BorderLayout());
         content = new JPanel();
         add(content, BorderLayout.CENTER);
@@ -116,10 +115,11 @@ public class compound extends JPanel {
      * @return The shape image.
      */
     private ImageIcon createShapeImage(int shapeNumber) {
-        // Load image from resources/assets/compound directory
+        // 修改为使用类路径加载资源
         String imagePath = "/assets/compound/compound" + shapeNumber + ".png";
         return com.shapeville.utils.ImageLoader.loadImageAndScale(imagePath, 400, 300);
     }
+
 
     /**
      * Sets up the user interface components.
@@ -127,14 +127,51 @@ public class compound extends JPanel {
     private void setupUI() {
         content.setLayout(new BorderLayout(10, 10));
         
-        // North area for title and timer
+        // North area for title, timer and attempts
         JPanel northPanel = new JPanel(new BorderLayout());
-        JLabel titleLabel = new JLabel("Bonus 1: Compound Shape Area Calculation", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        northPanel.add(titleLabel, BorderLayout.NORTH);
         
-        timerLabel = new JLabel("Time Remaining: 5:00", SwingConstants.CENTER);
-        northPanel.add(timerLabel, BorderLayout.CENTER);
+        // 创建顶部选择面板 - 模仿Sector.java的界面
+        JPanel selectionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        JLabel selectLabel = new JLabel("Select shape:");
+        selectLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        selectionPanel.add(selectLabel);
+        
+        // 添加复合形状选择按钮
+        JButton shapeButton = new JButton("Compound Shape");
+        shapeButton.addActionListener(e -> {
+        // 显示形状选择对话框
+        String[] options = new String[shapes.size()];
+        for (int i = 0; i < shapes.size(); i++) {
+            options[i] = "Shape " + (i + 1);
+        }
+        
+        int choice = JOptionPane.showOptionDialog(
+            this,
+            "Select one of the 6 compound shapes:",
+            "Select Shape",
+            JOptionPane.DEFAULT_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            options,
+            options[0]
+        );
+        
+        if (choice >= 0) {
+            currentShapeIndex = choice;
+            resetTimer(); // 重置计时器
+            attempt = 0;  // 重置尝试次数
+            showCurrentShape();
+        }
+        });
+        selectionPanel.add(shapeButton);
+        
+        northPanel.add(selectionPanel, BorderLayout.NORTH);
+        
+        // 添加时间面板
+        JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 5));
+        timerLabel = new JLabel("Time left: 05:00");
+        infoPanel.add(timerLabel);
+        northPanel.add(infoPanel, BorderLayout.CENTER);
         
         content.add(northPanel, BorderLayout.NORTH);
         
@@ -164,38 +201,8 @@ public class compound extends JPanel {
         submitButton.addActionListener(e -> checkAnswer(answerField.getText()));
         southPanel.add(submitButton);
         
-        // Add shape selection buttons
-        JPanel shapeSelectionPanel = new JPanel();
-        shapeSelectionPanel.setLayout(new GridLayout(2, 3, 5, 5));
-        
-        for (int i = 0; i < shapes.size(); i++) {
-            final int index = i;
-            JButton shapeButton = new JButton("Shape " + (i + 1));
-            shapeButton.addActionListener(e -> {
-                currentShapeIndex = index;
-                resetTimer();
-                showCurrentShape();
-            });
-            shapeSelectionPanel.add(shapeButton);
-        }
-        
-        // Add home button
-        JButton homeButton = new JButton("Return to Home");
-        homeButton.addActionListener(e -> {
-            // Logic to return to the home page
-            if (timer != null) {
-                timer.cancel();
-            }
-             // 获取MainFrame实例并导航到主页
-            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-            if (topFrame instanceof com.shapeville.main.MainFrame) {
-                ((com.shapeville.main.MainFrame) topFrame).navigateToHome();
-            }
-        });
-        shapeSelectionPanel.add(homeButton);
-        
-        content.add(shapeSelectionPanel, BorderLayout.SOUTH);
-        content.add(southPanel, BorderLayout.AFTER_LAST_LINE);
+         content.add(southPanel, BorderLayout.SOUTH);
+      
         
         // Display the first shape
         showCurrentShape();
@@ -249,7 +256,7 @@ public class compound extends JPanel {
                     timer.cancel();
                     timerRunning = false;
                     SwingUtilities.invokeLater(() -> {
-                        JOptionPane.showMessageDialog(compound.this, 
+                        JOptionPane.showMessageDialog(Compound.this, 
                                 "Time's up! Let's see the solution.");
                         showSolution();
                     });
@@ -306,7 +313,8 @@ public class compound extends JPanel {
                 JOptionPane.showMessageDialog(this, "Correct Answer!");
                 practisedShapes++;
 
-              
+                // 更新进度条 - 确保总数为shapes.size()
+                updateProgress(practisedShapes, shapes.size());
                 
                 // Mark this shape as completed
                 currentShape.setCompleted(true);
@@ -314,10 +322,18 @@ public class compound extends JPanel {
                 // Check if all shapes are completed
                 if (practisedShapes >= shapes.size()) {
                     JOptionPane.showMessageDialog(this, "Congratulations! You have completed all compound shape exercises!");
-                    // Return to home page or proceed to the next task
+                    // 修复：完成所有形状后返回主界面
+                    JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+                    if (topFrame instanceof com.shapeville.main.MainFrame) {
+                        com.shapeville.main.MainFrame mainFrame = (com.shapeville.main.MainFrame) topFrame;
+                        mainFrame.getTaskManager().currentTaskTypeCompleted(new com.shapeville.logic.TaskLogic(){});
+                        mainFrame.navigateToHome();
+                    }
                 } else {
                     // Move to the next incomplete shape
                     moveToNextShape();
+                    // 修复：重新开始计时器
+                    resetTimer();
                 }
             } else {
                 attempt++;
@@ -334,13 +350,24 @@ public class compound extends JPanel {
                     currentShape.setCompleted(true);
                     practisedShapes++;
                     
+                    // 更新进度条 - 无论答对答错都更新进度
+                    updateProgress(practisedShapes, shapes.size());
+                    
                     // Check if all shapes are completed
                     if (practisedShapes >= shapes.size()) {
                         JOptionPane.showMessageDialog(this, "You have completed all compound shape exercises!");
                         // Return to home page or proceed to the next task
+                        JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+                        if (topFrame instanceof com.shapeville.main.MainFrame) {
+                            com.shapeville.main.MainFrame mainFrame = (com.shapeville.main.MainFrame) topFrame;
+                            mainFrame.getTaskManager().currentTaskTypeCompleted(new com.shapeville.logic.TaskLogic(){});
+                            mainFrame.navigateToHome();
+                        }
                     } else {
                         // Move to the next incomplete shape
                         moveToNextShape();
+                        // 修复：重新开始计时器
+                        resetTimer();
                     }
                 } else {
                     JOptionPane.showMessageDialog(this, "Incorrect answer, please try again!\nYou have " + (3 - attempt) + " attempts remaining.");
@@ -381,6 +408,7 @@ public class compound extends JPanel {
         
         currentShapeIndex = nextIndex;
         answerField.setText("");
+        attempt = 0; // 修复：重置尝试次数
         showCurrentShape();
     }
     
@@ -487,4 +515,22 @@ private void recordScore(int attemptsUsed) {
             this.completed = completed;
         }
     }
+
+    /**
+ * 更新进度条
+ * @param current 当前完成的形状数量
+ * @param total 总形状数量
+ */
+private void updateProgress(int current, int total) {
+    // 获取MainFrame实例
+    JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+    if (topFrame instanceof com.shapeville.main.MainFrame) {
+        com.shapeville.main.MainFrame mainFrame = (com.shapeville.main.MainFrame) topFrame;
+        // 获取NavigationBar并更新进度
+        // 修复：确保current不会超过total
+        int displayCurrent = Math.min(current, total);
+        mainFrame.getNavigationBar().updateProgress(displayCurrent, total);
+    }
+}
+
 }
