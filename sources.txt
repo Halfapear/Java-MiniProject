@@ -14,8 +14,8 @@ src/main/java/com/shapeville/task/sk2/Task3Panel.java
 src/main/java/com/shapeville/task/sk1/Task2Panel.java
 src/main/java/com/shapeville/task/sk1/Task1Panel3D.java
 src/main/java/com/shapeville/task/sk1/Task1Panel2D.java
-src/main/java/com/shapeville/task/bonus/sector.java
-src/main/java/com/shapeville/task/bonus/compound.java
+src/main/java/com/shapeville/task/bonus/Sector.java
+src/main/java/com/shapeville/task/bonus/Compound.java
 src/main/java/com/shapeville/model/TaskDefinition.java
 src/main/java/com/shapeville/model/Shape.java
 src/main/java/com/shapeville/model/Problem.java
