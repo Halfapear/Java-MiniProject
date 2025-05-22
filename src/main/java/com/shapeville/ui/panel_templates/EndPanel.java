@@ -10,8 +10,17 @@ import javax.swing.SwingConstants;
 
 import com.shapeville.logic.ScoreManager;
 
+/**
+ * The EndPanel class represents the screen displayed at the end of a user session.
+ * It shows a thank you message and the user's final score for the session.
+ */
 public class EndPanel extends JPanel {
 
+    /**
+     * Constructs a new EndPanel.
+     * Retrieves the final score from the {@link ScoreManager} and displays it along with a thank you message.
+     * @param scoreManager The {@link ScoreManager} containing the final score.
+     */
     public EndPanel(ScoreManager scoreManager) {
         int finalScore = scoreManager.getCurrentScore(); // 调用 getCurrentScore()
         setLayout(new BorderLayout());
@@ -20,7 +29,7 @@ public class EndPanel extends JPanel {
         label.setFont(new Font("Arial", Font.BOLD, 24));
         add(label, BorderLayout.CENTER);
 
-        // 显示最终得分
+        // Display final score
         JLabel scoreLabel = new JLabel("Your final score: " + finalScore, SwingConstants.CENTER);
         scoreLabel.setFont(new Font("Arial", Font.PLAIN, 20));
         add(scoreLabel, BorderLayout.SOUTH);

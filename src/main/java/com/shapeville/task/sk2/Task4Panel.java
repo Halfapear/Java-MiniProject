@@ -13,39 +13,67 @@ import com.shapeville.ui.panel_templates.TaskPanel;
 import com.shapeville.utils.Constants;
 
 /**
- * Task 4 Panel: Circle Area and Circumference calculations.
- * Allows the user to choose between Area or Circumference mode. A random radius or diameter is provided,
- * and the user must calculate the area or circumference accordingly.
- * Includes a 3-minute timer, up to 3 attempts, and shows the formula with substituted values after each round.
+ * Task 4 Panel for Circle Area and Circumference calculations.
+ * This panel allows the user to practice calculating the area and circumference of circles.
+ * It supports two modes (Area and Circumference) and provides either the radius or diameter.
+ * Features include a timer, attempt tracking, feedback, and displaying the formula with substituted values.
+ * Implements the {@link com.shapeville.ui.panel_templates.TaskPanel} interface for integration with the task management flow.
  */
 public class Task4Panel extends JPanel implements TaskPanel {
+    /** Reference to the main application frame. */
     private MainFrame mainFrameRef;
+    /** Button to select the Area calculation mode. */
     private JButton areaButton;
+    /** Button to select the Circumference calculation mode. */
     private JButton circumferenceButton;
+    /** Label to display the remaining time. */
     private JLabel timeLabel;
+    /** Label to display the number of attempts remaining. */
     private JLabel attemptsLabel;
+    /** Label to display the question or instructions for the current problem. */
     private JLabel questionLabel;
+    /** Text field for user input of the calculated value. */
     private JTextField answerField;
+    /** Button to submit the user's answer. */
     private JButton submitButton;
+    /** Label to display feedback or result messages. */
     private JLabel resultMessageLabel;
+    /** Label to display the formula for the current circle calculation. */
     private JLabel formulaLabel;
+    /** Timer for the task time limit. */
     private Timer timer;
+    /** Remaining time in seconds for the current problem. */
     private int timeRemaining;
+    /** Number of attempts used for the current problem. */
     private int attemptsUsed;
+    /** Flag indicating if a problem is currently active. */
     private boolean problemActive;
-    // Flags for completed scenario combinations
+    /** Flag indicating if the Area calculation with Radius scenario is completed. */
     private boolean doneAreaRadius = false;
+    /** Flag indicating if the Area calculation with Diameter scenario is completed. */
     private boolean doneAreaDiameter = false;
+    /** Flag indicating if the Circumference calculation with Radius scenario is completed. */
     private boolean doneCircRadius = false;
+    /** Flag indicating if the Circumference calculation with Diameter scenario is completed. */
     private boolean doneCircDiameter = false;
     // Current problem context
+    /** Flag indicating if the current problem is Area calculation (true) or Circumference (false). */
     private boolean currentIsArea;
+    /** Flag indicating if the given value for the current problem is Radius (true) or Diameter (false). */
     private boolean givenIsRadius;
+    /** The correct numerical answer for the current problem. */
     private double currentCorrectAnswer;
+    /** The formula string for the current circle calculation problem. */
     private String currentFormula;
     // Panel for drawing the circle and labeling given dimensions
+    /** Custom panel for drawing the circle and labeling the given dimension. */
     private CircleDrawingPanel circleDrawingPanel;
 
+    /**
+     * Constructs a new Task4Panel.
+     * Initializes UI components, sets up mode selection buttons, and prepares for circle calculation tasks.
+     * @param mainFrame The reference to the main application frame ({@link com.shapeville.main.MainFrame}).
+     */
     public Task4Panel(MainFrame mainFrame) {
         this.mainFrameRef = mainFrame;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -167,6 +195,14 @@ public class Task4Panel extends JPanel implements TaskPanel {
         });
     }
 
+    /**
+     * Starts a new circle calculation problem (Area or Circumference).
+     * Selects a random value (radius or diameter) and generates the question.
+     * Sets up the correct answer, formula, and starts the timer.
+     * Disables mode selection buttons while a problem is active.
+     * Ensures each of the four scenarios (Area/Radius, Area/Diameter, Circ/Radius, Circ/Diameter) is presented once.
+     * @param isAreaMode True to start an Area calculation problem, false for Circumference.
+     */
     private void startNewCircleProblem(boolean isAreaMode) {
         // Ensure the selected mode still has an unseen scenario
         if (isAreaMode && doneAreaRadius && doneAreaDiameter) {

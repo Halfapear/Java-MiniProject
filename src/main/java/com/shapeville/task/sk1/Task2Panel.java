@@ -35,28 +35,63 @@ import com.shapeville.model.Problem;
 import com.shapeville.ui.panel_templates.TaskPanel;
 import com.shapeville.utils.Constants;
 
+/**
+ * Task 2 Panel for Angle Recognition.
+ * This panel guides the user through recognizing different types of angles by their degree measurements.
+ * It allows users to input angle values, visualizes the angle, and prompts for the angle type.
+ * Implements the {@link com.shapeville.ui.panel_templates.TaskPanel} interface to fit into the application's task management flow.
+ */
 public class Task2Panel extends JPanel implements TaskPanel {
+    /** Reference to the main application frame. */
     private MainFrame mainFrame;
+    /** Reference to the score manager for updating the score. */
     private ScoreManager scoreManager;
+    /** Label for visualizing the current angle. */
     private JLabel angleVisualLabel;
+    /** Text field for user input of the angle value. */
     private JTextField angleInputField;
+    /** Button to submit the user's answer. */
     private JButton submitButton;
+    /** Label to display feedback to the user. */
     private JLabel feedbackLabel;
+    /** Label to display the determined angle type. */
     private JLabel angleTypeLabel;
+    /** Label to display the number of attempts remaining. */
     private JLabel attemptsLabel;
+<<<<<<< HEAD
     private JLabel inputPromptLabel; // 新增：输入框前的提示标签
     private int currentAttempts = 0;
+=======
+    /** Label prompting the user to enter the angle value. */
+    private JLabel inputPromptLabel; // New: Prompt label before the input field
+    /** Number of attempts remaining for the current problem. */
+    private int currentAttempts = 3;
+    /** Number of angles successfully identified in the current session. */
+>>>>>>> JZBDoc
     private int completedAngles = 0;
+    /** Array of target angle values for the task. */
     private final int[] targetAngles = {30, 90, 120, 180, 200, 270, 300, 360};
+    /** Index of the current target angle in the {@code targetAngles} array. */
     private int currentIndex = 0;
-    private int currentAngle = 0; // 控制UI显示的角度，初始为0
-    private int targetAngle = 0;  // 存储目标角度
+    /** The current angle value being visualized (controlled by user input or task). */
+    private int currentAngle = 0; // Controls the angle displayed by the UI, initially 0
+    /** The target angle value for the current problem. */
+    private int targetAngle = 0;  // Stores the target angle
+    /** Flag indicating if an angle value has been entered by the user. */
     private boolean angleEntered = false;
+    /** Width for the angle visualization area. */
     private static final int VISUALIZATION_WIDTH = 300;
+    /** Height for the angle visualization area. */
     private static final int VISUALIZATION_HEIGHT = 300;
+    /** Number of angles to identify to complete the task. */
     private static final int anglesToIdentify = 4; // 需要识别4种角度类型
     private Set<String> enteredAngleTypes = new HashSet<>(); // Track entered angle types
 
+    /**
+     * Constructs a new Task2Panel.
+     * Initializes UI components and loads the first angle problem.
+     * @param mainFrame The reference to the main application frame ({@link com.shapeville.main.MainFrame}).
+     */
     public Task2Panel(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
         this.scoreManager = mainFrame.getScoreManager();
@@ -64,6 +99,11 @@ public class Task2Panel extends JPanel implements TaskPanel {
         loadNextAngle();
     }
 
+    /**
+     * Initializes the user interface components for the angle recognition task.
+     * Sets up the layout, adds labels, text fields, buttons, and containers.
+     * Includes a custom JLabel for drawing the angle visualization.
+     */
     private void initializeUI() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -93,7 +133,7 @@ public class Task2Panel extends JPanel implements TaskPanel {
         angleVisualLabel.setMaximumSize(new Dimension(VISUALIZATION_WIDTH, VISUALIZATION_HEIGHT));
         angleVisualLabel.setMinimumSize(new Dimension(VISUALIZATION_WIDTH, VISUALIZATION_HEIGHT));
         angleVisualLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-        // 居中显示
+        // Center display
         JPanel visualizationWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER));
         visualizationWrapper.setBackground(new Color(50, 50, 50)); // Contrast background for container
         visualizationWrapper.add(angleVisualLabel);
@@ -103,7 +143,7 @@ public class Task2Panel extends JPanel implements TaskPanel {
         // Input panel
         JPanel inputPanel = new JPanel();
         inputPanel.setBackground(new Color(30, 30, 30)); // Match main panel background
-        inputPromptLabel = new JLabel("Enter angle (0-360, multiples of 10):"); // 新增：输入框前的提示标签
+        inputPromptLabel = new JLabel("Enter angle (0-360, multiples of 10):"); // New: Prompt label before the input field
         inputPromptLabel.setFont(new Font("Arial", Font.PLAIN, 18));
         inputPromptLabel.setForeground(Color.WHITE); // High contrast text
         inputPanel.add(inputPromptLabel);
@@ -157,6 +197,15 @@ public class Task2Panel extends JPanel implements TaskPanel {
         add(Box.createVerticalStrut(20));
     }
 
+    /**
+     * Draws the angle visualization on the panel.
+     * Renders a base line, the angle line, an arc representing the angle,
+     * and a label showing the angle degree or a question mark.
+     * @param g The Graphics object to draw on.
+     * @param degrees The angle in degrees to visualize.
+     * @param width The width of the drawing area.
+     * @param height The height of the drawing area.
+     */
     private void drawAngle(Graphics g, int degrees, int width, int height) {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -212,13 +261,19 @@ public class Task2Panel extends JPanel implements TaskPanel {
         g2d.drawString(angleText, textX, textY);
     }
 
+    /**
+     * Loads the next angle problem for the user to solve.
+     * Selects a target angle and resets the UI state for the new problem.
+     * Increments the completed angle count and updates the progress bar.
+     * Shows a completion dialog if the required number of angles are completed.
+     */
     private void loadNextAngle() {
         completedAngles++;
 
-        // 更新进度条
+        // Update progress bar
         mainFrame.getNavigationBar().updateProgress(completedAngles, anglesToIdentify);
 
-        // 选择下一个目标角度，但不更新currentAngle（保持0度）
+        // Select the next target angle, but don't update currentAngle (keep at 0 degrees)
         targetAngle = targetAngles[currentIndex % targetAngles.length];
         currentIndex++;
 
@@ -239,6 +294,13 @@ public class Task2Panel extends JPanel implements TaskPanel {
         SwingUtilities.invokeLater(() -> angleVisualLabel.repaint());
     }
 
+    /**
+     * Handles the submission of the user's input.
+     * In the first step, it validates and displays the entered angle.
+     * In the second step, it checks the identified angle type against the correct type.
+     * Updates feedback labels, attempt count, and score.
+     * @param e The ActionEvent triggered by the submit button.
+     */
     private void handleSubmit(ActionEvent e) {
         
         if (!angleEntered) {
@@ -253,6 +315,7 @@ public class Task2Panel extends JPanel implements TaskPanel {
                     return;
                 }
 
+<<<<<<< HEAD
                 // Determine the angle type
                 String angleType = determineAngleType(angle).toLowerCase();
 
@@ -265,15 +328,27 @@ public class Task2Panel extends JPanel implements TaskPanel {
                 }
 
                 // Update currentAngle only after validation
+=======
+                // Only update currentAngle after user submission
+>>>>>>> JZBDoc
                 currentAngle = angle;
                 angleEntered = true;
                 angleInputField.setText("");
 
+<<<<<<< HEAD
                 inputPromptLabel.setText("Enter angle type (acute, right, obtuse, reflex):");
+=======
+                inputPromptLabel.setText("Enter angle type (zero, acute, right, obtuse, straight, reflex, full):"); // Update prompt
+>>>>>>> JZBDoc
                 inputPromptLabel.setForeground(new Color(0, 255, 0)); // Green for success in first step
                 angleInputField.setToolTipText("Enter angle type (acute, right, obtuse, reflex)");
 
+<<<<<<< HEAD
                 // Refresh UI to display the entered angle
+=======
+
+                // Refresh UI to display the angle entered by the user
+>>>>>>> JZBDoc
                 SwingUtilities.invokeLater(() -> angleVisualLabel.repaint());
             } catch (NumberFormatException ex) {
                 feedbackLabel.setText("Invalid input! Please enter a valid number.");
@@ -321,7 +396,16 @@ public class Task2Panel extends JPanel implements TaskPanel {
         currentAttempts++;
     }
 
+<<<<<<< HEAD
 
+=======
+    /**
+     * Determines the type of an angle based on its degree measurement.
+     * Classifies angles as Acute, Right, Obtuse, Straight, or Reflex.
+     * @param angle The angle measurement in degrees.
+     * @return A String representing the type of the angle.
+     */
+>>>>>>> JZBDoc
     private String determineAngleType(int angle) {
         if (angle == 0) return "Zero";
         if (angle < 90) return "Acute";
@@ -332,16 +416,29 @@ public class Task2Panel extends JPanel implements TaskPanel {
         return "Full";
     }
 
+    /**
+     * Returns a random congratulatory message.
+     * @return A random congratulation string.
+     */
     private String getRandomCongratulation() {
         String[] congrats = {"Well done!", "Excellent!", "Perfect!", "You got it!", "Great job!"};
         return congrats[new Random().nextInt(congrats.length)];
     }
 
+    /**
+     * Returns a random encouragement message for incorrect answers.
+     * @return A random encouragement string.
+     */
     private String getRandomEncouragement() {
         String[] encouragements = {"You can do it!", "Almost there!", "Think carefully!", "One more try!"};
         return encouragements[new Random().nextInt(encouragements.length)];
     }
 
+    /**
+     * Displays a dialog when the required number of angles for this task are completed.
+     * Offers options to return to home or try the task again.
+     * Handles navigation or state reset based on user choice.
+     */
     private void showCompletionDialog() {
         Object[] options = {"Return to Home", "Try Again"};
         int choice = JOptionPane.showOptionDialog(this,
@@ -364,23 +461,46 @@ public class Task2Panel extends JPanel implements TaskPanel {
     }
 
     @Override
+    /**
+     * Implemented from {@link com.shapeville.ui.panel_templates.TaskPanel}. Displays a problem on the panel.
+     * Note: Problem loading is currently handled internally in {@code loadNextAngle()}.
+     * @param problem The problem to display.
+     */
     public void displayProblem(Problem problem) {
     }
 
     @Override
+    /**
+     * Implemented from {@link com.shapeville.ui.panel_templates.TaskPanel}. Displays feedback to the user.
+     * Note: Feedback display is currently handled internally in {@code handleSubmit()}.
+     * @param feedback The feedback to display.
+     */
     public void showFeedback(Feedback feedback) {
     }
 
     @Override
+    /**
+     * Implemented from {@link com.shapeville.ui.panel_templates.TaskPanel}. Sets the callback for task logic.
+     * Currently not fully utilized in this panel, but required by the interface.
+     * @param logic The task logic instance.
+     */
     public void setTaskLogicCallback(TaskLogic logic) {
     }
 
     @Override
+    /**
+     * Implemented from {@link com.shapeville.ui.panel_templates.TaskPanel}. Gets the unique identifier for this panel.
+     * @return The panel ID string from {@link com.shapeville.utils.Constants}.
+     */
     public String getPanelId() {
         return Constants.ANGLE_TYPE_PANEL_ID;
     }
 
     @Override
+    /**
+     * Implemented from {@link com.shapeville.ui.panel_templates.TaskPanel}. Resets the state of the panel.
+     * Clears the current angle, resets completed angle count, attempts, and updates UI elements.
+     */
     public void resetState() {
         completedAngles = 0;
         currentIndex = 0;
