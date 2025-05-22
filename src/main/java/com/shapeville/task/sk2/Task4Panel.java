@@ -293,7 +293,7 @@ public class Task4Panel extends JPanel implements TaskPanel {
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Please enter a valid number.",
                     "Invalid Input", JOptionPane.WARNING_MESSAGE);
-            resultMessageLabel.setText("Invalid input! 😟"); // Added symbol and text
+            resultMessageLabel.setText("Invalid input! :("); // Changed emoji to text symbol
             resultMessageLabel.setForeground(new Color(255, 0, 0)); // Red for incorrect
             return;
         }
@@ -312,7 +312,7 @@ public class Task4Panel extends JPanel implements TaskPanel {
             int points = scoreManager.calculatePoints(attemptsUsed, Constants.SCORE_BASIC);
             scoreManager.recordScoreAndFeedback(points);
             // Show success feedback and formula
-            resultMessageLabel.setText("Correct! 😊"); // Added symbol and text
+            resultMessageLabel.setText("Correct! :)"); // Changed emoji to text symbol
             resultMessageLabel.setForeground(new Color(0, 255, 0)); // Green for correct
             formulaLabel.setText("<html><div style='width:400px;'>" + currentFormula + "</div></html>");
             if (allScenariosDone()) {
@@ -328,7 +328,7 @@ public class Task4Panel extends JPanel implements TaskPanel {
             if (attemptsUsed < Constants.DEFAULT_MAX_ATTEMPTS) {
                 JOptionPane.showMessageDialog(this, "Try again! :( Remaining attempts: " + (Constants.DEFAULT_MAX_ATTEMPTS - attemptsUsed),
                         "Incorrect Answer", JOptionPane.INFORMATION_MESSAGE);
-                resultMessageLabel.setText("Try again! 😟"); // Added symbol and text
+                resultMessageLabel.setText("Try again! :("); // Changed emoji to text symbol
                 resultMessageLabel.setForeground(new Color(255, 0, 0)); // Red for incorrect
                 answerField.setText("");
                 answerField.requestFocus();
@@ -340,7 +340,7 @@ public class Task4Panel extends JPanel implements TaskPanel {
                 answerField.setEnabled(false);
                 submitButton.setEnabled(false);
                 markCurrentScenarioDone();
-                resultMessageLabel.setText("No attempts left. 😟 The solution is shown below."); // Added symbol and text
+                resultMessageLabel.setText("No attempts left. :( The solution is shown below."); // Changed emoji to text symbol
                 resultMessageLabel.setForeground(new Color(255, 0, 0)); // Red for incorrect
                 formulaLabel.setText("<html><div style='width:400px;'>" + currentFormula + "</div></html>");
                 if (allScenariosDone()) {

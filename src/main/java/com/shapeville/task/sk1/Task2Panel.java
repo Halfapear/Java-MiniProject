@@ -239,7 +239,7 @@ public class Task2Panel extends JPanel implements TaskPanel {
             try {
                 int angle = Integer.parseInt(angleInputField.getText().trim());
                 if (angle < 0 || angle > 360 || angle % 10 != 0) {
-                    feedbackLabel.setText("Please enter a multiple of 10 between 0-360 😟"); // Added symbol and text
+                    feedbackLabel.setText("Please enter a multiple of 10 between 0-360 :("); // Changed emoji to text symbol
                     feedbackLabel.setForeground(new Color(255, 0, 0)); // Red for incorrect
                     return;
                 }
@@ -248,14 +248,14 @@ public class Task2Panel extends JPanel implements TaskPanel {
                 currentAngle = angle;
                 angleEntered = true;
                 angleInputField.setText("");
-                inputPromptLabel.setText("Enter angle type (acute, right, obtuse, reflex): 😊"); // Updated prompt with symbol and text
+                inputPromptLabel.setText("Enter angle type (acute, right, obtuse, reflex): :)"); // Changed emoji to text symbol
                 inputPromptLabel.setForeground(new Color(0, 255, 0)); // Green for success in first step
                 angleInputField.setToolTipText("Enter angle type (acute, right, obtuse, reflex)");
 
                 // 刷新UI显示用户输入的角度
                 SwingUtilities.invokeLater(() -> angleVisualLabel.repaint());
             } catch (NumberFormatException ex) {
-                feedbackLabel.setText("Please enter a valid number 😟"); // Added symbol and text
+                feedbackLabel.setText("Please enter a valid number :("); // Changed emoji to text symbol
                 feedbackLabel.setForeground(new Color(255, 0, 0)); // Red for incorrect
             }
         } else {
@@ -266,7 +266,7 @@ public class Task2Panel extends JPanel implements TaskPanel {
             if (input.equals(correctType)) {
                 // Correct answer
                 int points = scoreManager.calculatePoints(3 - currentAttempts + 1, false);
-                feedbackLabel.setText("Correct! 😊 " + getRandomCongratulation() + " +" + points + " points"); // Added symbol and text
+                feedbackLabel.setText("Correct! :) " + getRandomCongratulation() + " +" + points + " points"); // Changed emoji to text symbol
                 feedbackLabel.setForeground(new Color(0, 255, 0)); // Green for correct
                 scoreManager.recordScoreAndFeedback(points);
 
@@ -280,10 +280,10 @@ public class Task2Panel extends JPanel implements TaskPanel {
                 attemptsLabel.setText("Attempts left: " + currentAttempts);
 
                 if (currentAttempts > 0) {
-                    feedbackLabel.setText("Try again! 😟 " + getRandomEncouragement()); // Added symbol and text
+                    feedbackLabel.setText("Try again! :( " + getRandomEncouragement()); // Changed emoji to text symbol
                     feedbackLabel.setForeground(new Color(255, 0, 0)); // Red for incorrect
                 } else {
-                    feedbackLabel.setText("Incorrect! 😟 Correct answer: " + correctType); // Added symbol and text
+                    feedbackLabel.setText("Incorrect! :( Correct answer: " + correctType); // Changed emoji to text symbol
                     feedbackLabel.setForeground(new Color(255, 0, 0)); // Red for incorrect
                     angleTypeLabel.setText("This is a " + correctType + " angle");
                     angleTypeLabel.setForeground(new Color(0, 255, 0)); // Green for correct type reveal

@@ -225,17 +225,17 @@ public class Task1Panel2D extends JPanel implements TaskPanel {
         if (isCorrect) {
             scoreManager.recordScoreAndFeedback(points);
             completedShapes++;
-            message = "Correct! 😊 +" + points + " points"; // Added symbol and text
+            message = "Correct! :) +" + points + " points"; // Changed emoji to text symbol
             resultLabel.setForeground(new Color(0, 255, 0)); // Green for correct
         } else {
             attemptsLeft--;
             if (attemptsLeft <= 0) {
-                message = "Incorrect! 😟 The correct answer is: " + currentShape.getName(); // Added symbol and text
+                message = "Incorrect! :( The correct answer is: " + currentShape.getName(); // Changed emoji to text symbol
                 scoreManager.recordScoreAndFeedback(0);
                 completedShapes++;
                 resultLabel.setForeground(new Color(255, 0, 0)); // Red for incorrect
             } else {
-                message = "Try again! 😟 Remaining attempts: " + attemptsLeft; // Added symbol and text
+                message = "Try again! :( Remaining attempts: " + attemptsLeft; // Changed emoji to text symbol
                 attemptsUsed++;
                 resultLabel.setForeground(new Color(255, 0, 0)); // Red for incorrect
             }
