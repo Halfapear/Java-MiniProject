@@ -104,3 +104,58 @@ com.shapeville
 - 图片路径需以 `/assets/` 开头，并存放在 `src/main/resources/assets` 目录下。
 - 如果新增任务或修改现有任务，请更新此文档以便团队成员了解最新变化。
 
+
+
+5.22 JZB命令行 使用框架暂存
+# Java MiniProject - 手动命令行编译与执行指南
+
+本项目设计为使用 JDK 21.0.2 (或兼容版本) 通过**手动**命令行方式进行编译和运行。**根据要求，编译或执行过程不允许使用任何脚本文件（如 `.sh` 或 `.bat`）。**
+
+请务必仔细遵循以下步骤，特别是关于包含空格的路径处理。
+
+## 前提条件
+
+*   已安装 Java Development Kit (JDK) 21.0.2 或兼容版本。
+*   `javac` (编译器) 和 `java` (运行器) 命令必须在系统的 PATH 环境变量中可用。
+
+## 重要：选择正确的命令行环境
+
+本指南中的 `javac` 和 `java` 命令是为标准的命令行环境设计的。
+
+*   **Windows 用户：** 强烈建议使用 **命令提示符 (CMD)** 或 **Git Bash**。在 PowerShell 中，由于 `@` 符号有特殊含义，直接运行本指南中的 `javac ... @"sources.txt"` 命令可能会遇到解析错误。
+    *   如果在 PowerShell 中必须执行，请尝试将 `@sources.txt` 参数整体用引号包围，如：`javac -d "bin" -sourcepath "src/main/java" -encoding UTF-8 "@sources.txt"`。即便如此，CMD 或 Git Bash 仍是更可靠的选择。
+*   **Linux/macOS 用户：** 使用默认的终端即可。
+
+## 关于路径中空格的重要说明
+
+在以下所有指令中，如果文件路径或目录路径的任何部分包含空格（例如："My Documents", "Folder With Spaces"），当您在命令行中输入该路径时，**必须将整个路径用双引号 (`"..."`) 括起来**。
+
+## 核心步骤概览
+
+如果您已熟悉命令行操作，以下是编译和运行本项目的核心指令。详细步骤请参见后续说明。
+**重要：** 以下所有命令均假设您已通过 `cd` 命令进入了本项目的根目录，并且项目根目录下已存在我们提供的 `sources.txt` 文件。
+
+1.  **编译：**
+    ```bash
+    javac -d "bin" -sourcepath "src/main/java" -encoding UTF-8 @"sources.txt"
+    ```
+2.  **运行 (假设主类为 `com.shapeville.main.MainApp`):**
+    ```bash
+    java -cp "bin" com.shapeville.main.MainApp
+    ```
+
+**请注意：** 上述核心指令省略了创建 `bin` 目录和复制资源文件的步骤。为确保程序完整运行，请务必参考下面的详细步骤说明。
+
+## 详细步骤说明
+
+### 步骤 1：导航到项目根目录
+   打开命令行终端，并使用 `cd` 命令导航到您存放本项目的根目录（即包含此 `README.md`、`src` 文件夹和 `sources.txt` 文件的目录）。
+   (示例: `cd "D:\Path To Project\YourProjectName"`)
+
+### 步骤 2：确保输出目录 `bin` 存在
+   在项目根目录下，如果 `bin` 文件夹不存在，请创建它：
+   (Windows: `md bin` | Linux/macOS/Git Bash: `mkdir bin`)
+   *项目中已包含一个空的 `bin` 目录，如果评估者希望进行全新构建，可以先手动删除 `bin` 目录下的所有内容，然后再执行编译。*
+
+### 步骤 3：`sources.txt` 文件
+   本项目根目录下已包含一个名为 `sources.txt` 的文件。此文件列出了所有需要编译的 Java 源文件的相对路径（相对于项目根目录）。内容格式如下：
