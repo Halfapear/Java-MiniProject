@@ -45,13 +45,13 @@ public class HomeScreenPanel extends JPanel {
         tasksPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         tasksPanel.setBackground(new Color(50, 50, 50));
         
-        tasksPanel.add(createTaskButton("2D Shape Identification (KS1-TASK1)", Constants.TASK_ID_SHAPE_ID_2D));
-        tasksPanel.add(createTaskButton("3D Shape Identification (KS1-TASK1)", Constants.TASK_ID_SHAPE_ID_3D));
-        tasksPanel.add(createTaskButton("Angle Recognition (KS1-TASK2)", Constants.TASK_ID_ANGLE_TYPE));
-        tasksPanel.add(createTaskButton("Area Calculation (KS2-TASK3)", Constants.TASK_ID_AREA_CALC));
-        tasksPanel.add(createTaskButton("Circle Calculation (KS2-TASK4)", Constants.TASK_ID_CIRCLE_CALC));
-        tasksPanel.add(createTaskButton("Compound Area (BONUS1)", Constants.TASK_ID_COMPOUND_AREA_CALC));
-        tasksPanel.add(createTaskButton("Sector Circle Calculation (BONUS2)", Constants.TASK_ID_SECTOR_CIRCLE_CALC));
+        tasksPanel.add(createTaskButton("(Basic) 2D Shape Identification (KS1-TASK1)", Constants.TASK_ID_SHAPE_ID_2D));
+        tasksPanel.add(createTaskButton("(Advanced) 3D Shape Identification (KS1-TASK1)", Constants.TASK_ID_SHAPE_ID_3D));
+        tasksPanel.add(createTaskButton("(Basic) Angle Recognition (KS1-TASK2)", Constants.TASK_ID_ANGLE_TYPE));
+        tasksPanel.add(createTaskButton("(Basic) Area Calculation (KS2-TASK3)", Constants.TASK_ID_AREA_CALC));
+        tasksPanel.add(createTaskButton("(Basic) Circle Calculation (KS2-TASK4)", Constants.TASK_ID_CIRCLE_CALC));
+        tasksPanel.add(createTaskButton("(Advanced) Compound Area (BONUS1)", Constants.TASK_ID_COMPOUND_AREA_CALC));
+        tasksPanel.add(createTaskButton("(Advanced) Sector Circle Calculation (BONUS2)", Constants.TASK_ID_SECTOR_CIRCLE_CALC));
 
         add(tasksPanel, BorderLayout.CENTER);
     }
