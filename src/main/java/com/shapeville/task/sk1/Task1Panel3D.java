@@ -219,7 +219,7 @@ public class Task1Panel3D extends JPanel implements TaskPanel {
         String userAnswer = answerTextField.getText().trim();
         boolean isCorrect = userAnswer.equalsIgnoreCase(currentShape.getName());
         // int points = attemptsUsed == 1 ? 3 : attemptsUsed == 2 ? 2 : 1;
-        int points = scoreManager.calculatePoints(attemptsUsed,false);        
+        int points = scoreManager.calculatePoints(attemptsUsed,true);        
         String message;
         
         if (isCorrect) {

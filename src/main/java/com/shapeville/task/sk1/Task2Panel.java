@@ -11,7 +11,9 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.geom.Arc2D;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -43,7 +45,7 @@ public class Task2Panel extends JPanel implements TaskPanel {
     private JLabel angleTypeLabel;
     private JLabel attemptsLabel;
     private JLabel inputPromptLabel; // 新增：输入框前的提示标签
-    private int currentAttempts = 3;
+    private int currentAttempts = 0;
     private int completedAngles = 0;
     private final int[] targetAngles = {30, 90, 120, 180, 200, 270, 300, 360};
     private int currentIndex = 0;
@@ -53,6 +55,7 @@ public class Task2Panel extends JPanel implements TaskPanel {
     private static final int VISUALIZATION_WIDTH = 300;
     private static final int VISUALIZATION_HEIGHT = 300;
     private static final int anglesToIdentify = 4; // 需要识别4种角度类型
+    private Set<String> enteredAngleTypes = new HashSet<>(); // Track entered angle types
 
     public Task2Panel(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
@@ -225,7 +228,7 @@ public class Task2Panel extends JPanel implements TaskPanel {
         inputPromptLabel.setText("Enter angle (0-360, multiples of 10):"); // 重置提示语
         angleInputField.setToolTipText("Enter angle (0-360, multiples of 10)");
         angleInputField.requestFocus();
-        currentAttempts = 3;
+        currentAttempts = 0;
         angleEntered = false;
         angleTypeLabel.setText("");
         attemptsLabel.setText("Attempts left: 3");
@@ -237,30 +240,43 @@ public class Task2Panel extends JPanel implements TaskPanel {
     }
 
     private void handleSubmit(ActionEvent e) {
+        
         if (!angleEntered) {
             // First step: Enter angle
             try {
                 int angle = Integer.parseInt(angleInputField.getText().trim());
-                if (angle < 0 || angle > 360 || angle % 10 != 0) {
-                    feedbackLabel.setText("Please enter a multiple of 10 between 0-360 :("); // Changed emoji to text symbol
+                
+                // Validate angle: must be between 10 and 350, and a multiple of 10
+                if (angle <= 0 || angle >= 360 || angle % 10 != 0) {
+                    feedbackLabel.setText("Invalid angle! Please enter a multiple of 10 between 10 and 350.");
                     feedbackLabel.setForeground(new Color(255, 0, 0)); // Red for incorrect
                     return;
                 }
 
-                // 只有用户提交后才更新currentAngle
+                // Determine the angle type
+                String angleType = determineAngleType(angle).toLowerCase();
+
+                // Check if the angle type has already been used
+                if (enteredAngleTypes.contains(angleType)) {
+                    feedbackLabel.setText("Angle type '" + angleType + "' already used! Please enter a different angle.");
+                    feedbackLabel.setForeground(new Color(255, 0, 0)); // Red for incorrect
+                    angleInputField.setText(""); // Clear the input field
+                    return;
+                }
+
+                // Update currentAngle only after validation
                 currentAngle = angle;
                 angleEntered = true;
                 angleInputField.setText("");
 
-                inputPromptLabel.setText("Enter angle type (zero, acute, right, obtuse, straight, reflex, full):"); // 更新提示语
+                inputPromptLabel.setText("Enter angle type (acute, right, obtuse, reflex):");
                 inputPromptLabel.setForeground(new Color(0, 255, 0)); // Green for success in first step
-                angleInputField.setToolTipText("Enter angle type (zero, acute, right, obtuse, straight, reflex, full)");
+                angleInputField.setToolTipText("Enter angle type (acute, right, obtuse, reflex)");
 
-
-                // 刷新UI显示用户输入的角度
+                // Refresh UI to display the entered angle
                 SwingUtilities.invokeLater(() -> angleVisualLabel.repaint());
             } catch (NumberFormatException ex) {
-                feedbackLabel.setText("Please enter a valid number :("); // Changed emoji to text symbol
+                feedbackLabel.setText("Invalid input! Please enter a valid number.");
                 feedbackLabel.setForeground(new Color(255, 0, 0)); // Red for incorrect
             }
         } else {
@@ -270,8 +286,9 @@ public class Task2Panel extends JPanel implements TaskPanel {
 
             if (input.equals(correctType)) {
                 // Correct answer
-                int points = scoreManager.calculatePoints(3 - currentAttempts + 1, false);
-                feedbackLabel.setText("Correct! :) " + getRandomCongratulation() + " +" + points + " points"); // Changed emoji to text symbol
+                enteredAngleTypes.add(input); // Add the angle type to the set
+                int points = scoreManager.calculatePoints(currentAttempts, false);
+                feedbackLabel.setText("Correct! " + getRandomCongratulation() + " +" + points + " points");
                 feedbackLabel.setForeground(new Color(0, 255, 0)); // Green for correct
                 scoreManager.recordScoreAndFeedback(points);
 
@@ -281,14 +298,14 @@ public class Task2Panel extends JPanel implements TaskPanel {
                 timer.start();
             } else {
                 // Incorrect answer
-                currentAttempts--;
-                attemptsLabel.setText("Attempts left: " + currentAttempts);
+                
+                attemptsLabel.setText("Attempts left: " + (3 - currentAttempts));
 
-                if (currentAttempts > 0) {
-                    feedbackLabel.setText("Try again! :( " + getRandomEncouragement()); // Changed emoji to text symbol
+                if ((3 - currentAttempts) > 0) {
+                    feedbackLabel.setText("Try again! " + getRandomEncouragement());
                     feedbackLabel.setForeground(new Color(255, 0, 0)); // Red for incorrect
                 } else {
-                    feedbackLabel.setText("Incorrect! :( Correct answer: " + correctType); // Changed emoji to text symbol
+                    feedbackLabel.setText("Incorrect! Correct answer: " + correctType);
                     feedbackLabel.setForeground(new Color(255, 0, 0)); // Red for incorrect
                     angleTypeLabel.setText("This is a " + correctType + " angle");
                     angleTypeLabel.setForeground(new Color(0, 255, 0)); // Green for correct type reveal
@@ -301,7 +318,9 @@ public class Task2Panel extends JPanel implements TaskPanel {
                 }
             }
         }
+        currentAttempts++;
     }
+
 
     private String determineAngleType(int angle) {
         if (angle == 0) return "Zero";
