@@ -312,7 +312,6 @@ public class Task2Panel extends JPanel implements TaskPanel {
                     return;
                 }
 
-<<<<<<< HEAD
                 // Determine the angle type
                 String angleType = determineAngleType(angle).toLowerCase();
 
@@ -325,27 +324,20 @@ public class Task2Panel extends JPanel implements TaskPanel {
                 }
 
                 // Update currentAngle only after validation
-=======
-                // Only update currentAngle after user submission
->>>>>>> JZBDoc
+
                 currentAngle = angle;
                 angleEntered = true;
                 angleInputField.setText("");
 
-<<<<<<< HEAD
-                inputPromptLabel.setText("Enter angle type (acute, right, obtuse, reflex):");
-=======
+
                 inputPromptLabel.setText("Enter angle type (zero, acute, right, obtuse, straight, reflex, full):"); // Update prompt
->>>>>>> JZBDoc
+
                 inputPromptLabel.setForeground(new Color(0, 255, 0)); // Green for success in first step
                 angleInputField.setToolTipText("Enter angle type (acute, right, obtuse, reflex)");
 
-<<<<<<< HEAD
                 // Refresh UI to display the entered angle
-=======
 
                 // Refresh UI to display the angle entered by the user
->>>>>>> JZBDoc
                 SwingUtilities.invokeLater(() -> angleVisualLabel.repaint());
             } catch (NumberFormatException ex) {
                 feedbackLabel.setText("Invalid input! Please enter a valid number.");
@@ -393,16 +385,14 @@ public class Task2Panel extends JPanel implements TaskPanel {
         currentAttempts++;
     }
 
-<<<<<<< HEAD
 
-=======
     /**
      * Determines the type of an angle based on its degree measurement.
      * Classifies angles as Acute, Right, Obtuse, Straight, or Reflex.
      * @param angle The angle measurement in degrees.
      * @return A String representing the type of the angle.
      */
->>>>>>> JZBDoc
+
     private String determineAngleType(int angle) {
         if (angle == 0) return "Zero";
         if (angle < 90) return "Acute";
