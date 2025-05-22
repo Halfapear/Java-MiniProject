@@ -124,21 +124,26 @@ public class MainFrame extends JFrame {
     }
 
     public void endSession() {
+        Object[] options = {"Confirm", "Cancel"};
         // TODO: Maybe show final score before ending?
         showPanel(END_PANEL_ID);
         // Optional: Disable navigation buttons on EndPanel?
         // Using JOptionPane to actually close after showing EndPanel might be better UX
-         int choice = JOptionPane.showConfirmDialog(this,
+        int choice = JOptionPane.showOptionDialog(this,
                 "Session ended. Your final score: " + scoreManager.getCurrentScore() + "\nClose application?",
                 "End Session",
                 JOptionPane.OK_CANCEL_OPTION,
-                JOptionPane.INFORMATION_MESSAGE);
-         if (choice == JOptionPane.OK_OPTION) {
+                JOptionPane.INFORMATION_MESSAGE,
+                null,
+                options,
+                options[0] // Default button;
+        );
+        if (choice == JOptionPane.OK_OPTION) {
              System.exit(0);
-         } else {
+        } else {
              // If cancelled, maybe go back home?
              navigateToHome();
-         }
+        }
     }
 
     // --- Getters for Managers (Needed by Panels/Logic) ---
