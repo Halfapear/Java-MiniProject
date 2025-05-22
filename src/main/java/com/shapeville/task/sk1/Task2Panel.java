@@ -37,33 +37,52 @@ import com.shapeville.utils.Constants;
  * Task 2 Panel for Angle Recognition.
  * This panel guides the user through recognizing different types of angles by their degree measurements.
  * It allows users to input angle values, visualizes the angle, and prompts for the angle type.
- * Implements the {@link TaskPanel} interface to fit into the application's task management flow.
+ * Implements the {@link com.shapeville.ui.panel_templates.TaskPanel} interface to fit into the application's task management flow.
  */
 public class Task2Panel extends JPanel implements TaskPanel {
+    /** Reference to the main application frame. */
     private MainFrame mainFrame;
+    /** Reference to the score manager for updating the score. */
     private ScoreManager scoreManager;
+    /** Label for visualizing the current angle. */
     private JLabel angleVisualLabel;
+    /** Text field for user input of the angle value. */
     private JTextField angleInputField;
+    /** Button to submit the user's answer. */
     private JButton submitButton;
+    /** Label to display feedback to the user. */
     private JLabel feedbackLabel;
+    /** Label to display the determined angle type. */
     private JLabel angleTypeLabel;
+    /** Label to display the number of attempts remaining. */
     private JLabel attemptsLabel;
+    /** Label prompting the user to enter the angle value. */
     private JLabel inputPromptLabel; // 新增：输入框前的提示标签
+    /** Number of attempts remaining for the current problem. */
     private int currentAttempts = 3;
+    /** Number of angles successfully identified in the current session. */
     private int completedAngles = 0;
+    /** Array of target angle values for the task. */
     private final int[] targetAngles = {30, 90, 120, 180, 200, 270, 300, 360};
+    /** Index of the current target angle in the {@code targetAngles} array. */
     private int currentIndex = 0;
+    /** The current angle value being visualized (controlled by user input or task). */
     private int currentAngle = 0; // 控制UI显示的角度，初始为0
+    /** The target angle value for the current problem. */
     private int targetAngle = 0;  // 存储目标角度
+    /** Flag indicating if an angle value has been entered by the user. */
     private boolean angleEntered = false;
+    /** Width for the angle visualization area. */
     private static final int VISUALIZATION_WIDTH = 300;
+    /** Height for the angle visualization area. */
     private static final int VISUALIZATION_HEIGHT = 300;
+    /** Number of angles to identify to complete the task. */
     private static final int anglesToIdentify = 4; // 需要识别4种角度类型
 
     /**
      * Constructs a new Task2Panel.
      * Initializes UI components and loads the first angle problem.
-     * @param mainFrame The reference to the main application frame ({@link MainFrame}).
+     * @param mainFrame The reference to the main application frame ({@link com.shapeville.main.MainFrame}).
      */
     public Task2Panel(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
@@ -403,7 +422,7 @@ public class Task2Panel extends JPanel implements TaskPanel {
 
     @Override
     /**
-     * Implemented from {@link TaskPanel}. Displays a problem on the panel.
+     * Implemented from {@link com.shapeville.ui.panel_templates.TaskPanel}. Displays a problem on the panel.
      * Note: Problem loading is currently handled internally in {@code loadNextAngle()}.
      * @param problem The problem to display.
      */
@@ -412,7 +431,7 @@ public class Task2Panel extends JPanel implements TaskPanel {
 
     @Override
     /**
-     * Implemented from {@link TaskPanel}. Displays feedback to the user.
+     * Implemented from {@link com.shapeville.ui.panel_templates.TaskPanel}. Displays feedback to the user.
      * Note: Feedback display is currently handled internally in {@code handleSubmit()}.
      * @param feedback The feedback to display.
      */
@@ -421,7 +440,7 @@ public class Task2Panel extends JPanel implements TaskPanel {
 
     @Override
     /**
-     * Implemented from {@link TaskPanel}. Sets the callback for task logic.
+     * Implemented from {@link com.shapeville.ui.panel_templates.TaskPanel}. Sets the callback for task logic.
      * Currently not fully utilized in this panel, but required by the interface.
      * @param logic The task logic instance.
      */
@@ -430,8 +449,8 @@ public class Task2Panel extends JPanel implements TaskPanel {
 
     @Override
     /**
-     * Implemented from {@link TaskPanel}. Gets the unique identifier for this panel.
-     * @return The panel ID string from {@link Constants}.
+     * Implemented from {@link com.shapeville.ui.panel_templates.TaskPanel}. Gets the unique identifier for this panel.
+     * @return The panel ID string from {@link com.shapeville.utils.Constants}.
      */
     public String getPanelId() {
         return Constants.ANGLE_TYPE_PANEL_ID;
@@ -439,7 +458,7 @@ public class Task2Panel extends JPanel implements TaskPanel {
 
     @Override
     /**
-     * Implemented from {@link TaskPanel}. Resets the state of the panel.
+     * Implemented from {@link com.shapeville.ui.panel_templates.TaskPanel}. Resets the state of the panel.
      * Clears the current angle, resets completed angle count, attempts, and updates UI elements.
      */
     public void resetState() {

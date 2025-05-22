@@ -455,18 +455,22 @@ public class Task3Panel extends JPanel implements TaskPanel {
     }
 
     /**
-     * Inner panel class for drawing the geometric shapes and labeling their dimensions.
-     * This class handles the visual representation of the current shape problem.
+     * Inner class responsible for drawing shapes and their dimensions on the panel.
+     * Extends JPanel and overrides paintComponent to render the shape visualization.
      */
     private class ShapeDrawingPanel extends JPanel {
+        /** The name of the shape to be drawn. */
         private String shapeName;
+        /** The first parameter for the shape's dimensions (e.g., length, base1). */
         private int param1;
+        /** The second parameter for the shape's dimensions (e.g., width, base2, height). */
         private int param2;
+        /** The third parameter for the shape's dimensions (e.g., height for trapezium). */
         private int param3;
 
         /**
          * Constructs a new ShapeDrawingPanel.
-         * Sets the preferred size for the drawing area.
+         * Sets preferred size and border.
          */
         public ShapeDrawingPanel() {
             // Set a preferred size for the drawing area
@@ -474,11 +478,12 @@ public class Task3Panel extends JPanel implements TaskPanel {
         }
 
         /**
-         * Sets the data for the shape to be drawn and repaints the panel.
-         * @param shapeName The name of the shape (e.g., "Rectangle").
-         * @param p1 Parameter 1 (e.g., length, base1).
-         * @param p2 Parameter 2 (e.g., width, base2, height).
-         * @param p3 Parameter 3 (e.g., height for trapezium, 0 for others).
+         * Sets the data for the shape to be drawn.
+         * Updates the shape name and dimension parameters.
+         * @param shapeName The name of the shape.
+         * @param p1 The first dimension parameter.
+         * @param p2 The second dimension parameter.
+         * @param p3 The third dimension parameter (use 0 if not applicable).
          */
         public void setShapeData(String shapeName, int p1, int p2, int p3) {
             this.shapeName = shapeName;

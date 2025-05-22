@@ -22,32 +22,50 @@ import java.util.Random;
 /**
  * Task 1 Panel for 2D Shape Recognition.
  * This panel displays 2D shapes and prompts the user to identify their names.
- * It implements the {@link TaskPanel} interface to integrate with the application's task management flow.
+ * It implements the {@link com.shapeville.ui.panel_templates.TaskPanel} interface to integrate with the application's task management flow.
  */
 public class Task1Panel2D extends JPanel implements TaskPanel {
+    /** Reference to the main application frame. */
     private MainFrame mainFrame;
+    /** Label to display the image of the 2D shape. */
     private JLabel shapeImageLabel;
+    /** Text field for user input of the shape name. */
     private JTextField answerTextField;
+    /** Button to submit the user's answer. */
     private JButton submitButton;
+    /** Label to display feedback or results to the user. */
     private JLabel resultLabel;
+    /** Label to display the current score. */
     private JLabel scoreLabel;
+    /** Label to display the number of attempts remaining. */
     private JLabel attemptsLabel;
+    /** Label prompting the user to enter the shape name. */
     private JLabel promptLabel;
+    /** Label to display hints or type information (currently not used). */
     private JLabel typePromptLabel; // 新增：图形类型提示标签
+    /** List of available 2D shapes for the task. */
     private List<Shape> shapes;
+    /** The current shape being displayed to the user. */
     private Shape currentShape;
+    /** Reference to the score manager for updating the score. */
     private ScoreManager scoreManager;
+    /** Number of attempts left for the current problem. */
     private int attemptsLeft = 3;
+    /** Number of attempts used for the current problem. */
     private int attemptsUsed = 1;
+    /** Number of unique shapes successfully identified in the current session. */
     private int completedShapes = 0;
+    /** Container panel for the shape image. */
     private JPanel imageContainer;
+    /** Container panel for the input field and submit button. */
     private JPanel inputContainer;
+    /** Container panel for feedback and status labels. */
     private JPanel feedbackContainer;
 
     /**
      * Constructs a new Task1Panel2D.
      * Initializes UI components, loads the list of 2D shapes, and displays the first random shape.
-     * @param mainFrame The reference to the main application frame ({@link MainFrame}).
+     * @param mainFrame The reference to the main application frame ({@link com.shapeville.main.MainFrame}).
      */
     public Task1Panel2D(MainFrame mainFrame) {
         this.mainFrame = mainFrame;

@@ -20,19 +20,27 @@ import com.shapeville.utils.Constants;
 /**
  * The main application window (JFrame) for Shapeville v3.
  * This class sets up the main frame, including the navigation bar and a content area managed by CardLayout.
- * It holds and initializes core application managers such as {@link TaskManager} and {@link ScoreManager}.
+ * It holds and initializes core application managers such as {@link com.shapeville.logic.TaskManager} and {@link com.shapeville.logic.ScoreManager}.
  * It also provides methods for switching between different content panels (screens) of the application.
  */
 public class MainFrame extends JFrame {
 
+    /** The CardLayout manager for switching between different panels. */
     private CardLayout cardLayout;
+    /** The main panel container that holds all switchable panels (cards). */
     private JPanel contentPaneContainer; // Panel holding all the switchable panels (cards)
+    /** The navigation bar component displayed at the top of the frame. */
     private NavigationBar navigationBar;
+    /** The score manager instance handling scoring logic. */
     private ScoreManager scoreManager;
+    /** The task manager instance handling task flow and logic. */
     private TaskManager taskManager;
 
-    // Store registered panels for easy access if needed, managed by CardLayout
+    /** A map to store registered panels, with panel IDs as keys and panel instances as values. */
     private Map<String, JPanel> registeredPanels;
+
+    // Store registered panels for easy access if needed, managed by CardLayout
+    // private Map<String, JPanel> registeredPanels;
 
     // Panel Identifiers (Constants are better defined in a dedicated Constants class)
     // Using Constants from com.shapeville.utils.Constants is preferred.
@@ -55,6 +63,10 @@ public class MainFrame extends JFrame {
         showPanel(Constants.HOME_PANEL_ID); // Show home screen initially
     }
 
+    /**
+     * Initializes the core managers of the application: {@link com.shapeville.logic.ScoreManager} and {@link com.shapeville.logic.TaskManager}.
+     * Sets up dependencies between managers where necessary.
+     */
     private void initializeCoreManagers() {
         // Important: Handle dependencies. ScoreManager might need NavigationBar later.
         // TaskManager needs MainFrame to switch panels.
@@ -66,6 +78,11 @@ public class MainFrame extends JFrame {
         taskManager = new TaskManager(this, scoreManager); // Pass dependencies
     }
 
+    /**
+     * Initializes the main UI components of the frame.
+     * Sets frame properties like title, size, location, and layout.
+     * Creates and adds the {@link NavigationBar} and the content container with {@link CardLayout}.
+     */
     private void initializeUI() {
         /**
          * Initializes the main UI components of the frame.
@@ -92,6 +109,10 @@ public class MainFrame extends JFrame {
         add(contentPaneContainer, BorderLayout.CENTER);
     }
 
+    /**
+     * Registers the core panels (Home and End screens) with the content pane container managed by CardLayout.
+     * Task panels are registered dynamically by the TaskManager.
+     */
     private void registerCorePanels() {
         /**
          * Registers the core panels (Home and End screens) with the content pane container.
@@ -116,7 +137,7 @@ public class MainFrame extends JFrame {
 
     /**
      * Switches the currently displayed panel in the CardLayout to the one identified by the given panel ID.
-     * Optionally notifies the panel if it implements the {@link TaskPanel} interface.
+     * Optionally notifies the panel if it implements the {@link com.shapeville.ui.panel_templates.TaskPanel} interface.
      *
      * @param panelId The unique String identifier of the panel to show.
      */
@@ -173,7 +194,7 @@ public class MainFrame extends JFrame {
     /**
      * Gets the instance of the ScoreManager.
      *
-     * @return The {@link ScoreManager} instance.
+     * @return The {@link com.shapeville.logic.ScoreManager} instance.
      */
     public ScoreManager getScoreManager() {
         return scoreManager;
@@ -182,7 +203,7 @@ public class MainFrame extends JFrame {
     /**
      * Gets the instance of the TaskManager.
      *
-     * @return The {@link TaskManager} instance.
+     * @return The {@link com.shapeville.logic.TaskManager} instance.
      */
     public TaskManager getTaskManager() {
         return taskManager;
@@ -192,7 +213,7 @@ public class MainFrame extends JFrame {
     /**
      * Gets the instance of the NavigationBar.
      *
-     * @return The {@link NavigationBar} instance.
+     * @return The {@link com.shapeville.ui.NavigationBar} instance.
      */
     public NavigationBar getNavigationBar() {
         return navigationBar;
