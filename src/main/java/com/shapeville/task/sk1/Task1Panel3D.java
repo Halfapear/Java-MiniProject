@@ -22,7 +22,7 @@ import java.util.Random;
 /**
  * Task 1: 2D and 3D Shape Recognition
  */
-public class Task1Panel extends JPanel implements TaskPanel {
+public class Task1Panel3D extends JPanel implements TaskPanel {
     private MainFrame mainFrame;
     private JLabel shapeImageLabel;
     private JTextField answerTextField;
@@ -42,7 +42,7 @@ public class Task1Panel extends JPanel implements TaskPanel {
     private JPanel inputContainer;
     private JPanel feedbackContainer;
 
-    public Task1Panel(MainFrame mainFrame) {
+    public Task1Panel3D(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
         this.scoreManager = mainFrame.getScoreManager();
         initializeUI();
@@ -59,7 +59,7 @@ public class Task1Panel extends JPanel implements TaskPanel {
         gbc.gridx = 0;
 
         // 标题区域（居中）
-        JLabel titleLabel = new JLabel("Task 1: 2D and 3D Shape Recognition");
+        JLabel titleLabel = new JLabel("3D Shape Recognition");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         gbc.gridy = 0;
         add(titleLabel, gbc);
@@ -82,13 +82,6 @@ public class Task1Panel extends JPanel implements TaskPanel {
         inputContainer = new JPanel();
         inputContainer.setLayout(new BoxLayout(inputContainer, BoxLayout.Y_AXIS));
         inputContainer.setAlignmentX(Component.CENTER_ALIGNMENT);
-        
-        // 新增：图形类型提示标签
-        typePromptLabel = new JLabel("Current Shape Type: ");
-        typePromptLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        typePromptLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        typePromptLabel.setForeground(Color.BLUE); // 使用蓝色突出显示
-        inputContainer.add(typePromptLabel);
         
         promptLabel = new JLabel("Enter the correct shape name:");
         promptLabel.setFont(new Font("Arial", Font.PLAIN, 16));
@@ -151,19 +144,6 @@ public class Task1Panel extends JPanel implements TaskPanel {
     private void initializeShapes() {
         shapes = new ArrayList<>();
         
-        // 添加2D形状
-        shapes.add(new Shape("circle", "/assets/2d/circle.png", "2D"));
-        shapes.add(new Shape("rectangle", "/assets/2d/rectangle.png", "2D"));
-        shapes.add(new Shape("triangle", "/assets/2d/triangle.png", "2D"));
-        shapes.add(new Shape("square", "/assets/2d/square.png", "2D"));
-        shapes.add(new Shape("heptagon", "/assets/2d/heptagon.png", "2D"));
-        shapes.add(new Shape("hexagon", "/assets/2d/hexagon.png", "2D"));
-        shapes.add(new Shape("kite", "/assets/2d/kite.png", "2D"));
-        shapes.add(new Shape("octagon", "/assets/2d/octagon.png", "2D"));
-        shapes.add(new Shape("oval", "/assets/2d/oval.png", "2D"));
-        shapes.add(new Shape("pentagon", "/assets/2d/pentagon.png", "2D"));
-        shapes.add(new Shape("rhombus", "/assets/2d/rhombus.png", "2D"));
-
         // 添加3D形状
         shapes.add(new Shape("cone", "/assets/3d/cone.png", "3D"));
         shapes.add(new Shape("cube", "/assets/3d/cube.png", "3D"));
@@ -209,9 +189,6 @@ public class Task1Panel extends JPanel implements TaskPanel {
             shapeImageLabel.setText("Failed to load image");
         }
         
-        // 更新类型提示
-        typePromptLabel.setText("Current Shape Type: " + currentShape.getType());
-        
         attemptsLeft = 3;
         attemptsUsed = 1;
         resultLabel.setText("");
@@ -223,8 +200,8 @@ public class Task1Panel extends JPanel implements TaskPanel {
     private void checkAnswer() {
         String userAnswer = answerTextField.getText().trim();
         boolean isCorrect = userAnswer.equalsIgnoreCase(currentShape.getName());
-        int points = attemptsUsed == 1 ? 3 : attemptsUsed == 2 ? 2 : 1;
-        
+        // int points = attemptsUsed == 1 ? 3 : attemptsUsed == 2 ? 2 : 1;
+        int points = scoreManager.calculatePoints(attemptsUsed,false);        
         String message;
         if (isCorrect) {
             scoreManager.recordScoreAndFeedback(points);
@@ -293,3 +270,4 @@ public class Task1Panel extends JPanel implements TaskPanel {
         scoreLabel.setText("Current Score: " + scoreManager.getCurrentScore());
     }
 }
+

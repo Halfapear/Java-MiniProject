@@ -11,7 +11,8 @@ import com.shapeville.main.MainFrame;
 import com.shapeville.model.TaskDefinition;
 import com.shapeville.task.bonus.Compound;
 import com.shapeville.task.bonus.Sector;
-import com.shapeville.task.sk1.Task1Panel;
+import com.shapeville.task.sk1.Task1Panel2D;
+import com.shapeville.task.sk1.Task1Panel3D;
 import com.shapeville.task.sk1.Task2Panel;
 import com.shapeville.task.sk2.Task3Panel;
 import com.shapeville.task.sk2.Task4Panel;
@@ -42,17 +43,18 @@ public class TaskManager {
     }
     //task addition
     private void defineMasterTasks() {
-        // masterTaskList.add(new TaskDefinition(Constants.TASK_ID_SHAPE_ID_2D, Constants.SHAPE_IDENTIFICATION_PANEL_ID, Constants.TASK_TYPE_SHAPE_IDENTIFICATION_2D, Constants.SCORE_BASIC));
-        // masterTaskList.add(new TaskDefinition(Constants.TASK_ID_SHAPE_ID_3D, Constants.SHAPE_IDENTIFICATION_PANEL_ID, Constants.TASK_TYPE_SHAPE_IDENTIFICATION_3D, Constants.SCORE_ADVANCED));
-        /*----------------------------------------------*/
-        masterTaskList.add(new TaskDefinition(Constants.TASK_ID_SHAPE_ID_2D_AND_3D, Constants.SHAPE_IDENTIFICATION_PANEL_ID, Constants.TASK_TYPE_SHAPE_IDENTIFICATION_2D_AND_3D, Constants.SCORE_BASIC));
-        masterTaskList.add(new TaskDefinition(Constants.TASK_ID_ANGLE_TYPE, Constants.ANGLE_TYPE_PANEL_ID, Constants.TASK_TYPE_ANGLE_IDENTIFICATION, Constants.SCORE_BASIC));
+
+        masterTaskList.add(new TaskDefinition(Constants.TASK_ID_SHAPE_ID_2D, Constants.SHAPE_IDENTIFICATION_PANEL_ID, Constants.TASK_TYPE_SHAPE_IDENTIFICATION_2D, Constants.SCORE_BASIC));
         
+        masterTaskList.add(new TaskDefinition(Constants.TASK_ID_SHAPE_ID_3D, Constants.SHAPE_IDENTIFICATION_PANEL_ID, Constants.TASK_TYPE_SHAPE_IDENTIFICATION_3D, Constants.SCORE_ADVANCED));
+        /*----------------------------------------------*/
+        masterTaskList.add(new TaskDefinition(Constants.TASK_ID_ANGLE_TYPE, Constants.ANGLE_TYPE_PANEL_ID, Constants.TASK_TYPE_ANGLE_IDENTIFICATION, Constants.SCORE_BASIC));
         /*----------------------------------------------*/
         masterTaskList.add(new TaskDefinition(Constants.TASK_ID_AREA_CALC, Constants.AREA_CALC_PANEL_ID, Constants.TASK_TYPE_AREA_CALC, Constants.SCORE_BASIC));
         masterTaskList.add(new TaskDefinition(Constants.TASK_ID_CIRCLE_CALC, Constants.CIRCLE_CALC_PANEL_ID, Constants.TASK_TYPE_CIRCLE_CALC, Constants.SCORE_BASIC));
         masterTaskList.add(new TaskDefinition(Constants.TASK_ID_COMPOUND_AREA_CALC, Constants.COMPOUND_AREA_PANEL_ID, Constants.TASK_TYPE_COMPOUND_AREA_CALC, Constants.SCORE_ADVANCED));
         masterTaskList.add(new TaskDefinition(Constants.TASK_ID_SECTOR_CIRCLE_CALC, Constants.SECTOR_CIRCLE_CALC_PANEL_ID, Constants.TASK_TYPE_SECTOR_CIRCLE_CALC, Constants.SCORE_ADVANCED));
+
     }
 
     private void defineDefaultSessionSequence() {
@@ -110,9 +112,13 @@ public class TaskManager {
         currentPanelId = taskDef.getPanelId();
 
         try {
-            if (taskDef.getTaskId().equals(Constants.TASK_ID_SHAPE_ID_2D_AND_3D)) {
+            if (taskDef.getTaskId().equals(Constants.TASK_ID_SHAPE_ID_2D)) {
                 // Task 1: 形状识别（2D和3D）
-                currentActiveTaskPanel = new Task1Panel(mainFrameRef);
+currentActiveTaskPanel = new Task1Panel2D(mainFrameRef);
+            } 
+            else if (taskDef.getTaskId().equals(Constants.TASK_ID_SHAPE_ID_3D)) {
+                // Task 1: 形状识别（2D和3D）
+                currentActiveTaskPanel = new Task1Panel3D(mainFrameRef);
             } 
             else if (taskDef.getTaskId().equals(Constants.TASK_ID_ANGLE_TYPE)) {
                 // Task 2: 角度类型识别

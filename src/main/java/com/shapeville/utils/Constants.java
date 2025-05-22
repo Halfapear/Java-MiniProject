@@ -11,10 +11,10 @@ public class Constants {
     public static final String COMPOUND_AREA_PANEL_ID = "COMPOUND_AREA_PANEL";
     public static final String SECTOR_CIRCLE_CALC_PANEL_ID = "SECTOR_CIRCLE_CALC_PANEL";
     /*----------------------------------------------------------------------------------*/
-    //1
-    public static final String TASK_ID_SHAPE_ID_2D_AND_3D = "TASK_SHAPE_ID_2D_AND_3D"; 
-    //3
-    public static final String TASK_TYPE_SHAPE_IDENTIFICATION_2D_AND_3D = "SHAPE_ID_2D_AND_3D";
+    // //1
+    // public static final String TASK_ID_SHAPE_ID_2D = "TASK_SHAPE_ID_2D_AND_3D"; 
+    // //3
+    // public static final String TASK_TYPE_SHAPE_IDENTIFICATION_2D = "SHAPE_ID_2D_AND_3D";
     
     /*-----------------------------------------------------------------------------------*/
     // public static final String TASK_ID_ANGLE_TYPE = "TASK_ANGLE_TYPE";
