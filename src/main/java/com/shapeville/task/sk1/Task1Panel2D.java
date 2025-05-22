@@ -58,9 +58,13 @@ public class Task1Panel2D extends JPanel implements TaskPanel {
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.gridx = 0;
 
+        // Apply high contrast background to the main panel
+        setBackground(new Color(30, 30, 30));
+
         // 标题区域（居中）
         JLabel titleLabel = new JLabel("2D Shape Recognition");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        titleLabel.setForeground(Color.WHITE); // High contrast text
         gbc.gridy = 0;
         add(titleLabel, gbc);
 
@@ -69,6 +73,7 @@ public class Task1Panel2D extends JPanel implements TaskPanel {
         imageContainer.setPreferredSize(new Dimension(300, 300));
         imageContainer.setMaximumSize(new Dimension(300, 300));
         imageContainer.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+        imageContainer.setBackground(new Color(50, 50, 50)); // Contrast background for container
         
         shapeImageLabel = new JLabel();
         shapeImageLabel.setHorizontalAlignment(JLabel.CENTER);
@@ -82,9 +87,11 @@ public class Task1Panel2D extends JPanel implements TaskPanel {
         inputContainer = new JPanel();
         inputContainer.setLayout(new BoxLayout(inputContainer, BoxLayout.Y_AXIS));
         inputContainer.setAlignmentX(Component.CENTER_ALIGNMENT);
+        inputContainer.setBackground(new Color(30, 30, 30)); // Match main panel background
         
         promptLabel = new JLabel("Enter the correct shape name:");
         promptLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        promptLabel.setForeground(Color.WHITE); // High contrast text
         promptLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         inputContainer.add(promptLabel);
         
@@ -92,6 +99,8 @@ public class Task1Panel2D extends JPanel implements TaskPanel {
         answerTextField.setFont(new Font("Arial", Font.PLAIN, 16));
         answerTextField.setAlignmentX(Component.CENTER_ALIGNMENT);
         answerTextField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
+        answerTextField.setBackground(new Color(60, 60, 60)); // High contrast background
+        answerTextField.setForeground(Color.WHITE); // High contrast text
         answerTextField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -105,6 +114,8 @@ public class Task1Panel2D extends JPanel implements TaskPanel {
         submitButton = new JButton("Submit Answer");
         submitButton.setFont(new Font("Arial", Font.PLAIN, 16));
         submitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        submitButton.setBackground(new Color(80, 80, 80)); // High contrast background
+        submitButton.setForeground(Color.WHITE); // High contrast text
         submitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -120,19 +131,23 @@ public class Task1Panel2D extends JPanel implements TaskPanel {
         feedbackContainer = new JPanel();
         feedbackContainer.setLayout(new BoxLayout(feedbackContainer, BoxLayout.Y_AXIS));
         feedbackContainer.setAlignmentX(Component.CENTER_ALIGNMENT);
+        feedbackContainer.setBackground(new Color(30, 30, 30)); // Match main panel background
         
         resultLabel = new JLabel("");
         resultLabel.setFont(new Font("Arial", Font.BOLD, 16));
         resultLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        // Color will be set in checkAnswer()
         feedbackContainer.add(resultLabel);
         
         attemptsLabel = new JLabel("Remaining attempts: " + attemptsLeft);
         attemptsLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        attemptsLabel.setForeground(Color.YELLOW); // High contrast text for status
         attemptsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         feedbackContainer.add(attemptsLabel);
         
         scoreLabel = new JLabel("Current Score: " + scoreManager.getCurrentScore());
         scoreLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        scoreLabel.setForeground(Color.YELLOW); // High contrast text for status
         scoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         feedbackContainer.add(scoreLabel);
         
@@ -206,19 +221,23 @@ public class Task1Panel2D extends JPanel implements TaskPanel {
         // int points = attemptsUsed == 1 ? 3 : attemptsUsed == 2 ? 2 : 1;
         int points = scoreManager.calculatePoints(attemptsUsed,false);        
         String message;
+        
         if (isCorrect) {
             scoreManager.recordScoreAndFeedback(points);
             completedShapes++;
-            message = "Correct! +" + points + " points";
+            message = "Correct! :) +" + points + " points"; // Changed emoji to text symbol
+            resultLabel.setForeground(new Color(0, 255, 0)); // Green for correct
         } else {
             attemptsLeft--;
             if (attemptsLeft <= 0) {
-                message = "Incorrect! The correct answer is: " + currentShape.getName();
+                message = "Incorrect! :( The correct answer is: " + currentShape.getName(); // Changed emoji to text symbol
                 scoreManager.recordScoreAndFeedback(0);
                 completedShapes++;
+                resultLabel.setForeground(new Color(255, 0, 0)); // Red for incorrect
             } else {
-                message = "Incorrect! Remaining attempts: " + attemptsLeft;
+                message = "Try again! :( Remaining attempts: " + attemptsLeft; // Changed emoji to text symbol
                 attemptsUsed++;
+                resultLabel.setForeground(new Color(255, 0, 0)); // Red for incorrect
             }
         }
         

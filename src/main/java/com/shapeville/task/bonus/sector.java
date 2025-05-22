@@ -1,6 +1,7 @@
 package com.shapeville.task.bonus;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -38,13 +39,18 @@ public class Sector extends JPanel {
     private int timeRemaining = 300; // 5 minutes (300 seconds)
     private boolean timerRunning = false;
     private final DecimalFormat df = new DecimalFormat("#.##");
+    private JLabel sectorValuesLabel;
 
     /**
      * Constructor
      */
     public Sector() {
         setLayout(new BorderLayout());
+        // Apply high contrast background to the main panel
+        setBackground(new Color(30, 30, 30));
+
         content = new JPanel();
+        content.setBackground(new Color(30, 30, 30)); // Match main panel background
         add(content, BorderLayout.CENTER);
         initializeSectors();
         setupUI();
@@ -157,15 +163,20 @@ public class Sector extends JPanel {
         
         // North area for title, timer and attempts
         JPanel northPanel = new JPanel(new BorderLayout());
+        northPanel.setBackground(new Color(30, 30, 30)); // Match main panel background
         
         // 创建顶部选择面板 - 模仿图片中的界面
         JPanel selectionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        selectionPanel.setBackground(new Color(30, 30, 30)); // Match main panel background
         JLabel selectLabel = new JLabel("Select shape:");
         selectLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        selectLabel.setForeground(Color.WHITE); // High contrast text
         selectionPanel.add(selectLabel);
         
         // 添加扇形选择按钮 - 使用单个按钮"Sector"
         JButton sectorButton = new JButton("Sector");
+        sectorButton.setBackground(new Color(80, 80, 80)); // High contrast background
+        sectorButton.setForeground(Color.WHITE); // High contrast text
         sectorButton.addActionListener(e -> {
             // 显示扇形选择对话框
             String[] options = new String[sectors.size()];
@@ -197,8 +208,11 @@ public class Sector extends JPanel {
         
         // 添加时间和尝试次数面板
         JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 5));
+        infoPanel.setBackground(new Color(30, 30, 30)); // Match main panel background
         timerLabel = new JLabel("Time left: 05:00");
+        timerLabel.setForeground(Color.YELLOW); // High contrast text for status
         JLabel attemptsLabel = new JLabel("Attempts left: 3");
+        attemptsLabel.setForeground(Color.YELLOW); // High contrast text for status
         infoPanel.add(timerLabel);
         infoPanel.add(attemptsLabel);
         northPanel.add(infoPanel, BorderLayout.CENTER);
@@ -207,39 +221,56 @@ public class Sector extends JPanel {
         
         // Center area for problem description and sector image
         JPanel centerPanel = new JPanel(new BorderLayout(10, 10));
+        centerPanel.setBackground(new Color(30, 30, 30)); // Match main panel background
         
         JPanel infoPanel2 = new JPanel(new BorderLayout());
+        infoPanel2.setBackground(new Color(30, 30, 30)); // Match main panel background
         questionLabel = new JLabel("", SwingConstants.CENTER);
+        questionLabel.setForeground(Color.WHITE); // High contrast text
         infoPanel2.add(questionLabel, BorderLayout.NORTH);
         
         JLabel formulaLabel = new JLabel("<html><body style='width: 300px; text-align: center;'>" +
                 "Sector area = (central angle/360°) × π × radius²</body></html>", SwingConstants.CENTER);
         formulaLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+        formulaLabel.setForeground(Color.CYAN); // High contrast text for formula
         infoPanel2.add(formulaLabel, BorderLayout.CENTER);
         
         centerPanel.add(infoPanel2, BorderLayout.NORTH);
         
         sectorImageLabel = new JLabel("", SwingConstants.CENTER);
         sectorImageLabel.setPreferredSize(new Dimension(300, 300));
+        sectorImageLabel.setBackground(new Color(50, 50, 50)); // Contrast background for container
         centerPanel.add(sectorImageLabel, BorderLayout.CENTER);
+
+        // 新增：扇形数值信息标签
+        sectorValuesLabel = new JLabel("", SwingConstants.CENTER);
+        sectorValuesLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        sectorValuesLabel.setForeground(Color.WHITE); // High contrast text
+        centerPanel.add(sectorValuesLabel, BorderLayout.SOUTH);
         
         content.add(centerPanel, BorderLayout.CENTER);
         
         // South area for input and buttons
         JPanel southPanel = new JPanel();
         southPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        southPanel.setBackground(new Color(30, 30, 30)); // Match main panel background
         
         JLabel answerLabel = new JLabel("Enter area:");
+        answerLabel.setForeground(Color.WHITE); // High contrast text
         southPanel.add(answerLabel);
         
         answerField = new JTextField(10);
+        answerField.setBackground(new Color(60, 60, 60)); // High contrast background
+        answerField.setForeground(Color.WHITE); // High contrast text
         southPanel.add(answerField);
         
         JButton submitButton = new JButton("Submit Answer");
+        submitButton.setBackground(new Color(80, 80, 80)); // High contrast background
+        submitButton.setForeground(Color.WHITE); // High contrast text
         submitButton.addActionListener(e -> checkAnswer(answerField.getText()));
         southPanel.add(submitButton);
         
-   content.add(southPanel, BorderLayout.SOUTH);
+        content.add(southPanel, BorderLayout.SOUTH);
         
         // Display the first sector
         showCurrentSector();
@@ -255,10 +286,9 @@ public class Sector extends JPanel {
      */
     private void showCurrentSector() {
         SectorShape currentSector = sectors.get(currentSectorIndex);
-        questionLabel.setText("<html><body style='width: 400px'>" + 
-                              currentSector.getDescription() + "<br>" + 
-                              currentSector.getQuestion() + "<br>" +
-                              currentSector.getValues() + "</body></html>");
+        questionLabel.setText("<html><body style='width: 400px; text-align: center;'>" +
+                              currentSector.getDescription() + "<br>" +
+                              currentSector.getQuestion() + "</body></html>");
         
         // Display the sector image
         if (currentSector.getImage() != null) {
@@ -269,6 +299,9 @@ public class Sector extends JPanel {
             sectorImageLabel.setIcon(null);
             sectorImageLabel.setText("Sector " + (currentSectorIndex + 1) + " / " + sectors.size());
         }
+        
+        // 更新扇形数值信息标签
+        sectorValuesLabel.setText(currentSector.getValues());
         
         // Reset attempt count
         attempt = 0;
@@ -333,7 +366,7 @@ public class Sector extends JPanel {
      */
     private void checkAnswer(String input) {
         if (input.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please enter an answer!");
+            JOptionPane.showMessageDialog(this, "Invalid input! Please enter an answer! :("); // Updated message and symbol
             return;
         }
         
@@ -358,11 +391,12 @@ public class Sector extends JPanel {
                 // 修复问题1：先增加完成数量，再更新进度条
                 updateProgress(practicedSectors, sectors.size());
                 
-                JOptionPane.showMessageDialog(this, "Correct answer!");
+                // Improvement: Add text and symbol feedback
+                JOptionPane.showMessageDialog(this, "Correct! :)"); // Updated message and symbol
                 
                 // Check if all sectors are completed
                 if (practicedSectors >= sectors.size()) {
-                    JOptionPane.showMessageDialog(this, "Congratulations! You have completed all sector area calculation exercises!");
+                    JOptionPane.showMessageDialog(this, "Congratulations! You have completed all sector area calculation exercises! :)"); // Updated message and symbol
                     // Return to home page or proceed to the next task
                     javax.swing.JFrame topFrame = (javax.swing.JFrame) SwingUtilities.getWindowAncestor(this);
                 if (topFrame instanceof com.shapeville.main.MainFrame) {
@@ -392,7 +426,7 @@ public class Sector extends JPanel {
                     
                     // Check if all sectors are completed
                     if (practicedSectors >= sectors.size()) {
-                        JOptionPane.showMessageDialog(this, "Congratulations! You have completed all sector area calculation exercises!");
+                        JOptionPane.showMessageDialog(this, "You have completed all sector area calculation exercises! :)"); // Updated message and symbol
                         // Return to home page or proceed to the next task
                         javax.swing.JFrame topFrame = (javax.swing.JFrame) SwingUtilities.getWindowAncestor(this);
                     if (topFrame instanceof com.shapeville.main.MainFrame) {
@@ -403,36 +437,15 @@ public class Sector extends JPanel {
                         moveToNextSector();
                     }
                 } else {
-                    JOptionPane.showMessageDialog(this, "Incorrect answer. Please try again!\nYou have " + (3 - attempt) + " attempts remaining.");
+                    // Improvement: Add text and symbol feedback
+                    JOptionPane.showMessageDialog(this, "Try again! :(\nYou have " + (3 - attempt) + " attempts remaining."); // Updated message and symbol
                 }
             }
         }catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Please enter a valid number!");
+            JOptionPane.showMessageDialog(this, "Invalid input! Please enter a valid number! :("); // Updated message and symbol
         }
-
-
     }
     
-     // 添加记录分数的方法
-/**
- * 记录用户得分
- * @param attemptsUsed 用户使用的尝试次数
- */
-private void recordScore(int attemptsUsed) {
-    // 获取MainFrame实例
-    javax.swing.JFrame topFrame = (javax.swing.JFrame) SwingUtilities.getWindowAncestor(this);
-    if (topFrame instanceof com.shapeville.main.MainFrame) {
-        com.shapeville.main.MainFrame mainFrame = (com.shapeville.main.MainFrame) topFrame;
-        // 获取ScoreManager并记录分数
-        com.shapeville.logic.ScoreManager scoreManager = mainFrame.getScoreManager();
-        if (scoreManager != null) {
-            // 扇形区域计算是高级任务，使用高级评分
-            int points = scoreManager.calculatePoints(attemptsUsed, true);
-            scoreManager.recordScoreAndFeedback(points);
-        }
-    }
-}
-
     /**
      * Displays the solution for the current sector.
      */
@@ -567,19 +580,37 @@ private void recordScore(int attemptsUsed) {
     }
 
     /**
- * 更新进度条
- * @param current 当前完成的扇形数量
- * @param total 总扇形数量
- */
-private void updateProgress(int current, int total) {
-    // 获取MainFrame实例
-    javax.swing.JFrame topFrame = (javax.swing.JFrame) SwingUtilities.getWindowAncestor(this);
-    if (topFrame instanceof com.shapeville.main.MainFrame) {
-        com.shapeville.main.MainFrame mainFrame = (com.shapeville.main.MainFrame) topFrame;
-        // 获取NavigationBar并更新进度
-        mainFrame.getNavigationBar().updateProgress(current, total);
+     * 更新进度条
+     * @param current 当前完成的扇形数量
+     * @param total 总扇形数量
+     */
+    private void updateProgress(int current, int total) {
+        // 获取MainFrame实例
+        javax.swing.JFrame topFrame = (javax.swing.JFrame) SwingUtilities.getWindowAncestor(this);
+        if (topFrame instanceof com.shapeville.main.MainFrame) {
+            com.shapeville.main.MainFrame mainFrame = (com.shapeville.main.MainFrame) topFrame;
+            // 获取NavigationBar并更新进度
+            mainFrame.getNavigationBar().updateProgress(current, total);
+        }
     }
-}
 
+    /**
+     * 记录用户得分
+     * @param attemptsUsed 用户使用的尝试次数
+     */
+    private void recordScore(int attemptsUsed) {
+        // 获取MainFrame实例
+        javax.swing.JFrame topFrame = (javax.swing.JFrame) SwingUtilities.getWindowAncestor(this);
+        if (topFrame instanceof com.shapeville.main.MainFrame) {
+            com.shapeville.main.MainFrame mainFrame = (com.shapeville.main.MainFrame) topFrame;
+            // 获取ScoreManager并记录分数
+            com.shapeville.logic.ScoreManager scoreManager = mainFrame.getScoreManager();
+            if (scoreManager != null) {
+                // 扇形区域计算是高级任务，使用高级评分
+                int points = scoreManager.calculatePoints(attemptsUsed, true);
+                scoreManager.recordScoreAndFeedback(points);
+            }
+        }
+    }
 }
 

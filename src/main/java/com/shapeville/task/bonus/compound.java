@@ -1,6 +1,7 @@
 package com.shapeville.task.bonus;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -35,13 +36,18 @@ public class Compound extends JPanel {
     private Timer timer;
     private int timeRemaining = 300; // 5 minutes (300 seconds)
     private boolean timerRunning = false;
+    private JLabel shapeDescriptionLabel;
 
     /**
      * Constructor
      */
     public Compound() {
         setLayout(new BorderLayout());
+        // Apply high contrast background to the main panel
+        setBackground(new Color(30, 30, 30));
+
         content = new JPanel();
+        content.setBackground(new Color(30, 30, 30)); // Match main panel background
         add(content, BorderLayout.CENTER);
         initializeShapes();
         setupUI();
@@ -129,15 +135,20 @@ public class Compound extends JPanel {
         
         // North area for title, timer and attempts
         JPanel northPanel = new JPanel(new BorderLayout());
+        northPanel.setBackground(new Color(30, 30, 30)); // Match main panel background
         
         // 创建顶部选择面板 - 模仿Sector.java的界面
         JPanel selectionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        selectionPanel.setBackground(new Color(30, 30, 30)); // Match main panel background
         JLabel selectLabel = new JLabel("Select shape:");
         selectLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        selectLabel.setForeground(Color.WHITE); // High contrast text
         selectionPanel.add(selectLabel);
         
         // 添加复合形状选择按钮
         JButton shapeButton = new JButton("Compound Shape");
+        shapeButton.setBackground(new Color(80, 80, 80)); // High contrast background
+        shapeButton.setForeground(Color.WHITE); // High contrast text
         shapeButton.addActionListener(e -> {
         // 显示形状选择对话框
         String[] options = new String[shapes.size()];
@@ -169,7 +180,9 @@ public class Compound extends JPanel {
         
         // 添加时间面板
         JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 5));
+        infoPanel.setBackground(new Color(30, 30, 30)); // Match main panel background
         timerLabel = new JLabel("Time left: 05:00");
+        timerLabel.setForeground(Color.YELLOW); // High contrast text for status
         infoPanel.add(timerLabel);
         northPanel.add(infoPanel, BorderLayout.CENTER);
         
@@ -177,27 +190,42 @@ public class Compound extends JPanel {
         
         // Center area for problem description and shape image
         JPanel centerPanel = new JPanel(new BorderLayout(10, 10));
-        
+        centerPanel.setBackground(new Color(30, 30, 30)); // Match main panel background
+
         questionLabel = new JLabel("", SwingConstants.CENTER);
+        questionLabel.setForeground(Color.WHITE); // High contrast text
         centerPanel.add(questionLabel, BorderLayout.NORTH);
         
         shapeImageLabel = new JLabel("", SwingConstants.CENTER);
         shapeImageLabel.setPreferredSize(new Dimension(400, 300));
+        shapeImageLabel.setBackground(new Color(50, 50, 50)); // Contrast background for container
         centerPanel.add(shapeImageLabel, BorderLayout.CENTER);
+        
+        // 新增：形状描述标签
+        shapeDescriptionLabel = new JLabel("", SwingConstants.CENTER);
+        shapeDescriptionLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        shapeDescriptionLabel.setForeground(Color.WHITE); // High contrast text
+        centerPanel.add(shapeDescriptionLabel, BorderLayout.SOUTH);
         
         content.add(centerPanel, BorderLayout.CENTER);
         
         // South area for input and buttons
         JPanel southPanel = new JPanel();
         southPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        southPanel.setBackground(new Color(30, 30, 30)); // Match main panel background
         
         JLabel answerLabel = new JLabel("Enter Area:");
+        answerLabel.setForeground(Color.WHITE); // High contrast text
         southPanel.add(answerLabel);
         
         answerField = new JTextField(10);
+        answerField.setBackground(new Color(60, 60, 60)); // High contrast background
+        answerField.setForeground(Color.WHITE); // High contrast text
         southPanel.add(answerField);
         
         JButton submitButton = new JButton("Submit Answer");
+        submitButton.setBackground(new Color(80, 80, 80)); // High contrast background
+        submitButton.setForeground(Color.WHITE); // High contrast text
         submitButton.addActionListener(e -> checkAnswer(answerField.getText()));
         southPanel.add(submitButton);
         
@@ -223,10 +251,13 @@ public class Compound extends JPanel {
             shapeImageLabel.setIcon(currentShape.getImage());
             shapeImageLabel.setText("");
         } else {
-            // If no image, display shape description
+            // If no image, display shape description in image label (as fallback)
             shapeImageLabel.setIcon(null);
             shapeImageLabel.setText("Shape " + (currentShapeIndex + 1) + " / " + shapes.size());
         }
+        
+        // 更新形状描述标签
+        shapeDescriptionLabel.setText(currentShape.getDescription());
         
         // Reset attempt count
         attempt = 0;
@@ -291,7 +322,7 @@ public class Compound extends JPanel {
      */
     private void checkAnswer(String input) {
         if (input.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please enter an answer!");
+            JOptionPane.showMessageDialog(this, "Please enter an answer! :("); // Added symbol
             return;
         }
         
@@ -310,7 +341,8 @@ public class Compound extends JPanel {
                   // 记录分数 - 根据尝试次数计算得分
                 recordScore(attempt + 1);
                 
-                JOptionPane.showMessageDialog(this, "Correct Answer!");
+                // Improvement: Add text and symbol feedback
+                JOptionPane.showMessageDialog(this, "Correct! :)"); // Updated text and symbol
                 practisedShapes++;
 
                 // 更新进度条 - 确保总数为shapes.size()
@@ -321,7 +353,7 @@ public class Compound extends JPanel {
                 
                 // Check if all shapes are completed
                 if (practisedShapes >= shapes.size()) {
-                    JOptionPane.showMessageDialog(this, "Congratulations! You have completed all compound shape exercises!");
+                    JOptionPane.showMessageDialog(this, "Congratulations! You have completed all compound shape exercises! :)"); // Added symbol
                     // 修复：完成所有形状后返回主界面
                     JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
                     if (topFrame instanceof com.shapeville.main.MainFrame) {
@@ -335,7 +367,7 @@ public class Compound extends JPanel {
                     // 修复：重新开始计时器
                     resetTimer();
                 }
-            } else {
+            } else{
                 attempt++;
                 if (attempt >= 3) {
                     // Stop the timer
@@ -355,7 +387,7 @@ public class Compound extends JPanel {
                     
                     // Check if all shapes are completed
                     if (practisedShapes >= shapes.size()) {
-                        JOptionPane.showMessageDialog(this, "You have completed all compound shape exercises!");
+                        JOptionPane.showMessageDialog(this, "You have completed all compound shape exercises! :)"); // Added symbol
                         // Return to home page or proceed to the next task
                         JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
                         if (topFrame instanceof com.shapeville.main.MainFrame) {
@@ -370,11 +402,12 @@ public class Compound extends JPanel {
                         resetTimer();
                     }
                 } else {
-                    JOptionPane.showMessageDialog(this, "Incorrect answer, please try again!\nYou have " + (3 - attempt) + " attempts remaining.");
+                    // Improvement: Add text and symbol feedback
+                    JOptionPane.showMessageDialog(this, "Try again! :(\nYou have " + (3 - attempt) + " attempts remaining."); // Updated text and symbol
                 }
             }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Please enter a valid number!");
+        }catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Invalid input! Please enter a valid number! :("); // Added symbol
         }
     }
     
