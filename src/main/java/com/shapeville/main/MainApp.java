@@ -8,6 +8,11 @@ import javax.swing.SwingUtilities;
  */
 public class MainApp {
     /**
+     * Private constructor to prevent instantiation.
+     */
+    private MainApp() {}
+
+    /**
      * The main method to start the Shapeville application.
      * It creates and displays the MainFrame on the Event Dispatch Thread.
      * @param args Command line arguments (not used).

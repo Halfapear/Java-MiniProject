@@ -22,6 +22,7 @@ import com.shapeville.utils.Constants;
  * Interacts with the {@link MainFrame} to initiate tasks via the {@link com.shapeville.logic.TaskManager}.
  */
 public class HomeScreenPanel extends JPanel {
+    /** Reference to the main application frame. */
     private MainFrame mainFrameRef;
 
     /**

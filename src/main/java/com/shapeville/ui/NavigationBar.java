@@ -15,12 +15,18 @@ import com.shapeville.main.MainFrame;
  * This bar interacts with the {@link MainFrame} for navigation and {@link ScoreManager} for score display.
  */
 public class NavigationBar extends JPanel {
-    private JLabel scoreLabel; // Label to display the current score
-    private JButton homeButton; // Button to navigate back to the home screen
-    private JButton endSessionButton; // Button to end the current session
-    private JProgressBar progressBar; // Progress bar to show task completion status
-    private MainFrame mainFrameRef; // Reference to the MainFrame for triggering navigation actions
-    private ScoreManager scoreManager; // Reference to the ScoreManager for accessing score data
+    /** Label to display the current score. */
+    private JLabel scoreLabel;
+    /** Button to navigate back to the home screen. */
+    private JButton homeButton;
+    /** Button to end the current session. */
+    private JButton endSessionButton;
+    /** Progress bar to show task completion status. */
+    private JProgressBar progressBar;
+    /** Reference to the MainFrame for triggering navigation actions. */
+    private MainFrame mainFrameRef;
+    /** Reference to the ScoreManager for accessing score data. */
+    private ScoreManager scoreManager;
 
     /**
      * Constructs a new NavigationBar.
@@ -31,7 +37,7 @@ public class NavigationBar extends JPanel {
      */
     public NavigationBar(MainFrame mainFrame, ScoreManager scoreManager) {
         this.mainFrameRef = mainFrame;
-        this.scoreManager = scoreManager; // 初始化 ScoreManager
+        this.scoreManager = scoreManager; // Initialize ScoreManager
         initializeUI();
     }
 
@@ -44,22 +50,22 @@ public class NavigationBar extends JPanel {
         setPreferredSize(new Dimension(800, 50));
         setBackground(new Color(200, 200, 200)); // 灰色背景
 
-        // 左侧：分数显示
+        // Left side: Score display
         scoreLabel = new JLabel("Score: 0");
         scoreLabel.setFont(new Font("Arial", Font.BOLD, 16));
         add(scoreLabel, BorderLayout.WEST);
 
-        // 中间：进度条
-        progressBar = new JProgressBar(0, 100); // 默认最大值为 100
-        progressBar.setStringPainted(true); // 显示百分比
+        // Center: Progress bar
+        progressBar = new JProgressBar(0, 100); // Default max value is 100
+        progressBar.setStringPainted(true); // Show percentage
         add(progressBar, BorderLayout.CENTER);
 
-        // 右侧：导航按钮
+        // Right side: Navigation buttons
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         homeButton = new JButton("Home");
         endSessionButton = new JButton("End Session");
 
-        // 添加按钮监听器
+        // Add button listeners
         homeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

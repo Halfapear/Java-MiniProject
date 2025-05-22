@@ -120,7 +120,7 @@ public class MainFrame extends JFrame {
          */
         registerPanel(Constants.HOME_PANEL_ID, new HomeScreenPanel(this));
         registerPanel(Constants.END_PANEL_ID, new EndPanel(scoreManager));
-        // 任务面板将在 TaskManager 中动态注册
+        // Task panels will be registered dynamically by the TaskManager
     }
 
     /**
@@ -164,7 +164,7 @@ public class MainFrame extends JFrame {
         // TODO: Add logic if leaving a task needs confirmation or state reset
         showPanel(Constants.HOME_PANEL_ID);
         // taskManager.resetCurrentTask(); // Tell TaskManager the flow is interrupted
-        navigationBar.updateProgress(0, 0); // 重置进度条
+        navigationBar.updateProgress(0, 0); // Reset progress bar
     }
 
     /**
@@ -226,9 +226,9 @@ public class MainFrame extends JFrame {
      * @param panel The JPanel to be set as the content panel.
      */
     public void setContentPanel(JPanel panel) {
-        // 这里不需要做额外操作，因为registerPanel和showPanel已经处理了面板的添加和显示
-        // 这个方法只是为了兼容TaskManager中的调用
-        System.out.println("设置内容面板: " + panel.getClass().getSimpleName());
+        // No extra action needed here, as registerPanel and showPanel handle panel addition and display
+        // This method is just for compatibility with TaskManager calls
+        System.out.println("Setting content panel: " + panel.getClass().getSimpleName());
     }
 }
 

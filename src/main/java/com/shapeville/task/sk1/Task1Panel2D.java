@@ -42,7 +42,7 @@ public class Task1Panel2D extends JPanel implements TaskPanel {
     /** Label prompting the user to enter the shape name. */
     private JLabel promptLabel;
     /** Label to display hints or type information (currently not used). */
-    private JLabel typePromptLabel; // 新增：图形类型提示标签
+    private JLabel typePromptLabel; // New: Shape type prompt label
     /** List of available 2D shapes for the task. */
     private List<Shape> shapes;
     /** The current shape being displayed to the user. */
@@ -91,14 +91,14 @@ public class Task1Panel2D extends JPanel implements TaskPanel {
         // Apply high contrast background to the main panel
         setBackground(new Color(30, 30, 30));
 
-        // 标题区域（居中）
+        // Title area (centered)
         JLabel titleLabel = new JLabel("2D Shape Recognition");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         titleLabel.setForeground(Color.WHITE); // High contrast text
         gbc.gridy = 0;
         add(titleLabel, gbc);
 
-        // 固定大小的图片容器（300x300像素）
+        // Fixed size image container (300x300 pixels)
         imageContainer = new JPanel(new BorderLayout());
         imageContainer.setPreferredSize(new Dimension(300, 300));
         imageContainer.setMaximumSize(new Dimension(300, 300));
@@ -113,7 +113,7 @@ public class Task1Panel2D extends JPanel implements TaskPanel {
         gbc.gridy = 1;
         add(imageContainer, gbc);
 
-        // 居中的输入区域
+        // Centered input area
         inputContainer = new JPanel();
         inputContainer.setLayout(new BoxLayout(inputContainer, BoxLayout.Y_AXIS));
         inputContainer.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -157,7 +157,7 @@ public class Task1Panel2D extends JPanel implements TaskPanel {
         gbc.gridy = 2;
         add(inputContainer, gbc);
 
-        // 居中的反馈区域
+        // Centered feedback area
         feedbackContainer = new JPanel();
         feedbackContainer.setLayout(new BoxLayout(feedbackContainer, BoxLayout.Y_AXIS));
         feedbackContainer.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -182,7 +182,7 @@ public class Task1Panel2D extends JPanel implements TaskPanel {
         feedbackContainer.add(scoreLabel);
         
         gbc.gridy = 3;
-        gbc.weighty = 1.0; // 让底部区域占据剩余空间
+        gbc.weighty = 1.0; // Allow bottom area to take up remaining space
         add(feedbackContainer, gbc);
     }
 
@@ -193,7 +193,7 @@ public class Task1Panel2D extends JPanel implements TaskPanel {
     private void initializeShapes() {
         shapes = new ArrayList<>();
         
-        // 添加2D形状
+        // Add 2D shapes
         shapes.add(new Shape("circle", "/assets/2d/circle.png", "2D"));
         shapes.add(new Shape("rectangle", "/assets/2d/rectangle.png", "2D"));
         shapes.add(new Shape("triangle", "/assets/2d/triangle.png", "2D"));
@@ -235,7 +235,7 @@ public class Task1Panel2D extends JPanel implements TaskPanel {
             return;
         }
 
-        // 更新进度条
+        // Update progress bar
         mainFrame.getNavigationBar().updateProgress(completedShapes, Constants.SHAPES_PER_IDENTIFICATION_QUIZ);
 
         Random random = new Random();
@@ -337,7 +337,7 @@ public class Task1Panel2D extends JPanel implements TaskPanel {
      * @param logic The task logic instance.
      */
     public void setTaskLogicCallback(TaskLogic logic) {
-        // 实现任务逻辑回调
+        // Implement task logic callback
     }
 
     @Override
@@ -346,7 +346,7 @@ public class Task1Panel2D extends JPanel implements TaskPanel {
      * @param problem The problem to display.
      */
     public void displayProblem(Problem problem) {
-        // 显示问题
+        // Display problem
     }
 
     @Override

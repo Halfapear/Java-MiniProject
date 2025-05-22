@@ -19,27 +19,43 @@ import com.shapeville.utils.Constants;
  * Implements the {@link TaskPanel} interface to integrate with the application's task management flow.
  */
 public class Task3Panel extends JPanel implements TaskPanel {
+    /** Reference to the main application frame. */
     private MainFrame mainFrameRef;
-    // Use buttons for shape selection instead of a combo box
+    /** Buttons for selecting the shape calculation mode. */
     private JButton[] shapeButtons;
+    /** Label to display the remaining time for the current problem. */
     private JLabel timeLabel;
+    /** Label to display the number of attempts remaining for the current problem. */
     private JLabel attemptsLabel;
+    /** Label to display the question or instructions for the current problem. */
     private JLabel questionLabel;
+    /** Text field for user input of the calculated area. */
     private JTextField answerField;
+    /** Button to submit the user's answer. */
     private JButton submitButton;
+    /** Label to display feedback or result messages to the user. */
     private JLabel resultMessageLabel;
+    /** Label to display the formula used for the current shape's area calculation. */
     private JLabel formulaLabel;
+    /** Timer for the task time limit. */
     private Timer timer;
+    /** Remaining time in seconds for the current problem. */
     private int timeRemaining;
+    /** Number of attempts used for the current problem. */
     private int attemptsUsed;
+    /** Flag indicating if a problem is currently active. */
     private boolean problemActive;
+    /** The name of the shape for the current area calculation problem. */
     private String currentShape;
+    /** The correct numerical answer for the current problem's area. */
     private double currentCorrectAnswer;
+    /** The formula string for the current shape's area calculation. */
     private String currentFormula;
-    // Track which shapes have been completed in this session
+    /** Array of basic shape names supported by this task. */
     private final String[] shapes = {"Rectangle", "Parallelogram", "Triangle", "Trapezium"};
+    /** Set to track which shapes have been completed in the current session. */
     private java.util.Set<String> completedShapes;
-    // Panel for drawing the shape and labeling dimensions
+    /** Custom panel for drawing the shape and labeling dimensions. */
     private ShapeDrawingPanel shapeDrawingPanel;
 
     /**
@@ -483,7 +499,7 @@ public class Task3Panel extends JPanel implements TaskPanel {
          * @param shapeName The name of the shape.
          * @param p1 The first dimension parameter.
          * @param p2 The second dimension parameter.
-         * @param p3 The third dimension parameter (use 0 if not applicable).
+         * @param p3 The third dimension parameter (used for Trapezium).
          */
         public void setShapeData(String shapeName, int p1, int p2, int p3) {
             this.shapeName = shapeName;

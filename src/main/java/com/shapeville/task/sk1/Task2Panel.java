@@ -57,7 +57,7 @@ public class Task2Panel extends JPanel implements TaskPanel {
     /** Label to display the number of attempts remaining. */
     private JLabel attemptsLabel;
     /** Label prompting the user to enter the angle value. */
-    private JLabel inputPromptLabel; // 新增：输入框前的提示标签
+    private JLabel inputPromptLabel; // New: Prompt label before the input field
     /** Number of attempts remaining for the current problem. */
     private int currentAttempts = 3;
     /** Number of angles successfully identified in the current session. */
@@ -67,9 +67,9 @@ public class Task2Panel extends JPanel implements TaskPanel {
     /** Index of the current target angle in the {@code targetAngles} array. */
     private int currentIndex = 0;
     /** The current angle value being visualized (controlled by user input or task). */
-    private int currentAngle = 0; // 控制UI显示的角度，初始为0
+    private int currentAngle = 0; // Controls the angle displayed by the UI, initially 0
     /** The target angle value for the current problem. */
-    private int targetAngle = 0;  // 存储目标角度
+    private int targetAngle = 0;  // Stores the target angle
     /** Flag indicating if an angle value has been entered by the user. */
     private boolean angleEntered = false;
     /** Width for the angle visualization area. */
@@ -125,7 +125,7 @@ public class Task2Panel extends JPanel implements TaskPanel {
         angleVisualLabel.setMaximumSize(new Dimension(VISUALIZATION_WIDTH, VISUALIZATION_HEIGHT));
         angleVisualLabel.setMinimumSize(new Dimension(VISUALIZATION_WIDTH, VISUALIZATION_HEIGHT));
         angleVisualLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-        // 居中显示
+        // Center display
         JPanel visualizationWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER));
         visualizationWrapper.setBackground(new Color(50, 50, 50)); // Contrast background for container
         visualizationWrapper.add(angleVisualLabel);
@@ -135,7 +135,7 @@ public class Task2Panel extends JPanel implements TaskPanel {
         // Input panel
         JPanel inputPanel = new JPanel();
         inputPanel.setBackground(new Color(30, 30, 30)); // Match main panel background
-        inputPromptLabel = new JLabel("Enter angle (0-360, multiples of 10):"); // 新增：输入框前的提示标签
+        inputPromptLabel = new JLabel("Enter angle (0-360, multiples of 10):"); // New: Prompt label before the input field
         inputPromptLabel.setFont(new Font("Arial", Font.PLAIN, 18));
         inputPromptLabel.setForeground(Color.WHITE); // High contrast text
         inputPanel.add(inputPromptLabel);
@@ -262,10 +262,10 @@ public class Task2Panel extends JPanel implements TaskPanel {
     private void loadNextAngle() {
         completedAngles++;
 
-        // 更新进度条
+        // Update progress bar
         mainFrame.getNavigationBar().updateProgress(completedAngles, anglesToIdentify);
 
-        // 选择下一个目标角度，但不更新currentAngle（保持0度）
+        // Select the next target angle, but don't update currentAngle (keep at 0 degrees)
         targetAngle = targetAngles[currentIndex % targetAngles.length];
         currentIndex++;
 
@@ -304,17 +304,17 @@ public class Task2Panel extends JPanel implements TaskPanel {
                     return;
                 }
 
-                // 只有用户提交后才更新currentAngle
+                // Only update currentAngle after user submission
                 currentAngle = angle;
                 angleEntered = true;
                 angleInputField.setText("");
 
-                inputPromptLabel.setText("Enter angle type (zero, acute, right, obtuse, straight, reflex, full):"); // 更新提示语
+                inputPromptLabel.setText("Enter angle type (zero, acute, right, obtuse, straight, reflex, full):"); // Update prompt
                 inputPromptLabel.setForeground(new Color(0, 255, 0)); // Green for success in first step
                 angleInputField.setToolTipText("Enter angle type (zero, acute, right, obtuse, straight, reflex, full)");
 
 
-                // 刷新UI显示用户输入的角度
+                // Refresh UI to display the angle entered by the user
                 SwingUtilities.invokeLater(() -> angleVisualLabel.repaint());
             } catch (NumberFormatException ex) {
                 feedbackLabel.setText("Please enter a valid number :("); // Changed emoji to text symbol

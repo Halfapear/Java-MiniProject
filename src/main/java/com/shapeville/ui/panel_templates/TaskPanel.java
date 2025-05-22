@@ -41,5 +41,5 @@ public interface TaskPanel {
      * Called when moving to the next problem or navigating away from the panel.
      */
     void resetState();   // To clear UI for next problem or when leaving panel
-//    void updateProgress(int current, int total); // 新增方法
+//    void updateProgress(int current, int total); // New method
 }

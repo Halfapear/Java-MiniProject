@@ -34,15 +34,6 @@ public final class Constants {
     public static final String COMPOUND_AREA_PANEL_ID = "COMPOUND_AREA_PANEL";
     /** Sector and circle calculation task panel ID. */
     public static final String SECTOR_CIRCLE_CALC_PANEL_ID = "SECTOR_CIRCLE_CALC_PANEL";
-    /*----------------------------------------------------------------------------------*/
-    // //1
-    // public static final String TASK_ID_SHAPE_ID_2D = "TASK_SHAPE_ID_2D_AND_3D"; 
-    // //3
-    // public static final String TASK_TYPE_SHAPE_IDENTIFICATION_2D = "SHAPE_ID_2D_AND_3D";
-    
-    /*-----------------------------------------------------------------------------------*/
-    // public static final String TASK_ID_ANGLE_TYPE = "TASK_ANGLE_TYPE";
-    
     // TODO: Add Panel IDs for Task 3, 4, Bonus 1, 2
 
     /**
@@ -73,7 +64,7 @@ public final class Constants {
      * e.g., from the home screen buttons.
      * Used by {@link com.shapeville.model.TaskDefinition} and {@link com.shapeville.ui.panel_templates.HomeScreenPanel}.
      */
-    //1 These are unique IDs for specific task instances/configurations that can be started.
+    // These are unique IDs for specific task instances/configurations that can be started.
     /** Task ID for 2D shape identification. */
     public static final String TASK_ID_SHAPE_ID_2D = "TASK_SHAPE_ID_2D"; // User selects 2D shapes
     /** Task ID for 3D shape identification. */
@@ -118,6 +109,5 @@ public final class Constants {
      */
     public static final int TASK_TIME_LIMIT_SEC = 180;  // 3 minutes in seconds
 
-    
 }
 

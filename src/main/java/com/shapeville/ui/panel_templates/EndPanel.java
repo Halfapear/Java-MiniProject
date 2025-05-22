@@ -29,7 +29,7 @@ public class EndPanel extends JPanel {
         label.setFont(new Font("Arial", Font.BOLD, 24));
         add(label, BorderLayout.CENTER);
 
-        // 显示最终得分
+        // Display final score
         JLabel scoreLabel = new JLabel("Your final score: " + finalScore, SwingConstants.CENTER);
         scoreLabel.setFont(new Font("Arial", Font.PLAIN, 20));
         add(scoreLabel, BorderLayout.SOUTH);
