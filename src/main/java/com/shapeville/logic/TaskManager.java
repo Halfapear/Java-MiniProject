@@ -9,16 +9,12 @@ import javax.swing.JPanel;
 
 import com.shapeville.main.MainFrame;
 import com.shapeville.model.TaskDefinition;
-
-import com.shapeville.task.sk1.Task1Panel; 
-import com.shapeville.task.sk1.Task2Panel; 
-
+import com.shapeville.task.bonus.Compound;
+import com.shapeville.task.bonus.Sector;
+import com.shapeville.task.sk1.Task1Panel;
+import com.shapeville.task.sk1.Task2Panel;
 import com.shapeville.task.sk2.Task3Panel;
 import com.shapeville.task.sk2.Task4Panel;
-
-import com.shapeville.task.bonus.compound;
-import com.shapeville.task.bonus.sector;
-
 import com.shapeville.ui.panel_templates.TaskPanel;
 import com.shapeville.utils.Constants;
 
@@ -132,11 +128,11 @@ public class TaskManager {
             }
             else if (taskDef.getTaskId().equals(Constants.TASK_ID_COMPOUND_AREA_CALC)) {
                 // Bonus1 – Compound Shapes Area Calculation
-                currentActiveTaskPanel = new compound();
+                currentActiveTaskPanel = new Compound();
             }
             else if (taskDef.getTaskId().equals(Constants.TASK_ID_SECTOR_CIRCLE_CALC)) {
                 // Bonus2 – Sector of a Circle Area
-                currentActiveTaskPanel = new sector();
+                currentActiveTaskPanel = new Sector();
             } 
             else {
                 // Fallback for tasks that are not implemented yet
