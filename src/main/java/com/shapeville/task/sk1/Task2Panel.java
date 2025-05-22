@@ -251,14 +251,11 @@ public class Task2Panel extends JPanel implements TaskPanel {
                 currentAngle = angle;
                 angleEntered = true;
                 angleInputField.setText("");
-<<<<<<< HEAD
+
                 inputPromptLabel.setText("Enter angle type (zero, acute, right, obtuse, straight, reflex, full):"); // 更新提示语
-                angleInputField.setToolTipText("Enter angle type (zero, acute, right, obtuse, straight, reflex, full)");
-=======
-                inputPromptLabel.setText("Enter angle type (acute, right, obtuse, reflex): :)"); // Changed emoji to text symbol
                 inputPromptLabel.setForeground(new Color(0, 255, 0)); // Green for success in first step
-                angleInputField.setToolTipText("Enter angle type (acute, right, obtuse, reflex)");
->>>>>>> JZBUI
+                angleInputField.setToolTipText("Enter angle type (zero, acute, right, obtuse, straight, reflex, full)");
+
 
                 // 刷新UI显示用户输入的角度
                 SwingUtilities.invokeLater(() -> angleVisualLabel.repaint());
