@@ -35,6 +35,7 @@ public class Compound extends JPanel {
     private Timer timer;
     private int timeRemaining = 300; // 5 minutes (300 seconds)
     private boolean timerRunning = false;
+    private JLabel shapeDescriptionLabel;
 
     /**
      * Constructor
@@ -185,6 +186,11 @@ public class Compound extends JPanel {
         shapeImageLabel.setPreferredSize(new Dimension(400, 300));
         centerPanel.add(shapeImageLabel, BorderLayout.CENTER);
         
+        // 新增：形状描述标签
+        shapeDescriptionLabel = new JLabel("", SwingConstants.CENTER);
+        shapeDescriptionLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        centerPanel.add(shapeDescriptionLabel, BorderLayout.SOUTH);
+        
         content.add(centerPanel, BorderLayout.CENTER);
         
         // South area for input and buttons
@@ -223,10 +229,13 @@ public class Compound extends JPanel {
             shapeImageLabel.setIcon(currentShape.getImage());
             shapeImageLabel.setText("");
         } else {
-            // If no image, display shape description
+            // If no image, display shape description in image label (as fallback)
             shapeImageLabel.setIcon(null);
             shapeImageLabel.setText("Shape " + (currentShapeIndex + 1) + " / " + shapes.size());
         }
+        
+        // 更新形状描述标签
+        shapeDescriptionLabel.setText(currentShape.getDescription());
         
         // Reset attempt count
         attempt = 0;
@@ -310,7 +319,8 @@ public class Compound extends JPanel {
                   // 记录分数 - 根据尝试次数计算得分
                 recordScore(attempt + 1);
                 
-                JOptionPane.showMessageDialog(this, "Correct Answer!");
+                // Improvement: Add text and symbol feedback
+                JOptionPane.showMessageDialog(this, "Correct Answer! :)");
                 practisedShapes++;
 
                 // 更新进度条 - 确保总数为shapes.size()
@@ -370,7 +380,8 @@ public class Compound extends JPanel {
                         resetTimer();
                     }
                 } else {
-                    JOptionPane.showMessageDialog(this, "Incorrect answer, please try again!\nYou have " + (3 - attempt) + " attempts remaining.");
+                    // Improvement: Add text and symbol feedback
+                    JOptionPane.showMessageDialog(this, "Try again! :(\nYou have " + (3 - attempt) + " attempts remaining.");
                 }
             }
         } catch (NumberFormatException e) {

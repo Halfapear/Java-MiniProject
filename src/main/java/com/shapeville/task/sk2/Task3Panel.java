@@ -47,17 +47,23 @@ public class Task3Panel extends JPanel implements TaskPanel {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
+        // Apply high contrast background to the main panel
+        setBackground(new Color(30, 30, 30));
+
         // Title label
         JLabel titleLabel = new JLabel("Task 3: Area Calculation of Shapes", SwingConstants.CENTER);
         titleLabel.setAlignmentX(CENTER_ALIGNMENT);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        titleLabel.setForeground(Color.WHITE); // High contrast text
         add(titleLabel);
         add(Box.createVerticalStrut(15));
 
         // Top panel: shape selection and status
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 5));
+        topPanel.setBackground(new Color(30, 30, 30)); // Match main panel background
         JLabel selectLabel = new JLabel("Select shape:");
         selectLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        selectLabel.setForeground(Color.WHITE); // High contrast text
         topPanel.add(selectLabel);
 
         // Create shape selection buttons
@@ -66,6 +72,8 @@ public class Task3Panel extends JPanel implements TaskPanel {
             final String shapeName = shapes[i];
             shapeButtons[i] = new JButton(shapeName);
             shapeButtons[i].setFont(new Font("Arial", Font.PLAIN, 16));
+            shapeButtons[i].setBackground(new Color(80, 80, 80)); // High contrast background
+            shapeButtons[i].setForeground(Color.WHITE); // High contrast text
             topPanel.add(shapeButtons[i]);
             shapeButtons[i].addActionListener(new ActionListener() {
                 @Override
@@ -88,9 +96,11 @@ public class Task3Panel extends JPanel implements TaskPanel {
 
         timeLabel = new JLabel("Time left: --:--");
         timeLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        timeLabel.setForeground(Color.YELLOW); // High contrast text for status
         topPanel.add(timeLabel);
         attemptsLabel = new JLabel("Attempts left: " + Constants.DEFAULT_MAX_ATTEMPTS);
         attemptsLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        attemptsLabel.setForeground(Color.YELLOW); // High contrast text for status
         topPanel.add(attemptsLabel);
 
         add(topPanel);
@@ -100,22 +110,30 @@ public class Task3Panel extends JPanel implements TaskPanel {
         questionLabel = new JLabel(" ", SwingConstants.LEFT);
         questionLabel.setFont(new Font("Arial", Font.BOLD, 16));
         questionLabel.setAlignmentX(LEFT_ALIGNMENT);
+        questionLabel.setForeground(Color.WHITE); // High contrast text
         add(questionLabel);
         add(Box.createVerticalStrut(10));
 
         // Panel for drawing the shape and labeling dimensions
         shapeDrawingPanel = new ShapeDrawingPanel();
+        shapeDrawingPanel.setBackground(new Color(50, 50, 50)); // Contrast background for container
         add(shapeDrawingPanel);
         add(Box.createVerticalStrut(10));
 
         // Answer input panel
         JPanel answerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
+        answerPanel.setBackground(new Color(30, 30, 30)); // Match main panel background
         JLabel answerLabel = new JLabel("Your answer:");
         answerLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        answerLabel.setForeground(Color.WHITE); // High contrast text
         answerField = new JTextField(10);
         answerField.setFont(new Font("Arial", Font.PLAIN, 16));
+        answerField.setBackground(new Color(60, 60, 60)); // High contrast background
+        answerField.setForeground(Color.WHITE); // High contrast text
         submitButton = new JButton("Submit");
         submitButton.setFont(new Font("Arial", Font.PLAIN, 16));
+        submitButton.setBackground(new Color(80, 80, 80)); // High contrast background
+        submitButton.setForeground(Color.WHITE); // High contrast text
         answerPanel.add(answerLabel);
         answerPanel.add(answerField);
         answerPanel.add(submitButton);
@@ -125,11 +143,17 @@ public class Task3Panel extends JPanel implements TaskPanel {
         // Feedback panel for result message and formula
         JPanel feedbackPanel = new JPanel();
         feedbackPanel.setLayout(new BoxLayout(feedbackPanel, BoxLayout.Y_AXIS));
+        feedbackPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        feedbackPanel.setBackground(new Color(30, 30, 30)); // Match main panel background
+        
         resultMessageLabel = new JLabel(" ");
         resultMessageLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        // Color will be set in handleSubmit()
+        feedbackPanel.add(resultMessageLabel);
+        
         formulaLabel = new JLabel(" ");
         formulaLabel.setFont(new Font("Arial", Font.ITALIC, 14));
-        feedbackPanel.add(resultMessageLabel);
+        formulaLabel.setForeground(Color.CYAN); // High contrast text for formula
         feedbackPanel.add(formulaLabel);
         add(feedbackPanel);
 
@@ -261,6 +285,8 @@ public class Task3Panel extends JPanel implements TaskPanel {
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Please enter a valid number.",
                     "Invalid Input", JOptionPane.WARNING_MESSAGE);
+            resultMessageLabel.setText("Invalid input! 😟"); // Added symbol and text
+            resultMessageLabel.setForeground(new Color(255, 0, 0)); // Red for incorrect
             return;
         }
         attemptsUsed++;
@@ -276,7 +302,8 @@ public class Task3Panel extends JPanel implements TaskPanel {
             int points = scoreManager.calculatePoints(attemptsUsed, Constants.SCORE_BASIC);
             scoreManager.recordScoreAndFeedback(points);
             // Show success feedback and solution
-            resultMessageLabel.setText("Correct!");
+            resultMessageLabel.setText("Correct! 😊"); // Added symbol and text
+            resultMessageLabel.setForeground(new Color(0, 255, 0)); // Green for correct
             formulaLabel.setText("<html><div style='width:400px;'>" + currentFormula + "</div></html>");
             // Update progress bar
             mainFrameRef.getNavigationBar().updateProgress(completedShapes.size(), shapes.length);
@@ -290,36 +317,36 @@ public class Task3Panel extends JPanel implements TaskPanel {
                 // Enable buttons for another shape
                 updateShapeButtons();
             }
+        } else if (attemptsUsed < Constants.DEFAULT_MAX_ATTEMPTS) {
+            // Incorrect answer with attempts left
+            JOptionPane.showMessageDialog(this, "Try again! :( Remaining attempts: " + (Constants.DEFAULT_MAX_ATTEMPTS - attemptsUsed),
+                    "Incorrect Answer", JOptionPane.INFORMATION_MESSAGE);
+            resultMessageLabel.setText("Try again! 😟"); // Added symbol and text
+            resultMessageLabel.setForeground(new Color(255, 0, 0)); // Red for incorrect
+            answerField.setText("");
+            answerField.requestFocus();
+            attemptsLabel.setText("Attempts left: " + (Constants.DEFAULT_MAX_ATTEMPTS - attemptsUsed));
         } else {
-            // Incorrect answer
-            if (attemptsUsed < Constants.DEFAULT_MAX_ATTEMPTS) {
-                // There are attempts remaining – prompt to try again
-                JOptionPane.showMessageDialog(this, "Incorrect. Try again.",
-                        "Incorrect Answer", JOptionPane.INFORMATION_MESSAGE);
-                answerField.setText("");
-                answerField.requestFocus();
-                attemptsLabel.setText("Attempts left: " + (Constants.DEFAULT_MAX_ATTEMPTS - attemptsUsed));
+            // No attempts left (third incorrect attempt)
+            timer.stop();
+            problemActive = false;
+            answerField.setEnabled(false);
+            submitButton.setEnabled(false);
+            completedShapes.add(currentShape);
+            // Show failure feedback and correct solution
+            resultMessageLabel.setText("No attempts left. 😟 The solution is shown below."); // Added symbol and text
+            resultMessageLabel.setForeground(new Color(255, 0, 0)); // Red for incorrect
+            formulaLabel.setText("<html><div style='width:400px;'>" + currentFormula + "</div></html>");
+            // No points are awarded since the answer was not correct within 3 attempts
+            // Update progress bar (no points awarded)
+            mainFrameRef.getNavigationBar().updateProgress(completedShapes.size(), shapes.length);
+            if (completedShapes.size() == shapes.length) {
+                JOptionPane.showMessageDialog(mainFrameRef,
+                        "Congratulations, you have completed all 4 shapes.",
+                        "Task Complete", JOptionPane.INFORMATION_MESSAGE);
+                mainFrameRef.getTaskManager().currentTaskTypeCompleted(new TaskLogic(){});
             } else {
-                // No attempts left (third incorrect attempt)
-                timer.stop();
-                problemActive = false;
-                answerField.setEnabled(false);
-                submitButton.setEnabled(false);
-                completedShapes.add(currentShape);
-                // Show failure feedback and correct solution
-                resultMessageLabel.setText("No attempts left. The solution is shown below.");
-                formulaLabel.setText("<html><div style='width:400px;'>" + currentFormula + "</div></html>");
-                // No points are awarded since the answer was not correct within 3 attempts
-                // Update progress bar (no points awarded)
-                mainFrameRef.getNavigationBar().updateProgress(completedShapes.size(), shapes.length);
-                if (completedShapes.size() == shapes.length) {
-                    JOptionPane.showMessageDialog(mainFrameRef,
-                            "Congratulations, you have completed all 4 shapes.",
-                            "Task Complete", JOptionPane.INFORMATION_MESSAGE);
-                    mainFrameRef.getTaskManager().currentTaskTypeCompleted(new TaskLogic(){});
-                } else {
-                    updateShapeButtons();
-                }
+                updateShapeButtons();
             }
         }
     }

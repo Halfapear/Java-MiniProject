@@ -51,29 +51,41 @@ public class Task4Panel extends JPanel implements TaskPanel {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
+        // Apply high contrast background to the main panel
+        setBackground(new Color(30, 30, 30));
+
         // Title label
         JLabel titleLabel = new JLabel("Task 4: Circle Area and Circumference", SwingConstants.CENTER);
         titleLabel.setAlignmentX(CENTER_ALIGNMENT);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        titleLabel.setForeground(Color.WHITE); // High contrast text
         add(titleLabel);
         add(Box.createVerticalStrut(15));
 
         // Top panel: mode selection and status
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 5));
+        topPanel.setBackground(new Color(30, 30, 30)); // Match main panel background
         JLabel modeLabel = new JLabel("Select mode:");
         modeLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        modeLabel.setForeground(Color.WHITE); // High contrast text
         topPanel.add(modeLabel);
         areaButton = new JButton("Area");
         areaButton.setFont(new Font("Arial", Font.PLAIN, 16));
+        areaButton.setBackground(new Color(80, 80, 80)); // High contrast background
+        areaButton.setForeground(Color.WHITE); // High contrast text
         circumferenceButton = new JButton("Circumference");
         circumferenceButton.setFont(new Font("Arial", Font.PLAIN, 16));
+        circumferenceButton.setBackground(new Color(80, 80, 80)); // High contrast background
+        circumferenceButton.setForeground(Color.WHITE); // High contrast text
         topPanel.add(areaButton);
         topPanel.add(circumferenceButton);
         timeLabel = new JLabel("Time left: --:--");
         timeLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        timeLabel.setForeground(Color.YELLOW); // High contrast text for status
         topPanel.add(timeLabel);
         attemptsLabel = new JLabel("Attempts left: " + Constants.DEFAULT_MAX_ATTEMPTS);
         attemptsLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        attemptsLabel.setForeground(Color.YELLOW); // High contrast text for status
         topPanel.add(attemptsLabel);
         add(topPanel);
         add(Box.createVerticalStrut(10));
@@ -82,22 +94,30 @@ public class Task4Panel extends JPanel implements TaskPanel {
         questionLabel = new JLabel(" ", SwingConstants.LEFT);
         questionLabel.setFont(new Font("Arial", Font.BOLD, 16));
         questionLabel.setAlignmentX(LEFT_ALIGNMENT);
+        questionLabel.setForeground(Color.WHITE); // High contrast text
         add(questionLabel);
         add(Box.createVerticalStrut(10));
 
         // Panel for drawing the circle and labeling dimensions
         circleDrawingPanel = new CircleDrawingPanel();
+        circleDrawingPanel.setBackground(new Color(50, 50, 50)); // Contrast background for container
         add(circleDrawingPanel);
         add(Box.createVerticalStrut(10));
 
         // Answer input panel
         JPanel answerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
+        answerPanel.setBackground(new Color(30, 30, 30)); // Match main panel background
         JLabel answerLabel = new JLabel("Your answer:");
         answerLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        answerLabel.setForeground(Color.WHITE); // High contrast text
         answerField = new JTextField(10);
         answerField.setFont(new Font("Arial", Font.PLAIN, 16));
+        answerField.setBackground(new Color(60, 60, 60)); // High contrast background
+        answerField.setForeground(Color.WHITE); // High contrast text
         submitButton = new JButton("Submit");
         submitButton.setFont(new Font("Arial", Font.PLAIN, 16));
+        submitButton.setBackground(new Color(80, 80, 80)); // High contrast background
+        submitButton.setForeground(Color.WHITE); // High contrast text
         answerPanel.add(answerLabel);
         answerPanel.add(answerField);
         answerPanel.add(submitButton);
@@ -107,11 +127,17 @@ public class Task4Panel extends JPanel implements TaskPanel {
         // Feedback panel for result message and formula
         JPanel feedbackPanel = new JPanel();
         feedbackPanel.setLayout(new BoxLayout(feedbackPanel, BoxLayout.Y_AXIS));
+        feedbackPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        feedbackPanel.setBackground(new Color(30, 30, 30)); // Match main panel background
+        
         resultMessageLabel = new JLabel(" ");
         resultMessageLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        // Color will be set in handleSubmit()
+        feedbackPanel.add(resultMessageLabel);
+        
         formulaLabel = new JLabel(" ");
         formulaLabel.setFont(new Font("Arial", Font.ITALIC, 14));
-        feedbackPanel.add(resultMessageLabel);
+        formulaLabel.setForeground(Color.CYAN); // High contrast text for formula
         feedbackPanel.add(formulaLabel);
         add(feedbackPanel);
 
@@ -267,6 +293,8 @@ public class Task4Panel extends JPanel implements TaskPanel {
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Please enter a valid number.",
                     "Invalid Input", JOptionPane.WARNING_MESSAGE);
+            resultMessageLabel.setText("Invalid input! 😟"); // Added symbol and text
+            resultMessageLabel.setForeground(new Color(255, 0, 0)); // Red for incorrect
             return;
         }
         attemptsUsed++;
@@ -284,7 +312,8 @@ public class Task4Panel extends JPanel implements TaskPanel {
             int points = scoreManager.calculatePoints(attemptsUsed, Constants.SCORE_BASIC);
             scoreManager.recordScoreAndFeedback(points);
             // Show success feedback and formula
-            resultMessageLabel.setText("Correct!");
+            resultMessageLabel.setText("Correct! 😊"); // Added symbol and text
+            resultMessageLabel.setForeground(new Color(0, 255, 0)); // Green for correct
             formulaLabel.setText("<html><div style='width:400px;'>" + currentFormula + "</div></html>");
             if (allScenariosDone()) {
                 JOptionPane.showMessageDialog(mainFrameRef,
@@ -297,8 +326,10 @@ public class Task4Panel extends JPanel implements TaskPanel {
         } else {
             // Incorrect answer
             if (attemptsUsed < Constants.DEFAULT_MAX_ATTEMPTS) {
-                JOptionPane.showMessageDialog(this, "Incorrect. Try again.",
+                JOptionPane.showMessageDialog(this, "Try again! :( Remaining attempts: " + (Constants.DEFAULT_MAX_ATTEMPTS - attemptsUsed),
                         "Incorrect Answer", JOptionPane.INFORMATION_MESSAGE);
+                resultMessageLabel.setText("Try again! 😟"); // Added symbol and text
+                resultMessageLabel.setForeground(new Color(255, 0, 0)); // Red for incorrect
                 answerField.setText("");
                 answerField.requestFocus();
                 attemptsLabel.setText("Attempts left: " + (Constants.DEFAULT_MAX_ATTEMPTS - attemptsUsed));
@@ -309,7 +340,8 @@ public class Task4Panel extends JPanel implements TaskPanel {
                 answerField.setEnabled(false);
                 submitButton.setEnabled(false);
                 markCurrentScenarioDone();
-                resultMessageLabel.setText("No attempts left. The solution is shown below.");
+                resultMessageLabel.setText("No attempts left. 😟 The solution is shown below."); // Added symbol and text
+                resultMessageLabel.setForeground(new Color(255, 0, 0)); // Red for incorrect
                 formulaLabel.setText("<html><div style='width:400px;'>" + currentFormula + "</div></html>");
                 if (allScenariosDone()) {
                     JOptionPane.showMessageDialog(mainFrameRef,

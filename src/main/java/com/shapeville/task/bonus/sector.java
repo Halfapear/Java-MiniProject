@@ -38,6 +38,7 @@ public class Sector extends JPanel {
     private int timeRemaining = 300; // 5 minutes (300 seconds)
     private boolean timerRunning = false;
     private final DecimalFormat df = new DecimalFormat("#.##");
+    private JLabel sectorValuesLabel;
 
     /**
      * Constructor
@@ -222,6 +223,11 @@ public class Sector extends JPanel {
         sectorImageLabel = new JLabel("", SwingConstants.CENTER);
         sectorImageLabel.setPreferredSize(new Dimension(300, 300));
         centerPanel.add(sectorImageLabel, BorderLayout.CENTER);
+
+        // 新增：扇形数值信息标签
+        sectorValuesLabel = new JLabel("", SwingConstants.CENTER);
+        sectorValuesLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        centerPanel.add(sectorValuesLabel, BorderLayout.SOUTH);
         
         content.add(centerPanel, BorderLayout.CENTER);
         
@@ -255,10 +261,9 @@ public class Sector extends JPanel {
      */
     private void showCurrentSector() {
         SectorShape currentSector = sectors.get(currentSectorIndex);
-        questionLabel.setText("<html><body style='width: 400px'>" + 
-                              currentSector.getDescription() + "<br>" + 
-                              currentSector.getQuestion() + "<br>" +
-                              currentSector.getValues() + "</body></html>");
+        questionLabel.setText("<html><body style='width: 400px; text-align: center;'>" +
+                              currentSector.getDescription() + "<br>" +
+                              currentSector.getQuestion() + "</body></html>");
         
         // Display the sector image
         if (currentSector.getImage() != null) {
@@ -269,6 +274,9 @@ public class Sector extends JPanel {
             sectorImageLabel.setIcon(null);
             sectorImageLabel.setText("Sector " + (currentSectorIndex + 1) + " / " + sectors.size());
         }
+        
+        // 更新扇形数值信息标签
+        sectorValuesLabel.setText(currentSector.getValues());
         
         // Reset attempt count
         attempt = 0;
@@ -358,7 +366,8 @@ public class Sector extends JPanel {
                 // 修复问题1：先增加完成数量，再更新进度条
                 updateProgress(practicedSectors, sectors.size());
                 
-                JOptionPane.showMessageDialog(this, "Correct answer!");
+                // Improvement: Add text and symbol feedback
+                JOptionPane.showMessageDialog(this, "Correct! :)");
                 
                 // Check if all sectors are completed
                 if (practicedSectors >= sectors.size()) {
@@ -403,7 +412,8 @@ public class Sector extends JPanel {
                         moveToNextSector();
                     }
                 } else {
-                    JOptionPane.showMessageDialog(this, "Incorrect answer. Please try again!\nYou have " + (3 - attempt) + " attempts remaining.");
+                    // Improvement: Add text and symbol feedback
+                    JOptionPane.showMessageDialog(this, "Try again! :(\nYou have " + (3 - attempt) + " attempts remaining.");
                 }
             }
         }catch (NumberFormatException e) {
