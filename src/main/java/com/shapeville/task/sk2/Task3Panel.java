@@ -13,9 +13,10 @@ import com.shapeville.ui.panel_templates.TaskPanel;
 import com.shapeville.utils.Constants;
 
 /**
- * Task 3 Panel: Area Calculation of Shapes (Rectangle, Parallelogram, Triangle, Trapezium).
- * This panel allows the user to select a shape and calculate its area.
- * It includes a 3-minute timer, up to 3 attempts, and displays the correct solution and feedback after each round.
+ * Task 3 Panel for Area Calculation of basic shapes (Rectangle, Parallelogram, Triangle, Trapezium).
+ * This panel presents the user with a shape and its dimensions, prompting them to calculate the area.
+ * It includes a timer, tracks attempts, provides feedback, and shows the correct formula and calculation steps upon completion or failure.
+ * Implements the {@link TaskPanel} interface to integrate with the application's task management flow.
  */
 public class Task3Panel extends JPanel implements TaskPanel {
     private MainFrame mainFrameRef;
@@ -41,6 +42,11 @@ public class Task3Panel extends JPanel implements TaskPanel {
     // Panel for drawing the shape and labeling dimensions
     private ShapeDrawingPanel shapeDrawingPanel;
 
+    /**
+     * Constructs a new Task3Panel.
+     * Initializes UI components, sets up shape selection buttons, and prepares for the area calculation tasks.
+     * @param mainFrame The reference to the main application frame ({@link MainFrame}).
+     */
     public Task3Panel(MainFrame mainFrame) {
         this.mainFrameRef = mainFrame;
         this.completedShapes = new java.util.HashSet<>();
@@ -170,6 +176,12 @@ public class Task3Panel extends JPanel implements TaskPanel {
         updateShapeButtons();
     }
 
+    /**
+     * Starts a new area calculation problem for the specified shape.
+     * Generates random dimensions, calculates the correct answer, sets up the question text and formula,
+     * starts the timer, and updates the UI.
+     * @param shape The name of the shape for the new problem (e.g., "Rectangle").
+     */
     private void startNewShapeProblem(String shape) {
         // Begin a new problem for the selected shape
         currentShape = shape;
@@ -274,6 +286,12 @@ public class Task3Panel extends JPanel implements TaskPanel {
         timer.start();
     }
 
+    /**
+     * Handles the submission of the user's calculated area answer.
+     * Validates the input, checks if the answer is correct, and updates the UI.
+     * Manages attempts left and triggers the display of the correct formula/solution upon success or failure.
+     * Awards points based on the number of attempts for correct answers.
+     */
     private void handleSubmit() {
         String answerText = answerField.getText().trim();
         if (answerText.isEmpty()) {
@@ -351,7 +369,11 @@ public class Task3Panel extends JPanel implements TaskPanel {
         }
     }
 
-    // Enable or disable shape selection buttons based on completed tasks
+    /**
+     * Updates the enabled state of the shape selection buttons.
+     * Disables buttons for shapes that have already been completed in the current session.
+     * Disables all shape buttons while a problem is active.
+     */
     private void updateShapeButtons() {
         for (int i = 0; i < shapes.length; i++) {
             String shape = shapes[i];
@@ -363,7 +385,12 @@ public class Task3Panel extends JPanel implements TaskPanel {
         }
     }
 
-    // Helper to format numbers for display (no trailing .0 for integers, one decimal for .5 values, two decimals otherwise)
+    /**
+     * Helper method to format a double value for display.
+     * Formats integers without decimal places, values ending in .5 with one decimal place, and others with two decimal places.
+     * @param value The double value to format.
+     * @return A formatted String representation of the number.
+     */
     private String formatNumber(double value) {
         if (Math.abs(value - Math.round(value)) < 1e-6) {
             return String.valueOf((long)Math.round(value));           // Integer value
@@ -376,26 +403,49 @@ public class Task3Panel extends JPanel implements TaskPanel {
 
     // TaskPanel interface methods
     @Override
+    /**
+     * Implemented from {@link TaskPanel}. Displays a problem on the panel.
+     * Note: Problem loading is handled internally by {@code startNewShapeProblem()}.
+     * @param problem The problem to display.
+     */
     public void displayProblem(com.shapeville.model.Problem problem) {
         // Not used explicitly in this integrated implementation
     }
 
     @Override
+    /**
+     * Implemented from {@link TaskPanel}. Displays feedback to the user.
+     * Note: Feedback is displayed directly on UI labels within {@code handleSubmit()}.
+     * @param feedback The feedback to display.
+     */
     public void showFeedback(Feedback feedback) {
         // Not used explicitly; feedback is shown via labels/dialogs in the UI
     }
 
     @Override
+    /**
+     * Implemented from {@link TaskPanel}. Sets the callback for task logic.
+     * Currently not explicitly used for callbacks from this panel, but required by the interface.
+     * @param logic The task logic instance.
+     */
     public void setTaskLogicCallback(TaskLogic logic) {
         // Not used; UI and logic are combined in this panel
     }
 
     @Override
+    /**
+     * Implemented from {@link TaskPanel}. Gets the unique identifier for this panel.
+     * @return The panel ID string from {@link Constants}.
+     */
     public String getPanelId() {
         return Constants.AREA_CALC_PANEL_ID;
     }
 
     @Override
+    /**
+     * Implemented from {@link TaskPanel}. Resets the state of the panel.
+     * Stops the timer and deactivates the current problem when the panel is left.
+     */
     public void resetState() {
         // Clean up when leaving this panel (e.g., returning Home)
         if (timer != null) {
@@ -405,7 +455,8 @@ public class Task3Panel extends JPanel implements TaskPanel {
     }
 
     /**
-     * Inner panel class for drawing shapes and labeling dimensions.
+     * Inner panel class for drawing the geometric shapes and labeling their dimensions.
+     * This class handles the visual representation of the current shape problem.
      */
     private class ShapeDrawingPanel extends JPanel {
         private String shapeName;
@@ -413,11 +464,22 @@ public class Task3Panel extends JPanel implements TaskPanel {
         private int param2;
         private int param3;
 
+        /**
+         * Constructs a new ShapeDrawingPanel.
+         * Sets the preferred size for the drawing area.
+         */
         public ShapeDrawingPanel() {
             // Set a preferred size for the drawing area
             setPreferredSize(new Dimension(250, 150));
         }
 
+        /**
+         * Sets the data for the shape to be drawn and repaints the panel.
+         * @param shapeName The name of the shape (e.g., "Rectangle").
+         * @param p1 Parameter 1 (e.g., length, base1).
+         * @param p2 Parameter 2 (e.g., width, base2, height).
+         * @param p3 Parameter 3 (e.g., height for trapezium, 0 for others).
+         */
         public void setShapeData(String shapeName, int p1, int p2, int p3) {
             this.shapeName = shapeName;
             this.param1 = p1;
@@ -427,6 +489,11 @@ public class Task3Panel extends JPanel implements TaskPanel {
         }
 
         @Override
+        /**
+         * Paints the shape and its dimensions on the panel.
+         * Draws the outline, dimension lines with arrowheads, and labels for the dimensions.
+         * @param g The Graphics object to paint on.
+         */
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
             if (shapeName == null || shapeName.isEmpty()) {

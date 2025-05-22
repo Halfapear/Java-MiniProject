@@ -9,21 +9,25 @@ import com.shapeville.logic.ScoreManager;
 import com.shapeville.main.MainFrame;
 
 /**
- * NavigationBar - 顶部导航栏，显示分数和导航按钮。
+ * The NavigationBar class represents the top navigation bar of the Shapeville application.
+ * It displays the user's current score and task progress.
+ * It also contains buttons to navigate back to the home screen and to end the current session.
+ * This bar interacts with the {@link MainFrame} for navigation and {@link ScoreManager} for score display.
  */
 public class NavigationBar extends JPanel {
-    private JLabel scoreLabel; // 显示当前分数
-    private JButton homeButton; // 返回主页按钮
-    private JButton endSessionButton; // 结束会话按钮
-    private JProgressBar progressBar; // 显示任务进度
-    private MainFrame mainFrameRef; // 引用 MainFrame，用于交互
-    private ScoreManager scoreManager; // 分数管理器
+    private JLabel scoreLabel; // Label to display the current score
+    private JButton homeButton; // Button to navigate back to the home screen
+    private JButton endSessionButton; // Button to end the current session
+    private JProgressBar progressBar; // Progress bar to show task completion status
+    private MainFrame mainFrameRef; // Reference to the MainFrame for triggering navigation actions
+    private ScoreManager scoreManager; // Reference to the ScoreManager for accessing score data
 
     /**
-     * 构造函数，初始化导航栏组件。
-     * 
-     * @param mainFrame MainFrame 的引用，用于导航操作。
-     * @param scoreManager ScoreManager 的引用，用于分数显示。
+     * Constructs a new NavigationBar.
+     * Initializes the UI components and sets up action listeners for the buttons.
+     *
+     * @param mainFrame    A reference to the main application frame ({@link MainFrame}).
+     * @param scoreManager A reference to the score manager ({@link ScoreManager}) to display the score.
      */
     public NavigationBar(MainFrame mainFrame, ScoreManager scoreManager) {
         this.mainFrameRef = mainFrame;
@@ -32,7 +36,8 @@ public class NavigationBar extends JPanel {
     }
 
     /**
-     * 初始化导航栏的 UI 组件。
+     * Initializes the user interface components of the navigation bar.
+     * Sets up the layout, preferred size, background color, labels, progress bar, and buttons.
      */
     private void initializeUI() {
         setLayout(new BorderLayout());
@@ -75,7 +80,8 @@ public class NavigationBar extends JPanel {
     }
 
     /**
-     * 更新分数显示。
+     * Updates the displayed score on the navigation bar.
+     * Retrieves the current score from the {@link ScoreManager} and updates the score label.
      */
     public void updateScore() {
         int score = scoreManager.getCurrentScore(); 
@@ -84,10 +90,11 @@ public class NavigationBar extends JPanel {
     }
 
     /**
-     * 更新进度条。
-     * 
-     * @param current 当前任务索引。
-     * @param total   总任务数。
+     * Updates the progress bar to show the current task completion status.
+     * The progress is displayed as a percentage and a fraction (e.g., "3/5").
+     *
+     * @param current The current number of tasks completed in the sequence.
+     * @param total   The total number of tasks in the current sequence.
      */
     public void updateProgress(int current, int total) {
         if (total > 0) {

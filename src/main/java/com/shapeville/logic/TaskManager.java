@@ -19,6 +19,11 @@ import com.shapeville.task.sk2.Task4Panel;
 import com.shapeville.ui.panel_templates.TaskPanel;
 import com.shapeville.utils.Constants;
 
+/**
+ * Manages the sequence and logic flow of different tasks within the Shapeville application.
+ * Handles task loading, switching between task panels, and interaction with {@link MainFrame} and {@link ScoreManager}.
+ * Defines the master list of available tasks and the session sequence.
+ */
 public class TaskManager {
     private MainFrame mainFrameRef;
     private ScoreManager scoreManagerRef;
@@ -32,6 +37,13 @@ public class TaskManager {
     private int currentSessionTaskIndex;
 
 
+    /**
+     * Constructs a new TaskManager.
+     * Initializes task lists and sets references to the main frame and score manager.
+     * Defines the master list of all available tasks.
+     * @param mainFrame The reference to the main application frame ({@link MainFrame}).
+     * @param scoreManager The reference to the score manager ({@link ScoreManager}).
+     */
     public TaskManager(MainFrame mainFrame, ScoreManager scoreManager) {
         this.mainFrameRef = mainFrame;
         this.scoreManagerRef = scoreManager;
@@ -41,7 +53,11 @@ public class TaskManager {
         defineMasterTasks();
         //defineDefaultSessionSequence(); // Define the flow for a "full game"
     }
-    //task addition
+
+    /**
+     * Defines the master list of all available tasks in the application.
+     * Each task is represented by a {@link TaskDefinition}.
+     */
     private void defineMasterTasks() {
 
         masterTaskList.add(new TaskDefinition(Constants.TASK_ID_SHAPE_ID_2D, Constants.SHAPE_IDENTIFICATION_PANEL_ID, Constants.TASK_TYPE_SHAPE_IDENTIFICATION_2D, Constants.SCORE_BASIC));
@@ -73,6 +89,9 @@ public class TaskManager {
         }
     }
 
+    /**
+     * Starts a new full session, resetting the score and beginning the task sequence defined by {@code sessionTaskSequenceIds}.
+     */
     public void startFullSessionSequence() {
         System.out.println("Starting full session task sequence...");
         scoreManagerRef.resetSession();
@@ -80,6 +99,11 @@ public class TaskManager {
         loadNextTaskInSequence();
     }
 
+    /**
+     * Starts a specific task identified by its ID, bypassing the default session sequence.
+     * Loads the corresponding UI panel and task logic.
+     * @param taskId The unique ID of the task to start.
+     */
     public void startSpecificTask(String taskId) {
         System.out.println("Attempting to start specific task: " + taskId);
         TaskDefinition taskDefToStart = findTaskDefinitionById(taskId);
@@ -94,6 +118,11 @@ public class TaskManager {
         }
     }
 
+    /**
+     * Finds a {@link TaskDefinition} object from the master task list based on its unique task ID.
+     * @param taskId The unique ID of the task to find.
+     * @return The {@link TaskDefinition} corresponding to the ID, or null if not found.
+     */
     private TaskDefinition findTaskDefinitionById(String taskId) {
         for (TaskDefinition td : masterTaskList) {
             if (td.getTaskId().equals(taskId)) {
@@ -105,6 +134,12 @@ public class TaskManager {
     // Removed misplaced line as it is outside any method or block
 
 
+    /**
+     * Loads the appropriate UI panel and logic for a given task definition.
+     * Instantiates the panel and logic based on the task type.
+     * Registers and shows the panel in the main frame.
+     * @param taskDef The {@link TaskDefinition} for the task to load.
+     */
     private void loadTaskUIAndLogic(TaskDefinition taskDef) {
         System.out.println("Loading UI and Logic for task: " + taskDef.getTaskId() + " - Type: " + taskDef.getTaskType());
         currentActiveTaskLogic = null;
@@ -158,6 +193,12 @@ currentActiveTaskPanel = new Task1Panel2D(mainFrameRef);
     }
     
 
+    /**
+     * Called when a task type (a set of questions within a panel) is completed by the user.
+     * Increments the overall session progress and loads the next task in the sequence if applicable.
+     * If not in a sequence or the sequence ends, navigates back to the home screen.
+     * @param completedLogic The {@link TaskLogic} instance that was just completed.
+     */
     public void currentTaskTypeCompleted(TaskLogic completedLogic) {
         System.out.println("Task type completed: " + completedLogic.getClass().getSimpleName());
         scoreManagerRef.incrementTaskTypeCompletedCount(); // Increment overall session progress
@@ -176,6 +217,11 @@ currentActiveTaskPanel = new Task1Panel2D(mainFrameRef);
         }
     }
 
+    /**
+     * Loads the next task in the predefined session sequence.
+     * Updates the progress bar in the navigation bar.
+     * If the sequence is finished, ends the session.
+     */
     private void loadNextTaskInSequence() {
         currentSessionTaskIndex++;
         if (currentSessionTaskIndex < sessionTaskSequenceIds.size()) {
@@ -198,6 +244,10 @@ currentActiveTaskPanel = new Task1Panel2D(mainFrameRef);
     }
 
 
+    /**
+     * Handles the interruption of the current task (e.g., user navigates away).
+     * Resets the state of the current task panel and logic.
+     */
     public void currentTaskInterrupted() {
         System.out.println("Current task interrupted.");
         if (currentActiveTaskPanel instanceof TaskPanel) {
@@ -215,12 +265,18 @@ currentActiveTaskPanel = new Task1Panel2D(mainFrameRef);
         currentSessionTaskIndex = -1;
     }
 
-    // 补充 setTaskSequence 空实现，兼容 MainFrame 调用
+    /**
+     * Sets the task sequence for the session. This method can be customized to define a different order of tasks.
+     * Currently provides an empty implementation.
+     */
     public void setTaskSequence() {
         // 可以根据需要自定义任务序列，目前留空
     }
 
-    // 补充 resetCurrentTask 空实现，兼容 MainFrame 调用
+    /**
+     * Resets the current task state. This is an alias for {@code currentTaskInterrupted()}.
+     * Provided for compatibility with external calls.
+     */
     public void resetCurrentTask() {
         currentTaskInterrupted();
     }

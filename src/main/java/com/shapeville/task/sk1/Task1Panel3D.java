@@ -20,7 +20,9 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Task 1: 2D and 3D Shape Recognition
+ * Task 1 Panel for 3D Shape Recognition.
+ * This panel displays 3D shapes and prompts the user to identify their names.
+ * It implements the {@link TaskPanel} interface to integrate with the application's task management flow.
  */
 public class Task1Panel3D extends JPanel implements TaskPanel {
     private MainFrame mainFrame;
@@ -42,6 +44,11 @@ public class Task1Panel3D extends JPanel implements TaskPanel {
     private JPanel inputContainer;
     private JPanel feedbackContainer;
 
+    /**
+     * Constructs a new Task1Panel3D.
+     * Initializes UI components, loads the list of 3D shapes, and displays the first random shape.
+     * @param mainFrame The reference to the main application frame ({@link MainFrame}).
+     */
     public Task1Panel3D(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
         this.scoreManager = mainFrame.getScoreManager();
@@ -50,6 +57,11 @@ public class Task1Panel3D extends JPanel implements TaskPanel {
         loadRandomShape();
     }
 
+    /**
+     * Initializes the user interface components for the 3D shape recognition task.
+     * Sets up the layout, adds labels, text field, buttons, and containers.
+     * Configures appearance for high contrast and accessibility.
+     */
     private void initializeUI() {
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -156,6 +168,10 @@ public class Task1Panel3D extends JPanel implements TaskPanel {
         add(feedbackContainer, gbc);
     }
 
+    /**
+     * Initializes the list of available 3D shapes for the recognition task.
+     * Each shape is created with its name, image path, and type (3D).
+     */
     private void initializeShapes() {
         shapes = new ArrayList<>();
         
@@ -170,6 +186,11 @@ public class Task1Panel3D extends JPanel implements TaskPanel {
         shapes.add(new Shape("triangular prism", "/assets/3d/triangular prism.png", "3D"));
     }
 
+    /**
+     * Loads a random 3D shape from the list and displays its image.
+     * Resets attempt counts and UI feedback elements for the new problem.
+     * Checks if the required number of shapes are completed and handles task completion.
+     */
     private void loadRandomShape() {
         if (completedShapes >= Constants.SHAPES_PER_IDENTIFICATION_QUIZ) {
             Object[] options = {"Return to Home", "Try Again"};
@@ -215,6 +236,12 @@ public class Task1Panel3D extends JPanel implements TaskPanel {
         submitButton.setEnabled(true);
     }
 
+    /**
+     * Checks the user's answer against the correct shape name.
+     * Updates the score based on the number of attempts used.
+     * Provides feedback to the user and updates the UI.
+     * Handles advancing to the next shape or indicating incorrect answer after maximum attempts.
+     */
     private void checkAnswer() {
         String userAnswer = answerTextField.getText().trim();
         boolean isCorrect = userAnswer.equalsIgnoreCase(currentShape.getName());
@@ -264,6 +291,10 @@ public class Task1Panel3D extends JPanel implements TaskPanel {
     }
 
     @Override
+    /**
+     * Resets the state of the panel for a new task session or when navigating away.
+     * Clears the current shape, resets completed shape count, and updates UI elements to initial state.
+     */
     public void resetState() {
         completedShapes = 0;
         scoreManager.resetSession();
@@ -271,22 +302,37 @@ public class Task1Panel3D extends JPanel implements TaskPanel {
     }
 
     @Override
+    /**
+     * Gets the unique identifier for this panel, as defined in {@link Constants}.
+     * @return The panel ID string.
+     */
     public String getPanelId() {
         return Constants.SHAPE_IDENTIFICATION_PANEL_ID;
-        
     }
 
     @Override
+    /**
+     * Sets the callback for task logic. Currently not used in this specific panel, but required by {@link TaskPanel}.
+     * @param logic The task logic instance.
+     */
     public void setTaskLogicCallback(TaskLogic logic) {
         // 实现任务逻辑回调
     }
 
     @Override
+    /**
+     * Displays a problem on the panel. Currently not fully implemented as problem loading is handled internally, but required by {@link TaskPanel}.
+     * @param problem The problem to display.
+     */
     public void displayProblem(Problem problem) {
         // 显示问题
     }
 
     @Override
+    /**
+     * Displays feedback on the panel. Currently not fully implemented as feedback is handled internally, but required by {@link TaskPanel}.
+     * @param feedback The feedback to display.
+     */
     public void showFeedback(Feedback feedback) {
         resultLabel.setText(feedback.getMessage());
         scoreLabel.setText("Current Score: " + scoreManager.getCurrentScore());

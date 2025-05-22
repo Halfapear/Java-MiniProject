@@ -1,7 +1,15 @@
 package com.shapeville.utils;
 
+/**
+ * This class contains constant values used throughout the Shapeville application.
+ * It defines identifiers for panels, task types, specific tasks, scoring levels, and default settings.
+ */
 public class Constants {
-    //2 --- Panel Identifiers (for CardLayout and TaskDefinition.panelId) ---
+    /**
+     * --- Panel Identifiers (for CardLayout and TaskDefinition.panelId) ---
+     * These constants define the unique String identifiers for the different UI panels used in the application.
+     * Used by {@link com.shapeville.main.MainFrame} and {@link com.shapeville.logic.TaskManager} for switching panels.
+     */
     public static final String HOME_PANEL_ID = "HOME_PANEL";
     public static final String END_PANEL_ID = "END_PANEL";
     public static final String SHAPE_IDENTIFICATION_PANEL_ID = "SHAPE_ID_PANEL";
@@ -21,7 +29,11 @@ public class Constants {
     
     // TODO: Add Panel IDs for Task 3, 4, Bonus 1, 2
 
-    //3 --- Task Type Identifiers (for TaskDefinition.taskType and TaskManager logic mapping) ---
+    /**
+     * --- Task Type Identifiers (for TaskDefinition.taskType and TaskManager logic mapping) ---
+     * These constants categorize tasks by their type (e.g., shape identification, area calculation).
+     * Used by {@link com.shapeville.model.TaskDefinition} and {@link com.shapeville.logic.TaskManager}.
+     */
     public static final String TASK_TYPE_SHAPE_IDENTIFICATION_2D = "SHAPE_ID_2D"; // Task 1
     public static final String TASK_TYPE_SHAPE_IDENTIFICATION_3D = "SHAPE_ID_3D";// Task 1
 
@@ -32,7 +44,12 @@ public class Constants {
     public static final String TASK_TYPE_SECTOR_CIRCLE_CALC = "SECTOR_CIRCLE";// Bonus 2
     // TODO: Add Task Types for Task 3, 4, Bonus 1, 2
 
-    // --- Task Identifiers (for TaskDefinition.taskId and HomeScreen buttons) ---
+    /**
+     * --- Task Identifiers (for TaskDefinition.taskId and HomeScreen buttons) ---
+     * These are unique IDs for specific task instances or configurations that can be started directly,
+     * e.g., from the home screen buttons.
+     * Used by {@link com.shapeville.model.TaskDefinition} and {@link com.shapeville.ui.panel_templates.HomeScreenPanel}.
+     */
     //1 These are unique IDs for specific task instances/configurations that can be started.
     public static final String TASK_ID_SHAPE_ID_2D = "TASK_SHAPE_ID_2D"; // User selects 2D shapes
     public static final String TASK_ID_SHAPE_ID_3D = "TASK_SHAPE_ID_3D"; // User selects 3D shapes
@@ -44,16 +61,26 @@ public class Constants {
     public static final String TASK_ID_SECTOR_CIRCLE_CALC = "TASK_SECTOR_CIRCLE";
     // TODO: Add Task IDs for Task 3, 4, Bonus 1, 2 (e.g., "TASK_AREA_RECT", "TASK_AREA_TRIANGLE")
 
-    // Scoring levels 4
+    /**
+     * --- Scoring levels ---
+     * Constants defining the scoring levels (Basic and Advanced) as per the project specification.
+     * Used by {@link com.shapeville.logic.ScoreManager}.
+     */
     public static final boolean SCORE_ADVANCED = true;
     public static final boolean SCORE_BASIC = false;
 
-    // Default settings
+    /**
+     * --- Default settings ---
+     * Constants for default configuration values used in tasks.
+     */
     public static final int DEFAULT_MAX_ATTEMPTS = 3;
     public static final int SHAPES_PER_IDENTIFICATION_QUIZ = 4;
     public static final int ANGLES_PER_IDENTIFICATION_QUIZ = 4;
     // TODO: Add other constants (e.g., time limits in milliseconds)
 
+    /**
+     * The default time limit for timed tasks in seconds.
+     */
     public static final int TASK_TIME_LIMIT_SEC = 180;  // 3 minutes in seconds
 
     

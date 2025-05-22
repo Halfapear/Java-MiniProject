@@ -16,9 +16,20 @@ import javax.swing.SwingConstants;
 import com.shapeville.main.MainFrame;
 import com.shapeville.utils.Constants;
 
+/**
+ * The HomeScreenPanel class represents the initial screen of the Shapeville application.
+ * It displays a welcome message and provides buttons for the user to select and start different learning tasks.
+ * Interacts with the {@link MainFrame} to initiate tasks via the {@link com.shapeville.logic.TaskManager}.
+ */
 public class HomeScreenPanel extends JPanel {
     private MainFrame mainFrameRef;
 
+    /**
+     * Constructs a new HomeScreenPanel.
+     * Sets up the basic layout, background color, title, and instructions.
+     * Initializes the task selection buttons.
+     * @param mainFrame A reference to the main application frame ({@link MainFrame}).
+     */
     public HomeScreenPanel(MainFrame mainFrame) {
         this.mainFrameRef = mainFrame;
         setBackground(new Color(30, 30, 30));
@@ -39,6 +50,10 @@ public class HomeScreenPanel extends JPanel {
         add(instructions, BorderLayout.SOUTH);
     }
 
+    /**
+     * Initializes the main UI components of the home screen.
+     * Creates a panel to hold the task selection buttons and adds buttons for each available task.
+     */
     private void initializeUI() {
         JPanel tasksPanel = new JPanel();
         tasksPanel.setLayout(new BoxLayout(tasksPanel, BoxLayout.Y_AXIS));
@@ -56,6 +71,14 @@ public class HomeScreenPanel extends JPanel {
         add(tasksPanel, BorderLayout.CENTER);
     }
 
+    /**
+     * Creates a styled JButton for selecting a specific task.
+     * Adds an action listener to the button that triggers the start of the corresponding task
+     * via the {@link com.shapeville.logic.TaskManager}.
+     * @param label The text label to display on the button.
+     * @param taskId The unique ID of the task associated with this button (from {@link Constants}).
+     * @return The configured JButton.
+     */
     private JButton createTaskButton(String label, String taskId) {
         JButton button = new JButton(label);
         button.setFont(new Font("Arial", Font.PLAIN, 16));

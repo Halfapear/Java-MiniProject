@@ -18,10 +18,10 @@ import com.shapeville.ui.panel_templates.TaskPanel;
 import com.shapeville.utils.Constants;
 
 /**
- * The main window (JFrame) of the application.
- * Holds the navigation bar, the main content area (using CardLayout),
- * and references to core managers (TaskManager, ScoreManager).
- * Handles panel switching and overall application flow control initiated by TaskManager.
+ * The main application window (JFrame) for Shapeville v3.
+ * This class sets up the main frame, including the navigation bar and a content area managed by CardLayout.
+ * It holds and initializes core application managers such as {@link TaskManager} and {@link ScoreManager}.
+ * It also provides methods for switching between different content panels (screens) of the application.
  */
 public class MainFrame extends JFrame {
 
@@ -35,28 +35,43 @@ public class MainFrame extends JFrame {
     private Map<String, JPanel> registeredPanels;
 
     // Panel Identifiers (Constants are better defined in a dedicated Constants class)
-    public static final String HOME_PANEL_ID = "HOME_PANEL";
-    public static final String END_PANEL_ID = "END_PANEL";
+    // Using Constants from com.shapeville.utils.Constants is preferred.
+    // public static final String HOME_PANEL_ID = "HOME_PANEL"; // Use Constants.HOME_PANEL_ID
+    // public static final String END_PANEL_ID = "END_PANEL"; // Use Constants.END_PANEL_ID
     // Add IDs for all task panels, e.g., public static final String SHAPE_ID_PANEL_ID = "SHAPE_ID";
 
 
+    /**
+     * Constructs the main frame of the Shapeville application.
+     * Initializes managers, UI components, registers core panels,
+     * sets the task sequence, and displays the home screen.
+     */
     public MainFrame() {
         registeredPanels = new HashMap<>();
         initializeCoreManagers();
         initializeUI();
         registerCorePanels(); // Register home and end panels
         taskManager.setTaskSequence(); // Define the order of tasks
-        showPanel(HOME_PANEL_ID); // Show home screen initially
+        showPanel(Constants.HOME_PANEL_ID); // Show home screen initially
     }
 
     private void initializeCoreManagers() {
         // Important: Handle dependencies. ScoreManager might need NavigationBar later.
         // TaskManager needs MainFrame to switch panels.
+        /**
+         * Initializes the core managers of the application: {@link ScoreManager} and {@link TaskManager}.
+         * Sets up dependencies between managers where necessary.
+         */
         scoreManager = new ScoreManager();
         taskManager = new TaskManager(this, scoreManager); // Pass dependencies
     }
 
     private void initializeUI() {
+        /**
+         * Initializes the main UI components of the frame.
+         * Sets frame properties like title, size, location, and layout.
+         * Creates and adds the {@link NavigationBar} and the content container with {@link CardLayout}.
+         */
         setTitle("Shapeville Learning");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 650); // Slightly larger height for nav bar + content
@@ -78,6 +93,10 @@ public class MainFrame extends JFrame {
     }
 
     private void registerCorePanels() {
+        /**
+         * Registers the core panels (Home and End screens) with the content pane container.
+         * Task panels are registered dynamically by the TaskManager.
+         */
         registerPanel(Constants.HOME_PANEL_ID, new HomeScreenPanel(this));
         registerPanel(Constants.END_PANEL_ID, new EndPanel(scoreManager));
         // 任务面板将在 TaskManager 中动态注册
@@ -96,8 +115,8 @@ public class MainFrame extends JFrame {
     }
 
     /**
-     * Switches the currently displayed panel in the CardLayout.
-     * Also notifies the panel that it's being shown (if it implements TaskPanel interface).
+     * Switches the currently displayed panel in the CardLayout to the one identified by the given panel ID.
+     * Optionally notifies the panel if it implements the {@link TaskPanel} interface.
      *
      * @param panelId The unique String identifier of the panel to show.
      */
@@ -116,16 +135,24 @@ public class MainFrame extends JFrame {
 
     // --- Navigation Methods (Called by NavigationBar or TaskManager) ---
 
+    /**
+     * Navigates the user back to the home screen panel.
+     * Resets the progress bar in the navigation bar.
+     */
     public void navigateToHome() {
         // TODO: Add logic if leaving a task needs confirmation or state reset
-        showPanel(HOME_PANEL_ID);
+        showPanel(Constants.HOME_PANEL_ID);
         // taskManager.resetCurrentTask(); // Tell TaskManager the flow is interrupted
         navigationBar.updateProgress(0, 0); // 重置进度条
     }
 
+    /**
+     * Ends the current session.
+     * Displays the end session panel and prompts the user to close the application.
+     */
     public void endSession() {
         // TODO: Maybe show final score before ending?
-        showPanel(END_PANEL_ID);
+        showPanel(Constants.END_PANEL_ID);
         // Optional: Disable navigation buttons on EndPanel?
         // Using JOptionPane to actually close after showing EndPanel might be better UX
          int choice = JOptionPane.showConfirmDialog(this,
@@ -143,23 +170,39 @@ public class MainFrame extends JFrame {
 
     // --- Getters for Managers (Needed by Panels/Logic) ---
 
+    /**
+     * Gets the instance of the ScoreManager.
+     *
+     * @return The {@link ScoreManager} instance.
+     */
     public ScoreManager getScoreManager() {
         return scoreManager;
     }
 
+    /**
+     * Gets the instance of the TaskManager.
+     *
+     * @return The {@link TaskManager} instance.
+     */
     public TaskManager getTaskManager() {
         return taskManager;
     }
 
    
+    /**
+     * Gets the instance of the NavigationBar.
+     *
+     * @return The {@link NavigationBar} instance.
+     */
     public NavigationBar getNavigationBar() {
         return navigationBar;
     }
     
     /**
-     * 设置内容面板
-     * 
-     * @param panel 要设置的面板
+     * Sets the content panel. This method is primarily for compatibility
+     * and the actual panel management is handled by registerPanel and showPanel.
+     *
+     * @param panel The JPanel to be set as the content panel.
      */
     public void setContentPanel(JPanel panel) {
         // 这里不需要做额外操作，因为registerPanel和showPanel已经处理了面板的添加和显示

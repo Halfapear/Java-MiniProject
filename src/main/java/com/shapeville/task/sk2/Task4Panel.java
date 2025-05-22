@@ -13,10 +13,11 @@ import com.shapeville.ui.panel_templates.TaskPanel;
 import com.shapeville.utils.Constants;
 
 /**
- * Task 4 Panel: Circle Area and Circumference calculations.
- * Allows the user to choose between Area or Circumference mode. A random radius or diameter is provided,
- * and the user must calculate the area or circumference accordingly.
- * Includes a 3-minute timer, up to 3 attempts, and shows the formula with substituted values after each round.
+ * Task 4 Panel for Circle Area and Circumference calculations.
+ * This panel allows the user to practice calculating the area and circumference of circles.
+ * It supports two modes (Area and Circumference) and provides either the radius or diameter.
+ * Features include a timer, attempt tracking, feedback, and displaying the formula with substituted values.
+ * Implements the {@link TaskPanel} interface for integration with the task management flow.
  */
 public class Task4Panel extends JPanel implements TaskPanel {
     private MainFrame mainFrameRef;
@@ -46,6 +47,11 @@ public class Task4Panel extends JPanel implements TaskPanel {
     // Panel for drawing the circle and labeling given dimensions
     private CircleDrawingPanel circleDrawingPanel;
 
+    /**
+     * Constructs a new Task4Panel.
+     * Initializes UI components, sets up mode selection buttons, and prepares for circle calculation tasks.
+     * @param mainFrame The reference to the main application frame ({@link MainFrame}).
+     */
     public Task4Panel(MainFrame mainFrame) {
         this.mainFrameRef = mainFrame;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -167,6 +173,14 @@ public class Task4Panel extends JPanel implements TaskPanel {
         });
     }
 
+    /**
+     * Starts a new circle calculation problem (Area or Circumference).
+     * Selects a random value (radius or diameter) and generates the question.
+     * Sets up the correct answer, formula, and starts the timer.
+     * Disables mode selection buttons while a problem is active.
+     * Ensures each of the four scenarios (Area/Radius, Area/Diameter, Circ/Radius, Circ/Diameter) is presented once.
+     * @param isAreaMode True to start an Area calculation problem, false for Circumference.
+     */
     private void startNewCircleProblem(boolean isAreaMode) {
         // Ensure the selected mode still has an unseen scenario
         if (isAreaMode && doneAreaRadius && doneAreaDiameter) {
