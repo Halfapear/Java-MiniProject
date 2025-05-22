@@ -92,7 +92,7 @@ public class Task4Panel extends JPanel implements TaskPanel {
 
         // Answer input panel
         JPanel answerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
-        JLabel answerLabel = new JLabel("Your answer:");
+        JLabel answerLabel = new JLabel("Your answer(integer part only):");
         answerLabel.setFont(new Font("Arial", Font.PLAIN, 16));
         answerField = new JTextField(10);
         answerField.setFont(new Font("Arial", Font.PLAIN, 16));

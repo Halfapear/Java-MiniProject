@@ -177,6 +177,9 @@ public class Task2Panel extends JPanel implements TaskPanel {
     private void loadNextAngle() {
         completedAngles++;
 
+        // 更新进度条
+        mainFrame.getNavigationBar().updateProgress(completedAngles, anglesToIdentify);
+
         // 选择下一个目标角度，但不更新currentAngle（保持0度）
         targetAngle = targetAngles[currentIndex % targetAngles.length];
         currentIndex++;

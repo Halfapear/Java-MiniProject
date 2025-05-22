@@ -120,6 +120,7 @@ public class MainFrame extends JFrame {
         // TODO: Add logic if leaving a task needs confirmation or state reset
         showPanel(HOME_PANEL_ID);
         // taskManager.resetCurrentTask(); // Tell TaskManager the flow is interrupted
+        navigationBar.updateProgress(0, 0); // 重置进度条
     }
 
     public void endSession() {

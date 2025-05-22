@@ -180,7 +180,10 @@ public class Task1Panel2D extends JPanel implements TaskPanel {
             scoreManager.incrementTaskTypeCompletedCount();
             return;
         }
-        
+
+        // 更新进度条
+        mainFrame.getNavigationBar().updateProgress(completedShapes, Constants.SHAPES_PER_IDENTIFICATION_QUIZ);
+
         Random random = new Random();
         currentShape = shapes.get(random.nextInt(shapes.size()));
         ImageIcon icon = new ImageIcon(getClass().getResource(currentShape.getImagePath()));
