@@ -58,16 +58,13 @@ public class Task2Panel extends JPanel implements TaskPanel {
     private JLabel angleTypeLabel;
     /** Label to display the number of attempts remaining. */
     private JLabel attemptsLabel;
-<<<<<<< HEAD
-    private JLabel inputPromptLabel; // 新增：输入框前的提示标签
-    private int currentAttempts = 0;
-=======
+
     /** Label prompting the user to enter the angle value. */
     private JLabel inputPromptLabel; // New: Prompt label before the input field
     /** Number of attempts remaining for the current problem. */
     private int currentAttempts = 3;
     /** Number of angles successfully identified in the current session. */
->>>>>>> JZBDoc
+
     private int completedAngles = 0;
     /** Array of target angle values for the task. */
     private final int[] targetAngles = {30, 90, 120, 180, 200, 270, 300, 360};
