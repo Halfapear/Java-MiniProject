@@ -161,15 +161,15 @@ public class Task2Panel extends JPanel implements TaskPanel {
         g2d.setColor(Color.RED);
         g2d.fillOval(centerX - 5, centerY - 5, 10, 10);
 
-        // Draw angle label
-        String angleText = angleEntered ? (degrees + "°") : "0°";
+        // Draw angle label or question mark
+        String angleText = angleEntered ? (degrees + "°") : "?";
         g2d.setFont(new Font("Arial", Font.BOLD, 20));
         FontMetrics fm = g2d.getFontMetrics();
         int textWidth = fm.stringWidth(angleText);
         int textX = centerX + (int) (radius * 0.6 * Math.cos(Math.toRadians(angleEntered ? degrees / 2 : 0))) - textWidth / 2;
         int textY = centerY - (int) (radius * 0.6 * Math.sin(Math.toRadians(angleEntered ? degrees / 2 : 0))) - 5;
 
-        // Draw angle text
+
         g2d.setColor(Color.RED);
         g2d.drawString(angleText, textX, textY);
     }
@@ -212,8 +212,8 @@ public class Task2Panel extends JPanel implements TaskPanel {
                 currentAngle = angle;
                 angleEntered = true;
                 angleInputField.setText("");
-                inputPromptLabel.setText("Enter angle type (acute, right, obtuse, reflex):"); // 更新提示语
-                angleInputField.setToolTipText("Enter angle type (acute, right, obtuse, reflex)");
+                inputPromptLabel.setText("Enter angle type (zero, acute, right, obtuse, straight, reflex, full):"); // 更新提示语
+                angleInputField.setToolTipText("Enter angle type (zero, acute, right, obtuse, straight, reflex, full)");
 
                 // 刷新UI显示用户输入的角度
                 SwingUtilities.invokeLater(() -> angleVisualLabel.repaint());
