@@ -111,7 +111,7 @@ public class Task2Panel extends JPanel implements TaskPanel {
         // Title
         JLabel title = new JLabel("Angle Recognition", SwingConstants.CENTER);
         title.setFont(new Font("Arial", Font.BOLD, 24));
-        title.setForeground(Color.WHITE); // High contrast text
+        title.setForeground(Color.BLACK); // High contrast text
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         titlePanel.add(title);
         add(titlePanel);
@@ -330,10 +330,10 @@ public class Task2Panel extends JPanel implements TaskPanel {
                 angleInputField.setText("");
 
 
-                inputPromptLabel.setText("Enter angle type (zero, acute, right, obtuse, straight, reflex, full):"); // Update prompt
+                inputPromptLabel.setText("Enter angle type (acute, right, obtuse, straight, reflex):"); // Update prompt
 
                 inputPromptLabel.setForeground(new Color(0, 255, 0)); // Green for success in first step
-                angleInputField.setToolTipText("Enter angle type (acute, right, obtuse, reflex)");
+                angleInputField.setToolTipText("Enter angle type (acute, right, obtuse, straight, reflex)");
 
                 // Refresh UI to display the entered angle
 

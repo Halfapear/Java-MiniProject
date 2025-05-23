@@ -260,7 +260,7 @@ public class Task3Panel extends JPanel implements TaskPanel {
             v3 = h;
         }
         // Set question text with HTML wrapping to prevent overflow
-        questionLabel.setText("<html><div style='width:400px;text-align:left;'>" + questionText + "</div></html>");
+        questionLabel.setText("<html><div style='width:1200px;text-align:left;'>" + questionText + "</div></html>");
 
         // Draw the shape and label dimensions
         shapeDrawingPanel.setShapeData(currentShape, v1, v2, v3);
