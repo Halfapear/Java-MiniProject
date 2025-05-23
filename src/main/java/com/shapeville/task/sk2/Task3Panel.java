@@ -133,6 +133,7 @@ public class Task3Panel extends JPanel implements TaskPanel {
         questionLabel.setFont(new Font("Arial", Font.BOLD, 16));
         questionLabel.setAlignmentX(LEFT_ALIGNMENT);
         questionLabel.setForeground(Color.WHITE); // High contrast text
+        
         add(questionLabel);
         add(Box.createVerticalStrut(10));
 
@@ -259,7 +260,8 @@ public class Task3Panel extends JPanel implements TaskPanel {
             v3 = h;
         }
         // Set question text with HTML wrapping to prevent overflow
-        questionLabel.setText("<html><div style='width:400px;'>" + questionText + "</div></html>");
+        questionLabel.setText("<html><div style='width:400px;text-align:left;'>" + questionText + "</div></html>");
+
         // Draw the shape and label dimensions
         shapeDrawingPanel.setShapeData(currentShape, v1, v2, v3);
 
@@ -543,7 +545,7 @@ public class Task3Panel extends JPanel implements TaskPanel {
                 int y_top = marginTop;
                 int y_bottom = marginTop + widthPx;
                 // Draw rectangle outline
-                g2.setColor(Color.BLACK);
+                g2.setColor(Color.WHITE);
                 g2.drawRect(x_left, y_top, lengthPx, widthPx);
                 // Draw dimension lines and arrowheads for length (bottom side)
                 int y_dim = y_bottom + extOffset;
@@ -606,7 +608,7 @@ public class Task3Panel extends JPanel implements TaskPanel {
                 int x_tr = x_tl + basePx;
                 int y_tr = y_tl;
                 // Draw parallelogram outline
-                g2.setColor(Color.BLACK);
+                g2.setColor(Color.WHITE);
                 g2.drawLine(x_bl, y_bl, x_br, y_br); // bottom base
                 g2.drawLine(x_tl, y_tl, x_tr, y_tr); // top base
                 g2.drawLine(x_bl, y_bl, x_tl, y_tl); // left slanted side
@@ -661,7 +663,7 @@ public class Task3Panel extends JPanel implements TaskPanel {
                 int x_apex = marginLeft + basePx / 2;
                 int y_apex = marginTop;
                 // Draw triangle outline
-                g2.setColor(Color.BLACK);
+                g2.setColor(Color.WHITE);
                 g2.drawLine(x_bl, y_bl, x_br, y_br);     // base
                 g2.drawLine(x_bl, y_bl, x_apex, y_apex); // left side
                 g2.drawLine(x_br, y_br, x_apex, y_apex); // right side
@@ -720,7 +722,7 @@ public class Task3Panel extends JPanel implements TaskPanel {
                 int x_tr = x_tl + base2Px;
                 int y_tr = y_tl;
                 // Draw trapezium outline
-                g2.setColor(Color.BLACK);
+                g2.setColor(Color.WHITE);
                 g2.drawLine(x_bl, y_bl, x_br, y_br); // bottom base
                 g2.drawLine(x_tl, y_tl, x_tr, y_tr); // top base
                 g2.drawLine(x_bl, y_bl, x_tl, y_tl); // left side

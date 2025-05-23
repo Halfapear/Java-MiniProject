@@ -503,7 +503,7 @@ public class Task4Panel extends JPanel implements TaskPanel {
             int radiusPx = 50;
             int arrowSize = 8;
             // Draw circle outline and center point
-            g2.setColor(Color.BLACK);
+            g2.setColor(Color.WHITE);
             g2.drawOval(cx - radiusPx, cy - radiusPx, 2 * radiusPx, 2 * radiusPx);
             g2.fillOval(cx - 3, cy - 3, 6, 6);
             if (givenIsRadius) {

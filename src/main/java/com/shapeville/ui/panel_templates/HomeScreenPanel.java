@@ -86,7 +86,7 @@ public class HomeScreenPanel extends JPanel {
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
         button.setBackground(new Color(80, 80, 80));
         button.setForeground(Color.WHITE);
-        button.setMaximumSize(new Dimension(300, 40));
+        button.setMaximumSize(new Dimension(500, 50));
         button.addActionListener(e -> mainFrameRef.getTaskManager().startSpecificTask(taskId));
         return button;
     }
