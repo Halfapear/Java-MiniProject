@@ -9,11 +9,21 @@ import javax.swing.JPanel;
 
 import com.shapeville.main.MainFrame;
 import com.shapeville.model.TaskDefinition;
+import com.shapeville.task.bonus.Compound;
+import com.shapeville.task.bonus.Sector;
+import com.shapeville.task.sk1.Task1Panel2D;
+import com.shapeville.task.sk1.Task1Panel3D;
+import com.shapeville.task.sk1.Task2Panel;
 import com.shapeville.task.sk2.Task3Panel;
 import com.shapeville.task.sk2.Task4Panel;
 import com.shapeville.ui.panel_templates.TaskPanel;
 import com.shapeville.utils.Constants;
 
+/**
+ * Manages the sequence and logic flow of different tasks within the Shapeville application.
+ * Handles task loading, switching between task panels, and interaction with {@link MainFrame} and {@link ScoreManager}.
+ * Defines the master list of available tasks and the session sequence.
+ */
 public class TaskManager {
     private MainFrame mainFrameRef;
     private ScoreManager scoreManagerRef;
@@ -27,6 +37,13 @@ public class TaskManager {
     private int currentSessionTaskIndex;
 
 
+    /**
+     * Constructs a new TaskManager.
+     * Initializes task lists and sets references to the main frame and score manager.
+     * Defines the master list of all available tasks.
+     * @param mainFrame The reference to the main application frame ({@link MainFrame}).
+     * @param scoreManager The reference to the score manager ({@link ScoreManager}).
+     */
     public TaskManager(MainFrame mainFrame, ScoreManager scoreManager) {
         this.mainFrameRef = mainFrame;
         this.scoreManagerRef = scoreManager;
@@ -37,13 +54,23 @@ public class TaskManager {
         //defineDefaultSessionSequence(); // Define the flow for a "full game"
     }
 
+    /**
+     * Defines the master list of all available tasks in the application.
+     * Each task is represented by a {@link TaskDefinition}.
+     */
     private void defineMasterTasks() {
+
         masterTaskList.add(new TaskDefinition(Constants.TASK_ID_SHAPE_ID_2D, Constants.SHAPE_IDENTIFICATION_PANEL_ID, Constants.TASK_TYPE_SHAPE_IDENTIFICATION_2D, Constants.SCORE_BASIC));
+        
         masterTaskList.add(new TaskDefinition(Constants.TASK_ID_SHAPE_ID_3D, Constants.SHAPE_IDENTIFICATION_PANEL_ID, Constants.TASK_TYPE_SHAPE_IDENTIFICATION_3D, Constants.SCORE_ADVANCED));
+        // Task 2: Angle Type Identification
         masterTaskList.add(new TaskDefinition(Constants.TASK_ID_ANGLE_TYPE, Constants.ANGLE_TYPE_PANEL_ID, Constants.TASK_TYPE_ANGLE_IDENTIFICATION, Constants.SCORE_BASIC));
+        // Task 3: Area Calculation
         masterTaskList.add(new TaskDefinition(Constants.TASK_ID_AREA_CALC, Constants.AREA_CALC_PANEL_ID, Constants.TASK_TYPE_AREA_CALC, Constants.SCORE_BASIC));
         masterTaskList.add(new TaskDefinition(Constants.TASK_ID_CIRCLE_CALC, Constants.CIRCLE_CALC_PANEL_ID, Constants.TASK_TYPE_CIRCLE_CALC, Constants.SCORE_BASIC));
-        masterTaskList.add(new TaskDefinition(Constants.TASK_ID_COMPOUND_AREA, Constants.COMPOUND_AREA_PANEL_ID, Constants.TASK_TYPE_COMPOUND_AREA, Constants.SCORE_ADVANCED));
+        masterTaskList.add(new TaskDefinition(Constants.TASK_ID_COMPOUND_AREA_CALC, Constants.COMPOUND_AREA_PANEL_ID, Constants.TASK_TYPE_COMPOUND_AREA_CALC, Constants.SCORE_ADVANCED));
+        masterTaskList.add(new TaskDefinition(Constants.TASK_ID_SECTOR_CIRCLE_CALC, Constants.SECTOR_CIRCLE_CALC_PANEL_ID, Constants.TASK_TYPE_SECTOR_CIRCLE_CALC, Constants.SCORE_ADVANCED));
+
     }
 
     private void defineDefaultSessionSequence() {
@@ -62,6 +89,9 @@ public class TaskManager {
         }
     }
 
+    /**
+     * Starts a new full session, resetting the score and beginning the task sequence defined by {@code sessionTaskSequenceIds}.
+     */
     public void startFullSessionSequence() {
         System.out.println("Starting full session task sequence...");
         scoreManagerRef.resetSession();
@@ -69,6 +99,11 @@ public class TaskManager {
         loadNextTaskInSequence();
     }
 
+    /**
+     * Starts a specific task identified by its ID, bypassing the default session sequence.
+     * Loads the corresponding UI panel and task logic.
+     * @param taskId The unique ID of the task to start.
+     */
     public void startSpecificTask(String taskId) {
         System.out.println("Attempting to start specific task: " + taskId);
         TaskDefinition taskDefToStart = findTaskDefinitionById(taskId);
@@ -83,6 +118,11 @@ public class TaskManager {
         }
     }
 
+    /**
+     * Finds a {@link TaskDefinition} object from the master task list based on its unique task ID.
+     * @param taskId The unique ID of the task to find.
+     * @return The {@link TaskDefinition} corresponding to the ID, or null if not found.
+     */
     private TaskDefinition findTaskDefinitionById(String taskId) {
         for (TaskDefinition td : masterTaskList) {
             if (td.getTaskId().equals(taskId)) {
@@ -94,23 +134,46 @@ public class TaskManager {
     // Removed misplaced line as it is outside any method or block
 
 
+    /**
+     * Loads the appropriate UI panel and logic for a given task definition.
+     * Instantiates the panel and logic based on the task type.
+     * Registers and shows the panel in the main frame.
+     * @param taskDef The {@link TaskDefinition} for the task to load.
+     */
     private void loadTaskUIAndLogic(TaskDefinition taskDef) {
         System.out.println("Loading UI and Logic for task: " + taskDef.getTaskId() + " - Type: " + taskDef.getTaskType());
         currentActiveTaskLogic = null;
-        currentActiveTaskPanel = null; // This should be the JPanel that implements TaskPanel
+        currentActiveTaskPanel = null; 
         currentPanelId = taskDef.getPanelId();
-    
+
         try {
-        // ---------- instantiate the correct panel ----------
-            if (taskDef.getTaskId().equals(Constants.TASK_ID_AREA_CALC)) {
+            if (taskDef.getTaskId().equals(Constants.TASK_ID_SHAPE_ID_2D)) {
+                // Task 1: Shape Identification (2D)
+currentActiveTaskPanel = new Task1Panel2D(mainFrameRef);
+            } 
+            else if (taskDef.getTaskId().equals(Constants.TASK_ID_SHAPE_ID_3D)) {
+                // Task 1: Shape Identification (3D)
+                currentActiveTaskPanel = new Task1Panel3D(mainFrameRef);
+            } 
+            else if (taskDef.getTaskId().equals(Constants.TASK_ID_ANGLE_TYPE)) {
+                // Task 2: Angle Type Identification
+                currentActiveTaskPanel = new Task2Panel(mainFrameRef);
+            } 
+            else if (taskDef.getTaskId().equals(Constants.TASK_ID_AREA_CALC)) {
                 // Task 3 – Shapes area
                 currentActiveTaskPanel = new Task3Panel(mainFrameRef);
-
-            } 
+            }
             else if (taskDef.getTaskId().equals(Constants.TASK_ID_CIRCLE_CALC)) {
                 // Task 4 – Circle area / circumference
                 currentActiveTaskPanel = new Task4Panel(mainFrameRef);
-
+            }
+            else if (taskDef.getTaskId().equals(Constants.TASK_ID_COMPOUND_AREA_CALC)) {
+                // Bonus1 – Compound Shapes Area Calculation
+                currentActiveTaskPanel = new Compound();
+            }
+            else if (taskDef.getTaskId().equals(Constants.TASK_ID_SECTOR_CIRCLE_CALC)) {
+                // Bonus2 – Sector of a Circle Area
+                currentActiveTaskPanel = new Sector();
             } 
             else {
                 // Fallback for tasks that are not implemented yet
@@ -119,19 +182,23 @@ public class TaskManager {
                 currentActiveTaskPanel = placeholderPanel;
             }
 
-            // ---------- register & show the panel ----------
-
             mainFrameRef.registerPanel(currentPanelId, currentActiveTaskPanel);
             mainFrameRef.showPanel(currentPanelId);
-        } 
-        catch (Exception e) {
+        } catch (Exception e) {
             System.err.println("Exception while loading task " + taskDef.getTaskId() + ": " + e.getMessage());
             e.printStackTrace();
             JOptionPane.showMessageDialog(mainFrameRef, "Critical error loading task: " + taskDef.getTaskId(), "Error", JOptionPane.ERROR_MESSAGE);
             mainFrameRef.navigateToHome();
         }
     }
+    
 
+    /**
+     * Called when a task type (a set of questions within a panel) is completed by the user.
+     * Increments the overall session progress and loads the next task in the sequence if applicable.
+     * If not in a sequence or the sequence ends, navigates back to the home screen.
+     * @param completedLogic The {@link TaskLogic} instance that was just completed.
+     */
     public void currentTaskTypeCompleted(TaskLogic completedLogic) {
         System.out.println("Task type completed: " + completedLogic.getClass().getSimpleName());
         scoreManagerRef.incrementTaskTypeCompletedCount(); // Increment overall session progress
@@ -150,6 +217,11 @@ public class TaskManager {
         }
     }
 
+    /**
+     * Loads the next task in the predefined session sequence.
+     * Updates the progress bar in the navigation bar.
+     * If the sequence is finished, ends the session.
+     */
     private void loadNextTaskInSequence() {
         currentSessionTaskIndex++;
         if (currentSessionTaskIndex < sessionTaskSequenceIds.size()) {
@@ -162,18 +234,24 @@ public class TaskManager {
             } else {
                 System.err.println("Error: Next task in sequence not found: " + nextTaskId);
                 mainFrameRef.navigateToHome(); // Or handle error
+                
             }
         } else {
             System.out.println("Entire session task sequence completed!");
             mainFrameRef.endSession(); // All predefined tasks in sequence are done
+            mainFrameRef.showPanel(Constants.END_PANEL_ID);
         }
     }
 
 
+    /**
+     * Handles the interruption of the current task (e.g., user navigates away).
+     * Resets the state of the current task panel and logic.
+     */
     public void currentTaskInterrupted() {
         System.out.println("Current task interrupted.");
         if (currentActiveTaskPanel instanceof TaskPanel) {
-        ((TaskPanel) currentActiveTaskPanel).resetState();
+            ((TaskPanel) currentActiveTaskPanel).resetState();
         }
         // TODO: Add any cleanup logic for the currentActiveTaskLogic if needed (e.g., stop timers)
         // if (currentActiveTaskLogic != null && currentActiveTaskLogic instanceof SomeTimerInterface) {
@@ -187,12 +265,18 @@ public class TaskManager {
         currentSessionTaskIndex = -1;
     }
 
-    // 补充 setTaskSequence 空实现，兼容 MainFrame 调用
+    /**
+     * Sets the task sequence for the session. This method can be customized to define a different order of tasks.
+     * Currently provides an empty implementation.
+     */
     public void setTaskSequence() {
         // 可以根据需要自定义任务序列，目前留空
     }
 
-    // 补充 resetCurrentTask 空实现，兼容 MainFrame 调用
+    /**
+     * Resets the current task state. This is an alias for {@code currentTaskInterrupted()}.
+     * Provided for compatibility with external calls.
+     */
     public void resetCurrentTask() {
         currentTaskInterrupted();
     }
